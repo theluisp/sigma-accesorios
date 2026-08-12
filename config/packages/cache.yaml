@@ -1,0 +1,4 @@
+framework:
+    cache:
+        # Se usará para cachear la lectura del Google Sheet (ver planeación: punto 2, catálogo).
+        app: cache.adapter.filesystem

@@ -1,0 +1,19 @@
+parameters:
+
+services:
+    # Configuración por defecto para los servicios de este proyecto
+    _defaults:
+        autowire: true      # Inyecta automáticamente las dependencias en los constructores
+        autoconfigure: true # Registra automáticamente los servicios como comandos, listeners, etc.
+
+    # Crea servicios por defecto para las clases en src/
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # Aquí se irán registrando explícitamente los servicios propios:
+    # - Lector del catálogo (Google Sheets)
+    # - Cliente del chat (WhatsApp / IA)
