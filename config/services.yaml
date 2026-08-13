@@ -12,8 +12,9 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
+            - '../src/Dto/'
             - '../src/Kernel.php'
 
     # Aquí se irán registrando explícitamente los servicios propios:
-    # - Lector del catálogo (Google Sheets)
+    # - Lector del catálogo (Google Sheets) -> App\Service\GoogleSheets, App\Service\Catalog
     # - Cliente del chat (WhatsApp / IA)

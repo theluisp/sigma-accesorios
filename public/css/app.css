@@ -215,3 +215,58 @@ body {
 .chat-bubble:hover {
     background: var(--color-navy);
 }
+
+/* Admin: panel de imágenes */
+.admin-flash {
+    padding: 10px 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-weight: bold;
+}
+
+.admin-flash--success {
+    background: #e3f4e9;
+    color: #1a6b3a;
+}
+
+.admin-flash--error {
+    background: #fbe5e5;
+    color: #a12626;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #e0e6ec;
+    vertical-align: middle;
+}
+
+.admin-table__row--pending {
+    background: #fff8ec;
+}
+
+.admin-table__thumb {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #eef2f6;
+}
+
+.admin-upload-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn--small {
+    padding: 6px 14px;
+    font-size: 0.9rem;
+}

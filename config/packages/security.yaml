@@ -1,0 +1,31 @@
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\InMemoryUser: 'auto'
+
+    # Un solo usuario admin, en memoria. Suficiente para un panel interno de una persona.
+    # El usuario es "admin"; la contraseña se genera con: php bin/console security:hash-password
+    providers:
+        admin_provider:
+            memory:
+                users:
+                    admin:
+                        password: '%env(ADMIN_PASSWORD_HASH)%'
+                        roles: ['ROLE_ADMIN']
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        admin:
+            pattern: ^/admin
+            http_basic:
+                realm: 'Sigma Accesorios - Admin'
+            provider: admin_provider
+
+        main:
+            lazy: true
+            provider: admin_provider
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }

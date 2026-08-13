@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin · Imágenes{% endblock %}
+
+{% block body %}
+    <h1>Imágenes de productos</h1>
+    <p>{{ productos|length }} productos en el catálogo. Sube la foto de cada uno; se guarda con el nombre interno del producto (slug), así sirve para ambas sucursales si lo venden las dos.</p>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="admin-flash admin-flash--{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Imagen actual</th>
+                <th>Producto</th>
+                <th>Sucursales</th>
+                <th>Subir nueva imagen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+                <tr class="{{ imageResolver.hasImage(producto.slug) ? 'admin-table__row--ok' : 'admin-table__row--pending' }}">
+                    <td>
+                        <img src="{{ imageResolver.resolve(producto.slug) }}" alt="{{ producto.nombre }}" class="admin-table__thumb">
+                    </td>
+                    <td>
+                        <strong>{{ producto.nombre }}</strong><br>
+                        <code>{{ producto.slug }}</code>
+                    </td>
+                    <td>
+                        {% for branch in producto.branches %}
+                            {{ branch.sucursalLabel }}{{ not loop.last ? ', ' }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <form action="{{ path('admin_images_upload', {slug: producto.slug}) }}" method="post" enctype="multipart/form-data" class="admin-upload-form">
+                            <input type="hidden" name="_token" value="{{ csrf_token('upload-image-' ~ producto.slug) }}">
+                            <input type="file" name="imagen" accept="image/jpeg,image/png,image/webp" required>
+                            <button type="submit" class="btn btn--primary btn--small">Subir</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
