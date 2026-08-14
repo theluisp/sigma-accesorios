@@ -35,8 +35,9 @@ dale a **Compartir** y agrega ese correo con permiso de **Lector**.
 GOOGLE_SHEETS_SPREADSHEET_ID=1H4ytH7eHNcgKf4bu07pSfjJz1NLUgvo-IsJgY_All0Q
 ```
 
-Si el nombre de las pestañas del Sheet no es exactamente `REAL DE GUADALUPE` y
-`CAPU` (revisa las pestañas de abajo del Sheet), agrega también en `.env.local`:
+Las pestañas reales del Sheet se llaman `Real De Guadalupe Inventario` y
+`Capu Inventario` (ya configurado por default en `.env`). Si en algún momento
+las renombras, ajusta esto en `.env.local`:
 
 ```
 GOOGLE_SHEETS_RANGE_REAL_DE_GUADALUPE="'Nombre exacto de la pestaña'!A2:L"
