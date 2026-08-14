@@ -26,22 +26,30 @@ Proyecto Symfony recién inicializado (configuración base) para el sitio de Sig
 
 4. Abrir `http://localhost:8000` — deberías ver la página de inicio de prueba.
 
-## Catálogo (Google Sheets) y panel de imágenes
+## Catálogo (base de datos clonada de Google Sheets) y panel de imágenes
 
-El backend ya lee el catálogo desde el Google Sheet maestro (pestañas "Real De
-Guadalupe" y "Capu") y hay un panel en `/admin/imagenes` para subir la foto de
-cada producto a mano. Setup completo, paso a paso, en
-[`docs/google-sheets-setup.md`](docs/google-sheets-setup.md) — sin eso configurado,
-`app:catalog:test` y `/admin/imagenes` van a fallar con un error explicando qué falta.
-
-Para probar que la conexión al Sheet funciona sin abrir el navegador:
+El inventario real vive en el Google Sheet, pero el sitio lee de **su propia
+base de datos** (SQLite por default, cero setup) — no llama a Sheets en cada
+visita. Un comando trae los datos de Sheets y actualiza la base:
 
 ```bash
-php bin/console app:catalog:test
+php bin/console app:catalog:sync
 ```
+
+Ese es el que se programa por cron un par de veces al día (ver
+[`docs/google-sheets-setup.md`](docs/google-sheets-setup.md)). Para ver el
+estado actual sin tocar Sheets:
+
+```bash
+php bin/console app:catalog:status
+```
+
+Setup completo (cuenta de servicio de Google, migraciones, cron, panel de
+imágenes en `/admin/imagenes`), paso a paso, en
+[`docs/google-sheets-setup.md`](docs/google-sheets-setup.md).
 
 ## Próximos pasos (según la planeación del proyecto)
 
-- Página de Catálogo (grid + filtros) y Detalle de producto, usando `CatalogSyncService`.
+- Página de Catálogo (grid + filtros) y Detalle de producto, usando `ProductoRepository`.
 - Subir las fotos reales de los ~213 productos vía `/admin/imagenes`.
 - Widget de chat conectado a WhatsApp.

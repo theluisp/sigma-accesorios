@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>Imágenes de productos</h1>
-    <p>{{ productos|length }} productos en el catálogo. Sube la foto de cada uno; se guarda con el nombre interno del producto (slug), así sirve para ambas sucursales si lo venden las dos.</p>
+    <p>{{ productos|length }} productos en la base de datos. Sube la foto de cada uno; se guarda con el nombre interno del producto (slug), así sirve para ambas sucursales si lo venden las dos.</p>
 
     {% for label, messages in app.flashes %}
         {% for message in messages %}
@@ -23,17 +23,17 @@
         </thead>
         <tbody>
             {% for producto in productos %}
-                <tr class="{{ imageResolver.hasImage(producto.slug) ? 'admin-table__row--ok' : 'admin-table__row--pending' }}">
+                <tr class="{{ producto.imagen ? 'admin-table__row--ok' : 'admin-table__row--pending' }}">
                     <td>
-                        <img src="{{ imageResolver.resolve(producto.slug) }}" alt="{{ producto.nombre }}" class="admin-table__thumb">
+                        <img src="{{ producto.imagen ? producto.imagen.path : '/images/placeholder-product.svg' }}" alt="{{ producto.nombre }}" class="admin-table__thumb">
                     </td>
                     <td>
                         <strong>{{ producto.nombre }}</strong><br>
                         <code>{{ producto.slug }}</code>
                     </td>
                     <td>
-                        {% for branch in producto.branches %}
-                            {{ branch.sucursalLabel }}{{ not loop.last ? ', ' }}
+                        {% for existencia in producto.existencias %}
+                            {{ existencia.sucursal.nombre }}{{ not loop.last ? ', ' }}
                         {% endfor %}
                     </td>
                     <td>
