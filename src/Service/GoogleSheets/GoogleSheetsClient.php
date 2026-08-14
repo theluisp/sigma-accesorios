@@ -3,6 +3,7 @@
 namespace App\Service\GoogleSheets;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -42,7 +43,24 @@ final class GoogleSheetsClient
             'query' => ['majorDimension' => 'ROWS'],
         ]);
 
-        $data = $response->toArray();
+        try {
+            $data = $response->toArray();
+        } catch (HttpExceptionInterface $e) {
+            $body = $e->getResponse()->getContent(false);
+            $reason = $body;
+
+            $decoded = json_decode($body, true);
+            if (is_array($decoded) && isset($decoded['error']['message'])) {
+                $reason = $decoded['error']['message'];
+            }
+
+            throw new \RuntimeException(sprintf(
+                'Google rechazó la lectura del rango "%s": %s. '
+                .'Revisa que el nombre de la pestaña en GOOGLE_SHEETS_RANGE_* coincida EXACTO con el de tu Sheet.',
+                $range,
+                $reason
+            ), previous: $e);
+        }
 
         return $data['values'] ?? [];
     }
