@@ -31,7 +31,11 @@ final class CatalogRowMapper
     {
         $cell = static fn (int $i): string => trim((string) ($row[$i] ?? ''));
 
-        $slug = $cell(self::COL_SLUG);
+        // Normalizamos a minúsculas: el Sheet a veces trae el mismo producto con
+        // el slug en distinta mayúscula/minúscula entre filas (ej. re-subidas a
+        // Rappi), y MySQL con collation case-insensitive los ve como el mismo
+        // valor único aunque en PHP no coincidan como claves de array.
+        $slug = strtolower($cell(self::COL_SLUG));
         if ($slug === '') {
             return null;
         }
