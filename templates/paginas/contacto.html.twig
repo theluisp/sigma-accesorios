@@ -27,7 +27,9 @@
 
             {% if rappiUrl is not null %}
                 <a href="{{ rappiUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
-                    <span class="valor-icon contacto-icon--rappi">{{ include('_partials/_icon_rappi.svg.twig') }}</span>
+                    <span class="contacto-logo">
+                        <img src="/images/brands/rappi.png" alt="Rappi" loading="lazy">
+                    </span>
                     <p class="aqua-card__name">Rappi</p>
                     <p class="valor-desc">Pide a domicilio, recíbelo el mismo día.</p>
                 </a>
@@ -35,14 +37,18 @@
 
             {% if facebookUrl is not null %}
                 <a href="{{ facebookUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
-                    <span class="valor-icon contacto-icon--facebook">{{ include('_partials/_icon_facebook.svg.twig') }}</span>
+                    <span class="contacto-logo contacto-logo--facebook">
+                        <img src="/images/brands/facebook.png" alt="Facebook" loading="lazy">
+                    </span>
                     <p class="aqua-card__name">Facebook</p>
                     <p class="valor-desc">Síguenos para ver novedades y promociones.</p>
                 </a>
             {% endif %}
 
             <a href="{{ mapsUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
-                <span class="valor-icon contacto-icon--maps">{{ include('_partials/_icon_pin.svg.twig') }}</span>
+                <span class="contacto-logo">
+                    <img src="/images/brands/maps-pin.png" alt="Google Maps" loading="lazy">
+                </span>
                 <p class="aqua-card__name">Cómo llegar</p>
                 <p class="valor-desc">Búscanos en Google Maps.</p>
             </a>
@@ -60,7 +66,9 @@
             <div class="valores-grid">
                 {% for sucursal in sucursales %}
                     <div class="aqua-card aqua-card--valor">
-                        <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
+                        <span class="contacto-logo contacto-logo--small">
+                            <img src="/images/brands/maps-pin.png" alt="Ubicación" loading="lazy">
+                        </span>
                         <p class="aqua-card__name">{{ sucursal.nombre }}</p>
                         <a href="{{ sucursal.mapsUrl }}" target="_blank" rel="noopener" class="valor-desc valor-desc--link">Ver en Google Maps →</a>
                     </div>

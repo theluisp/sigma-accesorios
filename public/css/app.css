@@ -54,7 +54,7 @@ body {
 /* En Home el logo es la carta de presentación — se pinta más grande que en
    el resto del sitio (donde 72px ya es suficiente para el header). */
 body.is-home .site-header__logo {
-    height: 112px;
+    height: 168px;
 }
 
 .site-nav {
@@ -87,7 +87,7 @@ body.is-home .site-header__logo {
     }
 
     body.is-home .site-header__logo {
-        height: 76px;
+        height: 104px;
     }
 
     .site-nav {
@@ -801,25 +801,47 @@ body.is-home .site-header__logo {
     cursor: pointer;
 }
 
-/* Insignias a color de marca — así se reconoce cada canal de un vistazo. */
+/* Insignia de WhatsApp — sigue siendo ícono dibujado (no hay logo oficial
+   subido), así que mantiene el color de marca de fondo. */
 .contacto-icon--whatsapp {
     background: #25d366;
     color: #fff;
 }
 
-.contacto-icon--rappi {
-    background: #ff5a3c;
-    color: #fff;
+/* Logos reales de marca (Rappi/Facebook/Maps), subidos por el usuario —
+   ver public/images/brands/. Caja cuadrada con fondo neutro + padding para
+   que los logos con fondo transparente (Rappi, el pin de Maps) tengan
+   contraste; Facebook ya trae su propio fondo azul de marca, así que no
+   necesita el padding/fondo extra (variante --facebook lo quita). */
+.contacto-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: var(--color-surface);
+    margin-bottom: 12px;
+    padding: 8px;
+    overflow: hidden;
 }
 
-.contacto-icon--facebook {
-    background: #1877f2;
-    color: #fff;
+.contacto-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
 }
 
-.contacto-icon--maps {
-    background: #ea4335;
-    color: #fff;
+.contacto-logo--facebook {
+    padding: 0;
+}
+
+.contacto-logo--small {
+    width: 48px;
+    height: 48px;
+    padding: 6px;
 }
 
 .contacto-incentivo {
