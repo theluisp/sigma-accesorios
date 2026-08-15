@@ -81,6 +81,34 @@ class ProductoRepository extends ServiceEntityRepository
     }
 
     /**
+     * Slugs de categoría que tienen al menos un producto disponible ahora
+     * mismo — para que el carrusel de categorías de Home muestre solo lo
+     * que realmente se vende, nunca una tarjeta muerta hacia un catálogo
+     * vacío. El catálogo es chico (~200 productos), así que traer todo y
+     * filtrar en PHP (reusando Producto::isDisponible()) es suficiente.
+     *
+     * @return string[]
+     */
+    public function categoriasConStock(): array
+    {
+        $productos = $this->createQueryBuilder('p')
+            ->addSelect('e', 's')
+            ->leftJoin('p.existencias', 'e')
+            ->leftJoin('e.sucursal', 's')
+            ->getQuery()
+            ->getResult();
+
+        $categorias = [];
+        foreach ($productos as $producto) {
+            if ($producto->isDisponible()) {
+                $categorias[$producto->getCategoria()] = true;
+            }
+        }
+
+        return array_keys($categorias);
+    }
+
+    /**
      * Productos disponibles para el Catálogo público, con búsqueda de texto
      * opcional. El filtro de categoría y la paginación se resuelven en el
      * controlador (CatalogoController) sobre este resultado — el catálogo es

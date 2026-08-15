@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ProductoRepository;
 use App\Service\Banner\BannerImageResolver;
+use App\Service\Catalog\ProductCategorizer;
 use App\Service\Contacto\ContactoLinks;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +17,34 @@ class HomeController extends AbstractController
         ProductoRepository $productoRepository,
         BannerImageResolver $bannerResolver,
         ContactoLinks $contactoLinks,
+        ProductCategorizer $categorizer,
     ): Response {
         return $this->render('home/index.html.twig', [
             'productos' => $productoRepository->findDestacados(12),
             'banners' => $this->construirBanners($bannerResolver, $contactoLinks),
+            'categorias' => $this->categoriasParaMostrar($productoRepository, $categorizer),
         ]);
+    }
+
+    /**
+     * Categorías del carrusel de Home: solo las que tienen producto
+     * disponible ahora mismo (nunca una categoría vacía que decepcione al
+     * usuario), en el orden definido por ProductCategorizer.
+     *
+     * @return array<int, array{slug: string, label: string}>
+     */
+    private function categoriasParaMostrar(ProductoRepository $productoRepository, ProductCategorizer $categorizer): array
+    {
+        $conStock = array_flip($productoRepository->categoriasConStock());
+
+        $resultado = [];
+        foreach ($categorizer->todas() as $slug => $label) {
+            if (isset($conStock[$slug])) {
+                $resultado[] = ['slug' => $slug, 'label' => $label];
+            }
+        }
+
+        return $resultado;
     }
 
     /**

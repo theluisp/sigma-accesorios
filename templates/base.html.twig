@@ -2,17 +2,20 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Sigma Accesorios{% endblock %}</title>
+    <title>{% block title %}Sigma Accesorios para Celular{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/app.css">
     {% block stylesheets %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
     <header class="site-header">
         <div class="site-header__inner">
             <a href="{{ path('home') }}" class="site-header__brand">
-                <img src="/images/logo.png" alt="Sigma Accesorios" class="site-header__logo">
+                <img src="/images/logo.png" alt="Sigma Accesorios para Celular" class="site-header__logo">
             </a>
             <nav class="site-nav">
                 <a href="{{ path('catalogo') }}">Catálogo</a>
@@ -30,12 +33,14 @@
         <p>&copy; {{ "now"|date("Y") }} Sigma Accesorios</p>
     </footer>
 
-    {# Burbuja flotante: WhatsApp de verdad (no un placeholder decorativo).
+    {# Burbuja flotante: WhatsApp de verdad (no un placeholder decorativo),
+       con etiqueta de texto para invitar a escribir, no solo un ícono suelto.
        Solo se pinta si hay número configurado (ver App\Service\Contacto\ContactoLinks). #}
     {% set waFlotante = whatsapp_url() %}
     {% if waFlotante %}
-        <a href="{{ waFlotante }}" target="_blank" rel="noopener" class="chat-bubble" aria-label="Escríbenos por WhatsApp">
+        <a href="{{ waFlotante }}" target="_blank" rel="noopener" class="chat-bubble" aria-label="Chatea con un vendedor por WhatsApp">
             {{ include('_partials/_icon_chat.svg.twig') }}
+            <span class="chat-bubble__label">Chatea con un vendedor</span>
         </a>
     {% endif %}
 

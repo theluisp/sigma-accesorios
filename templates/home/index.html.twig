@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sigma Accesorios{% endblock %}
+{% block title %}Sigma Accesorios para Celular{% endblock %}
+
+{% block body_class %}is-home{% endblock %}
 
 {% block body %}
     {% if banners is not empty %}
@@ -50,27 +52,30 @@
         </div>
     {% endif %}
 
-    <section class="section">
-        <h2>Categorías</h2>
-        <div class="categories-grid">
-            <a href="{{ path('catalogo', {categoria: 'fundas'}) }}" class="category-card">
-                <span class="category-card__icon">{{ include('_partials/_icon_case.svg.twig') }}</span>
-                <span class="category-card__label">Fundas</span>
-            </a>
-            <a href="{{ path('catalogo', {categoria: 'cargadores'}) }}" class="category-card">
-                <span class="category-card__icon">{{ include('_partials/_icon_charger.svg.twig') }}</span>
-                <span class="category-card__label">Cargadores</span>
-            </a>
-            <a href="{{ path('catalogo', {categoria: 'audio'}) }}" class="category-card">
-                <span class="category-card__icon">{{ include('_partials/_icon_audio.svg.twig') }}</span>
-                <span class="category-card__label">Audio</span>
-            </a>
-            <a href="{{ path('catalogo', {categoria: 'mica-vidrio'}) }}" class="category-card">
-                <span class="category-card__icon">{{ include('_partials/_icon_shield.svg.twig') }}</span>
-                <span class="category-card__label">Mica/vidrio</span>
-            </a>
-        </div>
-    </section>
+    {# Solo se listan categorías con producto disponible ahora mismo
+       (App\Controller\HomeController::categoriasParaMostrar) — nunca una
+       tarjeta que lleve a un catálogo vacío. #}
+    {% if categorias is not empty %}
+        {% set categoriaIconos = {
+            'fundas': '_partials/_icon_case.svg.twig',
+            'mica-vidrio': '_partials/_icon_shield.svg.twig',
+            'audio': '_partials/_icon_audio.svg.twig',
+            'cargadores': '_partials/_icon_charger.svg.twig',
+            'soportes': '_partials/_icon_stand.svg.twig',
+            'otros': '_partials/_icon_other.svg.twig',
+        } %}
+        <section class="section">
+            <h2>Categorías</h2>
+            <div class="categories-grid">
+                {% for categoria in categorias %}
+                    <a href="{{ path('catalogo', {categoria: categoria.slug}) }}" class="category-card">
+                        <span class="category-card__icon">{{ include(categoriaIconos[categoria.slug] ?? categoriaIconos['otros']) }}</span>
+                        <span class="category-card__label">{{ categoria.label }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
 
     <section class="section section--glass">
         <div class="section__header">

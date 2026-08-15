@@ -51,6 +51,12 @@ body {
     width: auto;
 }
 
+/* En Home el logo es la carta de presentación — se pinta más grande que en
+   el resto del sitio (donde 72px ya es suficiente para el header). */
+body.is-home .site-header__logo {
+    height: 112px;
+}
+
 .site-nav {
     display: flex;
     gap: 24px;
@@ -78,6 +84,10 @@ body {
 
     .site-header__logo {
         height: 56px;
+    }
+
+    body.is-home .site-header__logo {
+        height: 76px;
     }
 
     .site-nav {
@@ -856,30 +866,41 @@ body {
 }
 
 /* Burbuja flotante de WhatsApp — color de marca de WhatsApp a propósito
-   (#25D366), para que se reconozca de inmediato qué hace el botón. */
+   (#25D366), para que se reconozca de inmediato qué hace el botón. Es una
+   píldora con texto ("Chatea con un vendedor"), no solo un ícono suelto,
+   para invitar activamente a escribir en vez de depender de que el
+   usuario adivine qué hace el botón. */
 .chat-bubble {
     position: fixed;
     right: 20px;
     bottom: 20px;
     z-index: 90;
-    width: 56px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     height: 56px;
-    border-radius: 50%;
+    padding: 0 20px 0 16px;
+    border-radius: 999px;
     background: #25d366;
     color: var(--color-white);
     border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
     text-decoration: none;
     box-shadow: 0 6px 16px rgba(37, 211, 102, 0.45);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+    max-width: calc(100vw - 28px);
 }
 
 .chat-bubble svg {
     width: 26px;
     height: 26px;
+    flex-shrink: 0;
+}
+
+.chat-bubble__label {
+    font-weight: 700;
+    font-size: 0.92rem;
+    white-space: nowrap;
 }
 
 .chat-bubble:hover {
@@ -892,8 +913,28 @@ body {
     .chat-bubble {
         right: 14px;
         bottom: 14px;
-        width: 50px;
         height: 50px;
+        padding: 0 16px 0 12px;
+        gap: 8px;
+    }
+
+    .chat-bubble__label {
+        font-size: 0.8rem;
+    }
+}
+
+/* En pantallas muy angostas la píldora completa no cabe cómodamente —
+   se reduce a solo el ícono (el aria-label sigue explicando la acción a
+   lectores de pantalla). */
+@media (max-width: 360px) {
+    .chat-bubble {
+        width: 50px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .chat-bubble__label {
+        display: none;
     }
 }
 
