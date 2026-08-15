@@ -13,7 +13,7 @@
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=3">
+    <link rel="stylesheet" href="/css/app.css?v=4">
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -41,12 +41,31 @@
 
     {# Burbuja flotante: WhatsApp de verdad (no un placeholder decorativo),
        con etiqueta de texto para invitar a escribir, no solo un ícono suelto.
-       Solo se pinta si hay número configurado (ver App\Service\Contacto\ContactoLinks). #}
+       Solo se pinta si hay número configurado (ver App\Service\Contacto\ContactoLinks).
+
+       Renombrado de "chat-bubble" a "sigma-fab": varios bloqueadores de
+       anuncios/privacidad (uBlock Origin, AdBlock Plus con EasyList, etc.)
+       traen filtros cosméticos genéricos que esconden CUALQUIER elemento
+       con clases/ids tipo "chat-bubble", "chat-widget", "whatsapp-button" —
+       exactamente el patrón que teníamos. El elemento aparecía en el HTML
+       servido y en el CSS, sin errores de consola, pero no se pintaba: es
+       la firma clásica de un filtro cosmético de extensión, no un bug de
+       nuestro código. Además de renombrar, se agrega un `style` inline
+       redundante (máxima especificidad posible sin !important) como
+       segunda capa de defensa por si el `app.css` externo llegara a
+       bloquearse por el mismo tipo de filtro. #}
     {% set waFlotante = whatsapp_url() %}
     {% if waFlotante %}
-        <a href="{{ waFlotante }}" target="_blank" rel="noopener" class="chat-bubble" aria-label="Contactar vendedor por WhatsApp">
+        <a
+            href="{{ waFlotante }}"
+            target="_blank"
+            rel="noopener"
+            class="sigma-fab"
+            aria-label="Contactar vendedor por WhatsApp"
+            style="position:fixed;right:20px;bottom:20px;z-index:2147483647;display:flex;align-items:center;gap:10px;height:56px;padding:0 20px 0 16px;border-radius:999px;background:#25d366;color:#fff;text-decoration:none;box-shadow:0 6px 16px rgba(37,211,102,.45);"
+        >
             {{ include('_partials/_icon_chat.svg.twig') }}
-            <span class="chat-bubble__label">Contactar vendedor</span>
+            <span class="sigma-fab__label" style="font-weight:700;font-size:.92rem;white-space:nowrap;">Contactar vendedor</span>
         </a>
     {% endif %}
 

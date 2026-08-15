@@ -889,15 +889,29 @@ body.is-home .site-header__logo {
 
 /* Burbuja flotante de WhatsApp — color de marca de WhatsApp a propósito
    (#25D366), para que se reconozca de inmediato qué hace el botón. Es una
-   píldora con texto ("Chatea con un vendedor"), no solo un ícono suelto,
-   para invitar activamente a escribir en vez de depender de que el
-   usuario adivine qué hace el botón. */
-.chat-bubble {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 90;
-    display: flex;
+   píldora con texto ("Contactar vendedor"), no solo un ícono suelto, para
+   invitar activamente a escribir en vez de depender de que el usuario
+   adivine qué hace el botón.
+
+   Se llama ".sigma-fab" (no ".chat-bubble") a propósito: muchos
+   bloqueadores de anuncios/privacidad traen filtros cosméticos genéricos
+   que esconden cualquier elemento cuya clase/id contenga "chat-bubble",
+   "chat-widget", "whatsapp-button", etc. — es un patrón que las listas de
+   filtros (EasyList y similares) targetean explícitamente. Si el botón
+   "desaparece" de nuevo sin ningún error de consola y con el HTML/CSS bien
+   servidos, sospechar primero de una extensión del navegador antes que del
+   código: probar en una ventana de incógnito sin extensiones. Los
+   `!important` de abajo y el `style` inline en base.html.twig son una
+   segunda capa de defensa por si el `app.css` externo también llegara a
+   ser bloqueado. */
+.sigma-fab {
+    position: fixed !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    z-index: 2147483647 !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     align-items: center;
     gap: 10px;
     height: 56px;
@@ -913,34 +927,34 @@ body.is-home .site-header__logo {
     max-width: calc(100vw - 28px);
 }
 
-.chat-bubble svg {
+.sigma-fab svg {
     width: 26px;
     height: 26px;
     flex-shrink: 0;
 }
 
-.chat-bubble__label {
+.sigma-fab__label {
     font-weight: 700;
     font-size: 0.92rem;
     white-space: nowrap;
 }
 
-.chat-bubble:hover {
+.sigma-fab:hover {
     background: #1fb958;
     transform: translateY(-2px);
     box-shadow: 0 10px 22px rgba(37, 211, 102, 0.5);
 }
 
 @media (max-width: 640px) {
-    .chat-bubble {
-        right: 14px;
-        bottom: 14px;
+    .sigma-fab {
+        right: 14px !important;
+        bottom: 14px !important;
         height: 50px;
         padding: 0 16px 0 12px;
         gap: 8px;
     }
 
-    .chat-bubble__label {
+    .sigma-fab__label {
         font-size: 0.8rem;
     }
 }
@@ -949,13 +963,13 @@ body.is-home .site-header__logo {
    se reduce a solo el ícono (el aria-label sigue explicando la acción a
    lectores de pantalla). */
 @media (max-width: 360px) {
-    .chat-bubble {
+    .sigma-fab {
         width: 50px;
         padding: 0;
         justify-content: center;
     }
 
-    .chat-bubble__label {
+    .sigma-fab__label {
         display: none;
     }
 }
