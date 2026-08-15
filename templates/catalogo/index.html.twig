@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catálogo — Sigma Accesorios{% endblock %}
+
+{% block body %}
+    <section class="catalogo-header">
+        <h1>Catálogo</h1>
+        <p>Explora todo el inventario, actualizado varias veces al día.</p>
+
+        <form method="get" action="{{ path('catalogo') }}" class="catalogo-search" role="search">
+            {% if categoriaSeleccionada is not empty %}
+                <input type="hidden" name="categoria" value="{{ categoriaSeleccionada }}">
+            {% endif %}
+            <span class="catalogo-search__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </span>
+            <input
+                type="search"
+                name="q"
+                value="{{ texto }}"
+                placeholder="Busca por nombre, ej. 'funda iphone 13'…"
+                class="catalogo-search__input"
+                aria-label="Buscar productos"
+            >
+            <button type="submit" class="btn btn--primary btn--small catalogo-search__btn">Buscar</button>
+        </form>
+    </section>
+
+    <section class="section">
+        <div class="category-pills">
+            <a
+                href="{{ path('catalogo', {q: texto, categoria: ''}) }}"
+                class="category-pill{{ categoriaSeleccionada is empty ? ' category-pill--active' : '' }}"
+            >
+                Todos <span class="category-pill__count">{{ totalEnBusqueda }}</span>
+            </a>
+            {% for slug, label in categorias %}
+                <a
+                    href="{{ path('catalogo', {q: texto, categoria: slug}) }}"
+                    class="category-pill{{ categoriaSeleccionada == slug ? ' category-pill--active' : '' }}"
+                >
+                    {{ label }} <span class="category-pill__count">{{ conteoPorCategoria[slug] ?? 0 }}</span>
+                </a>
+            {% endfor %}
+        </div>
+
+        <p class="catalogo-meta">
+            {% if texto is not empty %}
+                {{ totalResultados }} resultado{{ totalResultados == 1 ? '' : 's' }} para «{{ texto }}»
+                {%- if categoriaSeleccionada is not empty %} en {{ categorias[categoriaSeleccionada]|default('Otros accesorios') }}{% endif %}
+            {% else %}
+                {{ totalResultados }} producto{{ totalResultados == 1 ? '' : 's' }}
+                {%- if categoriaSeleccionada is not empty %} en {{ categorias[categoriaSeleccionada]|default('Otros accesorios') }}{% endif %}
+            {% endif %}
+        </p>
+
+        {% if productos is empty %}
+            <p class="section__empty">
+                No encontramos productos con esos filtros.
+                <a href="{{ path('catalogo') }}">Quitar filtros</a>
+            </p>
+        {% else %}
+            <div class="products-grid">
+                {% for producto in productos %}
+                    {{ include('_partials/_producto_card.html.twig', {producto: producto}) }}
+                {% endfor %}
+            </div>
+
+            {% if totalPaginas > 1 %}
+                <nav class="pagination-glass" aria-label="Paginación del catálogo">
+                    <a
+                        href="{{ path('catalogo', {q: texto, categoria: categoriaSeleccionada, pagina: max(pagina - 1, 1)}) }}"
+                        class="pagination-glass__item{{ pagina <= 1 ? ' pagination-glass__item--disabled' : '' }}"
+                        aria-label="Página anterior"
+                    >&larr;</a>
+
+                    {% for item in rangoPaginas %}
+                        {% if item is null %}
+                            <span class="pagination-glass__ellipsis">…</span>
+                        {% else %}
+                            <a
+                                href="{{ path('catalogo', {q: texto, categoria: categoriaSeleccionada, pagina: item}) }}"
+                                class="pagination-glass__item{{ item == pagina ? ' pagination-glass__item--active' : '' }}"
+                            >{{ item }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    <a
+                        href="{{ path('catalogo', {q: texto, categoria: categoriaSeleccionada, pagina: min(pagina + 1, totalPaginas)}) }}"
+                        class="pagination-glass__item{{ pagina >= totalPaginas ? ' pagination-glass__item--disabled' : '' }}"
+                        aria-label="Página siguiente"
+                    >&rarr;</a>
+                </nav>
+            {% endif %}
+        {% endif %}
+    </section>
+{% endblock %}

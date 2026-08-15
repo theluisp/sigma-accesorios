@@ -26,6 +26,7 @@ final class CatalogImportService
     public function __construct(
         private readonly GoogleSheetsClient $sheetsClient,
         private readonly CatalogRowMapper $mapper,
+        private readonly ProductCategorizer $categorizer,
         private readonly EntityManagerInterface $em,
         private readonly ProductoRepository $productoRepository,
         private readonly SucursalRepository $sucursalRepository,
@@ -62,15 +63,20 @@ final class CatalogImportService
                     continue;
                 }
 
+                $categoria = $this->categorizer->classify($mapped['nombre']);
+
                 $producto = $productosPorSlug[$mapped['slug']] ?? null;
                 if ($producto === null) {
                     $producto = new Producto($mapped['slug'], $mapped['nombre'], $mapped['descripcion']);
+                    $producto->setCategoria($categoria);
                     $this->em->persist($producto);
                     $productosPorSlug[$mapped['slug']] = $producto;
                     ++$productosNuevos;
                 } else {
                     $producto->setNombre($mapped['nombre']);
                     $producto->setDescripcion($mapped['descripcion']);
+                    // Recalculamos por si el producto cambió de nombre entre syncs.
+                    $producto->setCategoria($categoria);
                     $producto->marcarActualizado();
                 }
 

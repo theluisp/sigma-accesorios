@@ -213,6 +213,31 @@ body {
 }
 
 /* Destacados */
+.section__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.section__header h2 {
+    margin-bottom: 0;
+}
+
+.section__see-all {
+    color: var(--color-blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+.section__see-all:hover {
+    color: var(--color-blue-hover);
+}
+
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -221,6 +246,7 @@ body {
 
 .section__empty {
     color: var(--color-text-secondary);
+    padding: 24px 0;
 }
 
 .section__empty a {
@@ -306,6 +332,171 @@ body {
 .aqua-card .btn {
     width: 100%;
     margin-top: auto;
+}
+
+/* ============================================================
+   Catálogo: encabezado, buscador, píldoras de categoría y
+   paginador. Mismo lenguaje visual "vidrio esmerilado" que el
+   resto del sitio.
+   ============================================================ */
+.catalogo-header {
+    padding: 32px 0 12px;
+}
+
+.catalogo-header h1 {
+    margin: 0 0 6px;
+    color: var(--color-navy);
+    font-size: clamp(1.9rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.catalogo-header p {
+    margin: 0 0 24px;
+    color: var(--color-text-secondary);
+    font-size: 1.05rem;
+}
+
+/* Buscador: barra "vidrio" con ícono, estilo apple.com */
+.catalogo-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 560px;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 980px;
+    padding: 8px 8px 8px 18px;
+    box-shadow: 0 8px 24px rgba(26, 46, 71, 0.10);
+}
+
+.catalogo-search__icon {
+    display: flex;
+    color: var(--color-text-secondary);
+    flex: 0 0 auto;
+}
+
+.catalogo-search__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    color: var(--color-navy);
+    outline: none;
+}
+
+.catalogo-search__input::placeholder {
+    color: var(--color-text-secondary);
+}
+
+.catalogo-search__btn {
+    flex: 0 0 auto;
+}
+
+/* Píldoras de categoría */
+.category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.category-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 980px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(26, 46, 71, 0.08);
+    color: var(--color-navy);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.category-pill:hover {
+    border-color: var(--color-blue);
+    color: var(--color-blue);
+}
+
+.category-pill--active {
+    background: var(--color-blue);
+    border-color: var(--color-blue);
+    color: var(--color-white);
+}
+
+.category-pill--active:hover {
+    color: var(--color-white);
+}
+
+.category-pill__count {
+    color: inherit;
+    opacity: 0.7;
+    font-weight: 500;
+    font-size: 0.85em;
+}
+
+.catalogo-meta {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin: 0 0 20px;
+}
+
+/* Paginador */
+.pagination-glass {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 36px;
+}
+
+.pagination-glass__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 10px;
+    border-radius: 980px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(26, 46, 71, 0.08);
+    color: var(--color-navy);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.pagination-glass__item:hover {
+    border-color: var(--color-blue);
+    color: var(--color-blue);
+}
+
+.pagination-glass__item--active {
+    background: var(--color-blue);
+    border-color: var(--color-blue);
+    color: var(--color-white);
+}
+
+.pagination-glass__item--active:hover {
+    color: var(--color-white);
+}
+
+.pagination-glass__item--disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.pagination-glass__ellipsis {
+    color: var(--color-text-secondary);
+    padding: 0 4px;
 }
 
 /* Footer */

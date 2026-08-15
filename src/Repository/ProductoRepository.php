@@ -79,4 +79,42 @@ class ProductoRepository extends ServiceEntityRepository
 
         return array_slice($disponibles, 0, $limite);
     }
+
+    /**
+     * Productos disponibles para el Catálogo público, con búsqueda de texto
+     * opcional. El filtro de categoría y la paginación se resuelven en el
+     * controlador (CatalogoController) sobre este resultado — el catálogo es
+     * chico (~200 productos), así que no vale la pena complicar la consulta.
+     *
+     * La búsqueda parte el texto en palabras y exige que TODAS aparezcan en
+     * el nombre o la descripción (AND), aprovechando que el collation de
+     * MySQL (utf8mb4_unicode_ci) ya ignora mayúsculas/acentos por defecto.
+     *
+     * @return Producto[]
+     */
+    public function buscarDisponibles(?string $texto): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->addSelect('e', 's', 'i')
+            ->leftJoin('p.existencias', 'e')
+            ->leftJoin('e.sucursal', 's')
+            ->leftJoin('p.imagen', 'i')
+            ->orderBy('p.nombre', 'ASC');
+
+        $texto = $texto !== null ? trim($texto) : '';
+        if ($texto !== '') {
+            foreach (preg_split('/\s+/', $texto) as $indice => $termino) {
+                $parametro = 'termino'.$indice;
+                $qb->andWhere("(p.nombre LIKE :{$parametro} OR p.descripcion LIKE :{$parametro})")
+                    ->setParameter($parametro, '%'.$termino.'%');
+            }
+        }
+
+        $productos = $qb->getQuery()->getResult();
+
+        return array_values(array_filter(
+            $productos,
+            static fn (Producto $producto): bool => $producto->isDisponible(),
+        ));
+    }
 }

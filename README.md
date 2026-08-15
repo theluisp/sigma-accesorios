@@ -48,8 +48,17 @@ Setup completo (cuenta de servicio de Google, migraciones, cron, panel de
 imágenes en `/admin/imagenes`), paso a paso, en
 [`docs/google-sheets-setup.md`](docs/google-sheets-setup.md).
 
+## Catálogo público
+
+`/catalogo` — grid de productos disponibles con buscador (nombre/descripción,
+insensible a mayúsculas/acentos), filtro por categoría (inferida del nombre
+del producto, ver `App\Service\Catalog\ProductCategorizer`) y paginador. Cada
+tarjeta abre un modal con el detalle (mismo componente que "Destacados" en
+Home). El markup de la tarjeta vive en un solo lugar reutilizable:
+`templates/_partials/_producto_card.html.twig`.
+
 ## Próximos pasos (según la planeación del proyecto)
 
-- Página de Catálogo (grid + filtros) y Detalle de producto, usando `ProductoRepository`.
 - Subir las fotos reales de los ~213 productos vía `/admin/imagenes`.
 - Widget de chat conectado a WhatsApp.
+- Página de Detalle de producto individual (por ahora el detalle se ve en el modal).

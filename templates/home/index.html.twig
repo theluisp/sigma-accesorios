@@ -7,7 +7,7 @@
         <div class="hero__text">
             <h1>Fundas, cargadores y más</h1>
             <p>Inventario actualizado en tiempo real. Encuentra el accesorio para tu modelo.</p>
-            <a href="#" class="btn btn--primary">Ver catálogo</a>
+            <a href="{{ path('catalogo') }}" class="btn btn--primary">Ver catálogo</a>
         </div>
         <div class="hero__media placeholder-box">
             {{ include('_partials/_icon_image.svg.twig') }}
@@ -17,19 +17,19 @@
     <section class="section">
         <h2>Categorías</h2>
         <div class="categories-grid">
-            <a href="#" class="category-card">
+            <a href="{{ path('catalogo', {categoria: 'fundas'}) }}" class="category-card">
                 <span class="category-card__icon">{{ include('_partials/_icon_case.svg.twig') }}</span>
                 <span class="category-card__label">Fundas</span>
             </a>
-            <a href="#" class="category-card">
+            <a href="{{ path('catalogo', {categoria: 'cargadores'}) }}" class="category-card">
                 <span class="category-card__icon">{{ include('_partials/_icon_charger.svg.twig') }}</span>
                 <span class="category-card__label">Cargadores</span>
             </a>
-            <a href="#" class="category-card">
+            <a href="{{ path('catalogo', {categoria: 'audio'}) }}" class="category-card">
                 <span class="category-card__icon">{{ include('_partials/_icon_audio.svg.twig') }}</span>
                 <span class="category-card__label">Audio</span>
             </a>
-            <a href="#" class="category-card">
+            <a href="{{ path('catalogo', {categoria: 'mica-vidrio'}) }}" class="category-card">
                 <span class="category-card__icon">{{ include('_partials/_icon_shield.svg.twig') }}</span>
                 <span class="category-card__label">Mica/vidrio</span>
             </a>
@@ -37,7 +37,10 @@
     </section>
 
     <section class="section section--glass">
-        <h2>Destacados</h2>
+        <div class="section__header">
+            <h2>Destacados</h2>
+            <a href="{{ path('catalogo') }}" class="section__see-all">Ver todo el catálogo →</a>
+        </div>
         {% if productos is empty %}
             <p class="section__empty">
                 Todavía no hay productos con foto propia — súbelas desde
@@ -46,28 +49,7 @@
         {% else %}
             <div class="products-grid">
                 {% for producto in productos %}
-                    {% set precioTexto = producto.precioDesde is not null
-                        ? 'Desde $' ~ producto.precioDesde|number_format(0, '.', ',')
-                        : 'Consultar disponibilidad' %}
-                    <div class="aqua-card">
-                        <div class="aqua-card__media">
-                            <img src="{{ producto.imagen.path }}" alt="{{ producto.nombre }}" loading="lazy">
-                        </div>
-                        <p class="aqua-card__name">{{ producto.nombre }}</p>
-                        <p class="aqua-card__price">{{ precioTexto }}</p>
-                        <button
-                            type="button"
-                            class="btn btn--primary btn--small"
-                            data-bs-toggle="modal"
-                            data-bs-target="#producto-modal"
-                            data-nombre="{{ producto.nombre }}"
-                            data-descripcion="{{ producto.descripcion|default('Sin descripción disponible.') }}"
-                            data-precio="{{ precioTexto }}"
-                            data-imagen="{{ producto.imagen.path }}"
-                        >
-                            Ver detalle
-                        </button>
-                    </div>
+                    {{ include('_partials/_producto_card.html.twig', {producto: producto}) }}
                 {% endfor %}
             </div>
         {% endif %}

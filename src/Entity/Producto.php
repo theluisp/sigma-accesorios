@@ -27,6 +27,10 @@ class Producto
     #[ORM\Column(type: 'text')]
     private string $descripcion = '';
 
+    /** Inferida del nombre por App\Service\Catalog\ProductCategorizer (el Sheet no trae categoría). */
+    #[ORM\Column(length: 40)]
+    private string $categoria = 'otros';
+
     #[ORM\Column]
     private \DateTimeImmutable $creadoEn;
 
@@ -78,6 +82,16 @@ class Producto
     public function setDescripcion(string $descripcion): void
     {
         $this->descripcion = $descripcion;
+    }
+
+    public function getCategoria(): string
+    {
+        return $this->categoria;
+    }
+
+    public function setCategoria(string $categoria): void
+    {
+        $this->categoria = $categoria;
     }
 
     public function getActualizadoEn(): \DateTimeImmutable
