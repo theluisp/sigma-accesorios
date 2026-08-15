@@ -64,9 +64,13 @@ final class ImageUploadController extends AbstractController
         }
 
         try {
-            $path = $this->imageResolver->store($slug, $file);
+            // OJO: leer mimeType/size ANTES de store(), porque store() mueve el
+            // archivo físicamente (UploadedFile::move()) y después de eso el
+            // objeto $file ya no puede leer su tmp original (por eso tronaba
+            // con "file does not exist or is not readable").
             $mimeType = (string) $file->getMimeType();
             $tamanio = (int) $file->getSize();
+            $path = $this->imageResolver->store($slug, $file);
 
             $imagen = $producto->getImagen();
             if ($imagen === null) {
