@@ -47,7 +47,7 @@ body {
 }
 
 .site-header__logo {
-    height: 48px;
+    height: 72px;
     width: auto;
 }
 
@@ -64,6 +64,28 @@ body {
 
 .site-nav a:hover {
     color: var(--color-blue);
+}
+
+/* Responsivo: header en 2 filas (logo arriba, nav abajo centrado) antes de
+   que el logo + 3 links se amontonen/desborden en pantallas angostas. */
+@media (max-width: 640px) {
+    .site-header__inner {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px 16px;
+    }
+
+    .site-header__logo {
+        height: 56px;
+    }
+
+    .site-nav {
+        width: 100%;
+        justify-content: center;
+        gap: 18px;
+        flex-wrap: wrap;
+    }
 }
 
 /* Main */
@@ -294,6 +316,7 @@ body {
    tarjeta. object-fit: cover recorta cualquier foto para llenar ese
    cuadrado sin deformarla, así todas se ven del mismo tamaño exacto. */
 .aqua-card__media {
+    position: relative;
     width: 120px;
     height: 120px;
     border-radius: 18px;
@@ -319,11 +342,50 @@ body {
     line-height: 1.3;
 }
 
+/* Precio: si el dato real trae descuento, se ve el "antes" tachado junto
+   al precio actual — no se inventa ninguna oferta que no venga del Sheet. */
+.aqua-card__precio-wrap {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+    margin: 6px 0 2px;
+    flex-wrap: wrap;
+}
+
 .aqua-card__price {
-    margin: 4px 0 14px;
     color: var(--color-blue);
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.aqua-card__precio-original {
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    text-decoration: line-through;
+}
+
+/* Badge de descuento sobre la imagen — rojo "de oferta", intencionalmente
+   fuera de la paleta navy/azul para que salte a la vista. */
+.aqua-card__badge-descuento {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    z-index: 1;
+    background: #e0393e;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 980px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.aqua-card__disponibilidad {
+    margin: 0 0 12px;
+    color: #1a8f4c;
+    font-size: 0.8rem;
     font-weight: 600;
-    font-size: 0.95rem;
 }
 
 /* El botón "Ver detalle" reutiliza el sistema .btn (ver arriba) — aquí
@@ -394,6 +456,18 @@ body {
 
 .catalogo-search__btn {
     flex: 0 0 auto;
+}
+
+@media (max-width: 480px) {
+    .catalogo-search {
+        max-width: 100%;
+        padding: 6px 6px 6px 14px;
+    }
+
+    .catalogo-search__btn {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
 }
 
 /* Píldoras de categoría */
@@ -717,6 +791,47 @@ body {
     cursor: pointer;
 }
 
+/* Insignias a color de marca — así se reconoce cada canal de un vistazo. */
+.contacto-icon--whatsapp {
+    background: #25d366;
+    color: #fff;
+}
+
+.contacto-icon--rappi {
+    background: #ff5a3c;
+    color: #fff;
+}
+
+.contacto-icon--facebook {
+    background: #1877f2;
+    color: #fff;
+}
+
+.contacto-icon--maps {
+    background: #ea4335;
+    color: #fff;
+}
+
+.contacto-incentivo {
+    background: var(--color-surface);
+    border: 1px solid rgba(37, 211, 102, 0.25);
+    border-radius: 16px;
+    padding: 14px 18px;
+    margin: 0 0 24px;
+    color: var(--color-navy);
+    font-size: 0.95rem;
+}
+
+.contacto-incentivo a {
+    color: #1a8f4c;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.contacto-incentivo a:hover {
+    text-decoration: underline;
+}
+
 .contacto-pendiente {
     font-size: 0.85rem;
 }
@@ -740,26 +855,66 @@ body {
     padding: 16px 20px;
 }
 
-/* Chat bubble flotante */
+/* Burbuja flotante de WhatsApp — color de marca de WhatsApp a propósito
+   (#25D366), para que se reconozca de inmediato qué hace el botón. */
 .chat-bubble {
     position: fixed;
     right: 20px;
     bottom: 20px;
-    width: 52px;
-    height: 52px;
+    z-index: 90;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
-    background: var(--color-blue);
+    background: #25d366;
     color: var(--color-white);
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(26, 46, 71, 0.25);
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.45);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.chat-bubble svg {
+    width: 26px;
+    height: 26px;
 }
 
 .chat-bubble:hover {
-    background: var(--color-navy);
+    background: #1fb958;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(37, 211, 102, 0.5);
+}
+
+@media (max-width: 640px) {
+    .chat-bubble {
+        right: 14px;
+        bottom: 14px;
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* Botón "Preguntar por WhatsApp" del modal de producto */
+.btn--whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #25d366;
+    color: #fff;
+}
+
+.btn--whatsapp svg {
+    width: 18px;
+    height: 18px;
+}
+
+.btn--whatsapp:hover {
+    background-color: #1fb958;
+    color: #fff;
 }
 
 /* Admin: panel de imágenes */

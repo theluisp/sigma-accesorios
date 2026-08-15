@@ -61,6 +61,9 @@
             <p class="section__empty">
                 No encontramos productos con esos filtros.
                 <a href="{{ path('catalogo') }}">Quitar filtros</a>
+                {% if whatsapp_url() %}
+                    o <a href="{{ whatsapp_url() }}" target="_blank" rel="noopener">pregúntanos por WhatsApp</a>, seguro te ayudamos a encontrarlo.
+                {% endif %}
             </p>
         {% else %}
             <div class="products-grid">

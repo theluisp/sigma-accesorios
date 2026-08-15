@@ -141,15 +141,54 @@ class Producto
         return $total;
     }
 
-    public function getPrecioDesde(): ?float
+    /**
+     * La existencia (producto+sucursal) disponible con el precio más bajo —
+     * es la que se muestra en las tarjetas/modal. De ahí salen precio,
+     * descuento y (si aplica) el precio "antes de descuento" para el
+     * tratamiento visual de oferta.
+     */
+    public function getExistenciaMasBarata(): ?ProductoSucursal
     {
-        $precios = [];
+        $mejor = null;
         foreach ($this->existencias as $existencia) {
-            if ($existencia->isDisponible()) {
-                $precios[] = $existencia->getPrecio();
+            if (!$existencia->isDisponible()) {
+                continue;
+            }
+            if ($mejor === null || $existencia->getPrecio() < $mejor->getPrecio()) {
+                $mejor = $existencia;
             }
         }
 
-        return $precios === [] ? null : min($precios);
+        return $mejor;
+    }
+
+    public function getPrecioDesde(): ?float
+    {
+        return $this->getExistenciaMasBarata()?->getPrecio();
+    }
+
+    public function getDescuentoPorcentaje(): int
+    {
+        return $this->getExistenciaMasBarata()?->getDescuentoPorcentaje() ?? 0;
+    }
+
+    /**
+     * Precio "antes de descuento", calculado a partir del % que trae el
+     * Sheet — null si no hay descuento (no inventamos ofertas: solo se
+     * muestra el precio tachado cuando el dato real trae un % > 0).
+     */
+    public function getPrecioOriginal(): ?float
+    {
+        $existencia = $this->getExistenciaMasBarata();
+        if ($existencia === null) {
+            return null;
+        }
+
+        $descuento = $existencia->getDescuentoPorcentaje();
+        if ($descuento <= 0 || $descuento >= 100) {
+            return null;
+        }
+
+        return round($existencia->getPrecio() / (1 - $descuento / 100), 2);
     }
 }

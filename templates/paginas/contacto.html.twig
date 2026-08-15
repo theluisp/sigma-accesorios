@@ -9,10 +9,17 @@
     </section>
 
     <section class="section">
+        {% if whatsappUrl is not null %}
+            <p class="contacto-incentivo">
+                💬 ¿Tienes dudas sobre un producto, tu pedido o quieres comprar directo?
+                <a href="{{ whatsappUrl }}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a> — respondemos rápido.
+            </p>
+        {% endif %}
+
         <div class="contacto-grid">
             {% if whatsappUrl is not null %}
                 <a href="{{ whatsappUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
-                    <span class="valor-icon">{{ include('_partials/_icon_chat.svg.twig') }}</span>
+                    <span class="valor-icon contacto-icon--whatsapp">{{ include('_partials/_icon_chat.svg.twig') }}</span>
                     <p class="aqua-card__name">WhatsApp</p>
                     <p class="valor-desc">Escríbenos directo, respondemos rápido.</p>
                 </a>
@@ -20,7 +27,7 @@
 
             {% if rappiUrl is not null %}
                 <a href="{{ rappiUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
-                    <span class="valor-icon">{{ include('_partials/_icon_truck.svg.twig') }}</span>
+                    <span class="valor-icon contacto-icon--rappi">{{ include('_partials/_icon_rappi.svg.twig') }}</span>
                     <p class="aqua-card__name">Rappi</p>
                     <p class="valor-desc">Pide a domicilio, recíbelo el mismo día.</p>
                 </a>
@@ -28,24 +35,23 @@
 
             {% if facebookUrl is not null %}
                 <a href="{{ facebookUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
-                    <span class="valor-icon">{{ include('_partials/_icon_facebook.svg.twig') }}</span>
+                    <span class="valor-icon contacto-icon--facebook">{{ include('_partials/_icon_facebook.svg.twig') }}</span>
                     <p class="aqua-card__name">Facebook</p>
                     <p class="valor-desc">Síguenos para ver novedades y promociones.</p>
                 </a>
             {% endif %}
 
             <a href="{{ mapsUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
-                <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
+                <span class="valor-icon contacto-icon--maps">{{ include('_partials/_icon_pin.svg.twig') }}</span>
                 <p class="aqua-card__name">Cómo llegar</p>
                 <p class="valor-desc">Búscanos en Google Maps.</p>
             </a>
         </div>
 
-        {% if whatsappUrl is null or rappiUrl is null or facebookUrl is null %}
+        {% if facebookUrl is null %}
             <p class="section__empty contacto-pendiente">
-                Algunos botones todavía no aparecen porque faltan datos reales por configurar
-                (<code>WHATSAPP_PHONE_NUMBER</code>{% if facebookUrl is null %}, <code>FACEBOOK_URL</code>{% endif %}
-                en <code>.env.local</code>).
+                El botón de Facebook todavía no aparece porque falta configurar
+                <code>FACEBOOK_URL</code> en <code>.env.local</code>.
             </p>
         {% endif %}
 

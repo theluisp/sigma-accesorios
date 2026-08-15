@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tituloEl = document.getElementById('producto-modal-title');
     const precioEl = document.getElementById('producto-modal-precio');
     const descripcionEl = document.getElementById('producto-modal-descripcion');
+    const whatsappEl = document.getElementById('producto-modal-whatsapp');
 
     modalEl.addEventListener('show.bs.modal', (event) => {
         const trigger = event.relatedTarget;
@@ -21,10 +22,25 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const nombre = trigger.dataset.nombre || '';
+
         imagenEl.src = trigger.dataset.imagen || '';
-        imagenEl.alt = trigger.dataset.nombre || '';
-        tituloEl.textContent = trigger.dataset.nombre || '';
+        imagenEl.alt = nombre;
+        tituloEl.textContent = nombre;
         precioEl.textContent = trigger.dataset.precio || '';
         descripcionEl.textContent = trigger.dataset.descripcion || 'Sin descripción disponible.';
+
+        // Botón "Preguntar por WhatsApp": manda un mensaje precargado con el
+        // nombre del producto, para bajar la fricción de preguntar/comprar.
+        const whatsappBase = trigger.dataset.whatsapp;
+        if (whatsappEl) {
+            if (whatsappBase) {
+                const mensaje = `Hola, me interesa este producto: ${nombre}`;
+                whatsappEl.href = `${whatsappBase}?text=${encodeURIComponent(mensaje)}`;
+                whatsappEl.hidden = false;
+            } else {
+                whatsappEl.hidden = true;
+            }
+        }
     });
 });

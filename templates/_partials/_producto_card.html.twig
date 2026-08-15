@@ -3,15 +3,28 @@
     Espera una variable `producto` (App\Entity\Producto) en el contexto.
 #}
 {% set precioTexto = producto.precioDesde is not null
-    ? 'Desde $' ~ producto.precioDesde|number_format(0, '.', ',')
+    ? '$' ~ producto.precioDesde|number_format(0, '.', ',')
     : 'Consultar disponibilidad' %}
+{% set precioOriginal = producto.precioOriginal %}
+{% set descuento = producto.descuentoPorcentaje %}
 {% set imagenSrc = producto.imagen ? producto.imagen.path : '/images/placeholder-product.svg' %}
 <div class="aqua-card">
     <div class="aqua-card__media">
+        {% if precioOriginal is not null %}
+            <span class="aqua-card__badge-descuento">-{{ descuento }}%</span>
+        {% endif %}
         <img src="{{ imagenSrc }}" alt="{{ producto.nombre }}" loading="lazy">
     </div>
     <p class="aqua-card__name">{{ producto.nombre }}</p>
-    <p class="aqua-card__price">{{ precioTexto }}</p>
+    <div class="aqua-card__precio-wrap">
+        {% if precioOriginal is not null %}
+            <span class="aqua-card__precio-original">${{ precioOriginal|number_format(0, '.', ',') }}</span>
+        {% endif %}
+        <span class="aqua-card__price">{{ precioTexto }}</span>
+    </div>
+    {% if producto.precioDesde is not null %}
+        <p class="aqua-card__disponibilidad">✓ Disponible hoy</p>
+    {% endif %}
     <button
         type="button"
         class="btn btn--primary btn--small"
@@ -21,6 +34,7 @@
         data-descripcion="{{ producto.descripcion|default('Sin descripción disponible.') }}"
         data-precio="{{ precioTexto }}"
         data-imagen="{{ imagenSrc }}"
+        data-whatsapp="{{ whatsapp_url() }}"
     >
         Ver detalle
     </button>

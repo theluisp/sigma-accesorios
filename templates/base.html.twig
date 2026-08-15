@@ -30,17 +30,23 @@
         <p>&copy; {{ "now"|date("Y") }} Sigma Accesorios</p>
     </footer>
 
-    <button type="button" class="chat-bubble" aria-label="Abrir chat">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-        </svg>
-    </button>
+    {# Burbuja flotante: WhatsApp de verdad (no un placeholder decorativo).
+       Solo se pinta si hay número configurado (ver App\Service\Contacto\ContactoLinks). #}
+    {% set waFlotante = whatsapp_url() %}
+    {% if waFlotante %}
+        <a href="{{ waFlotante }}" target="_blank" rel="noopener" class="chat-bubble" aria-label="Escríbenos por WhatsApp">
+            {{ include('_partials/_icon_chat.svg.twig') }}
+        </a>
+    {% endif %}
 
     {# Modal genérico de "ver detalle" de producto (componente Modal de Bootstrap,
        con el vestido Aqua en app.css). Cualquier botón con
        data-bs-toggle="modal" data-bs-target="#producto-modal" y los atributos
-       data-nombre/data-descripcion/data-precio/data-imagen lo abre y lo llena
-       (ver public/js/app.js). Reutilizable desde Home, Catálogo, etc. #}
+       data-nombre/data-descripcion/data-precio/data-imagen/data-whatsapp lo
+       abre y lo llena (ver public/js/app.js). Reutilizable desde Home,
+       Catálogo, etc. El botón de WhatsApp del modal manda un mensaje
+       precargado con el nombre del producto — para incentivar dudas/compra
+       directa, no solo dejar el dato suelto. #}
     <div class="modal fade" id="producto-modal" tabindex="-1" aria-labelledby="producto-modal-title" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content aqua-modal">
@@ -54,6 +60,10 @@
                     </div>
                     <p class="aqua-modal__price fw-bold" id="producto-modal-precio"></p>
                     <p class="aqua-modal__descripcion" id="producto-modal-descripcion"></p>
+                    <a href="#" id="producto-modal-whatsapp" target="_blank" rel="noopener" class="btn btn--whatsapp w-100 mt-3" hidden>
+                        {{ include('_partials/_icon_chat.svg.twig') }}
+                        Preguntar por WhatsApp
+                    </a>
                 </div>
             </div>
         </div>
