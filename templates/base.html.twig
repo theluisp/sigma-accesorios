@@ -35,6 +35,25 @@
         </svg>
     </button>
 
+    {# Modal genérico de "ver detalle" de producto — cualquier botón con la clase
+       js-ver-detalle y data-nombre/data-descripcion/data-precio/data-imagen lo abre
+       (ver public/js/app.js). Reutilizable desde Home, Catálogo, etc. #}
+    <div class="modal" id="producto-modal" hidden>
+        <div class="modal__backdrop" data-modal-close></div>
+        <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="producto-modal-title">
+            <button type="button" class="modal__close" data-modal-close aria-label="Cerrar">&times;</button>
+            <div class="modal__media">
+                <img id="producto-modal-imagen" src="" alt="">
+            </div>
+            <div class="modal__body">
+                <h3 id="producto-modal-title"></h3>
+                <p class="modal__price" id="producto-modal-precio"></p>
+                <p class="modal__descripcion" id="producto-modal-descripcion"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js" defer></script>
     {% block javascripts %}{% endblock %}
 </body>
 </html>

@@ -51,4 +51,32 @@ class ProductoRepository extends ServiceEntityRepository
 
         return $indexado;
     }
+
+    /**
+     * Productos para mostrar en el sitio público: deben tener imagen propia
+     * cargada (innerJoin descarta los que no) y al menos una existencia
+     * disponible con stock. La disponibilidad se resuelve en PHP reusando
+     * Producto::isDisponible() — el catálogo es chico (~200 productos), así
+     * que no vale la pena una subconsulta.
+     *
+     * @return Producto[]
+     */
+    public function findDestacados(int $limite = 12): array
+    {
+        $productos = $this->createQueryBuilder('p')
+            ->addSelect('e', 's', 'i')
+            ->leftJoin('p.existencias', 'e')
+            ->leftJoin('e.sucursal', 's')
+            ->innerJoin('p.imagen', 'i')
+            ->orderBy('p.actualizadoEn', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        $disponibles = array_values(array_filter(
+            $productos,
+            static fn (Producto $producto): bool => $producto->isDisponible(),
+        ));
+
+        return array_slice($disponibles, 0, $limite);
+    }
 }

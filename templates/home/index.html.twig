@@ -38,28 +38,36 @@
 
     <section class="section">
         <h2>Destacados</h2>
-        <div class="products-grid">
-            <div class="product-card">
-                <div class="product-card__media placeholder-box">
-                    {{ include('_partials/_icon_image.svg.twig') }}
-                </div>
-                <p class="product-card__name">Funda iPhone 15</p>
-                <p class="product-card__price">$249</p>
+        {% if productos is empty %}
+            <p class="section__empty">
+                Todavía no hay productos con foto propia — súbelas desde
+                <a href="/admin/imagenes">el panel de imágenes</a>.
+            </p>
+        {% else %}
+            <div class="products-grid">
+                {% for producto in productos %}
+                    {% set precioTexto = producto.precioDesde is not null
+                        ? 'Desde $' ~ producto.precioDesde|number_format(0, '.', ',')
+                        : 'Consultar disponibilidad' %}
+                    <div class="product-card">
+                        <div class="product-card__media">
+                            <img src="{{ producto.imagen.path }}" alt="{{ producto.nombre }}" loading="lazy">
+                        </div>
+                        <p class="product-card__name">{{ producto.nombre }}</p>
+                        <p class="product-card__price">{{ precioTexto }}</p>
+                        <button
+                            type="button"
+                            class="btn btn--secondary btn--small js-ver-detalle"
+                            data-nombre="{{ producto.nombre }}"
+                            data-descripcion="{{ producto.descripcion|default('Sin descripción disponible.') }}"
+                            data-precio="{{ precioTexto }}"
+                            data-imagen="{{ producto.imagen.path }}"
+                        >
+                            Ver detalle
+                        </button>
+                    </div>
+                {% endfor %}
             </div>
-            <div class="product-card">
-                <div class="product-card__media placeholder-box">
-                    {{ include('_partials/_icon_image.svg.twig') }}
-                </div>
-                <p class="product-card__name">Cargador 20W</p>
-                <p class="product-card__price">$189</p>
-            </div>
-            <div class="product-card">
-                <div class="product-card__media placeholder-box">
-                    {{ include('_partials/_icon_image.svg.twig') }}
-                </div>
-                <p class="product-card__name">Audífonos BT</p>
-                <p class="product-card__price">$399</p>
-            </div>
-        </div>
+        {% endif %}
     </section>
 {% endblock %}
