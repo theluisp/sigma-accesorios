@@ -1,12 +1,12 @@
 /**
- * Modal de "ver detalle" de producto. Cualquier botón con la clase
- * js-ver-detalle y los atributos data-nombre / data-descripcion / data-precio
- * / data-imagen abre el modal #producto-modal (definido en base.html.twig)
- * con esos datos. Sin dependencias externas.
+ * Llena el modal de "ver detalle" de producto (#producto-modal, componente
+ * Modal de Bootstrap) con los data-* del botón que lo disparó. Bootstrap se
+ * encarga de abrir/cerrar/centrar/backdrop — aquí solo ponemos el contenido,
+ * usando su evento show.bs.modal y event.relatedTarget (el botón clickeado).
  */
 document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('producto-modal');
-    if (!modal) {
+    const modalEl = document.getElementById('producto-modal');
+    if (!modalEl) {
         return;
     }
 
@@ -15,42 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const precioEl = document.getElementById('producto-modal-precio');
     const descripcionEl = document.getElementById('producto-modal-descripcion');
 
-    function abrirModal(datos) {
-        imagenEl.src = datos.imagen || '';
-        imagenEl.alt = datos.nombre || '';
-        tituloEl.textContent = datos.nombre || '';
-        precioEl.textContent = datos.precio || '';
-        descripcionEl.textContent = datos.descripcion || 'Sin descripción disponible.';
-
-        modal.hidden = false;
-        document.body.classList.add('modal-open');
-    }
-
-    function cerrarModal() {
-        modal.hidden = true;
-        document.body.classList.remove('modal-open');
-    }
-
-    document.addEventListener('click', (event) => {
-        const trigger = event.target.closest('.js-ver-detalle');
-        if (trigger) {
-            abrirModal({
-                nombre: trigger.dataset.nombre,
-                descripcion: trigger.dataset.descripcion,
-                precio: trigger.dataset.precio,
-                imagen: trigger.dataset.imagen,
-            });
+    modalEl.addEventListener('show.bs.modal', (event) => {
+        const trigger = event.relatedTarget;
+        if (!trigger) {
             return;
         }
 
-        if (event.target.closest('[data-modal-close]')) {
-            cerrarModal();
-        }
-    });
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && !modal.hidden) {
-            cerrarModal();
-        }
+        imagenEl.src = trigger.dataset.imagen || '';
+        imagenEl.alt = trigger.dataset.nombre || '';
+        tituloEl.textContent = trigger.dataset.nombre || '';
+        precioEl.textContent = trigger.dataset.precio || '';
+        descripcionEl.textContent = trigger.dataset.descripcion || 'Sin descripción disponible.';
     });
 });

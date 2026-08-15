@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}Sigma Accesorios{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/app.css">
     {% block stylesheets %}{% endblock %}
 </head>
@@ -35,24 +36,30 @@
         </svg>
     </button>
 
-    {# Modal genérico de "ver detalle" de producto — cualquier botón con la clase
-       js-ver-detalle y data-nombre/data-descripcion/data-precio/data-imagen lo abre
+    {# Modal genérico de "ver detalle" de producto (componente Modal de Bootstrap,
+       con el vestido Aqua en app.css). Cualquier botón con
+       data-bs-toggle="modal" data-bs-target="#producto-modal" y los atributos
+       data-nombre/data-descripcion/data-precio/data-imagen lo abre y lo llena
        (ver public/js/app.js). Reutilizable desde Home, Catálogo, etc. #}
-    <div class="modal" id="producto-modal" hidden>
-        <div class="modal__backdrop" data-modal-close></div>
-        <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="producto-modal-title">
-            <button type="button" class="modal__close" data-modal-close aria-label="Cerrar">&times;</button>
-            <div class="modal__media">
-                <img id="producto-modal-imagen" src="" alt="">
-            </div>
-            <div class="modal__body">
-                <h3 id="producto-modal-title"></h3>
-                <p class="modal__price" id="producto-modal-precio"></p>
-                <p class="modal__descripcion" id="producto-modal-descripcion"></p>
+    <div class="modal fade" id="producto-modal" tabindex="-1" aria-labelledby="producto-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content aqua-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="producto-modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="aqua-modal__media mb-3">
+                        <img id="producto-modal-imagen" src="" alt="">
+                    </div>
+                    <p class="aqua-modal__price fw-bold" id="producto-modal-precio"></p>
+                    <p class="aqua-modal__descripcion" id="producto-modal-descripcion"></p>
+                </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="/js/app.js" defer></script>
     {% block javascripts %}{% endblock %}
 </body>

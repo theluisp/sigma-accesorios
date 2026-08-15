@@ -49,15 +49,17 @@
                     {% set precioTexto = producto.precioDesde is not null
                         ? 'Desde $' ~ producto.precioDesde|number_format(0, '.', ',')
                         : 'Consultar disponibilidad' %}
-                    <div class="product-card">
-                        <div class="product-card__media">
+                    <div class="aqua-card">
+                        <div class="aqua-card__media">
                             <img src="{{ producto.imagen.path }}" alt="{{ producto.nombre }}" loading="lazy">
                         </div>
-                        <p class="product-card__name">{{ producto.nombre }}</p>
-                        <p class="product-card__price">{{ precioTexto }}</p>
+                        <p class="aqua-card__name">{{ producto.nombre }}</p>
+                        <p class="aqua-card__price">{{ precioTexto }}</p>
                         <button
                             type="button"
-                            class="btn btn--secondary btn--small js-ver-detalle"
+                            class="btn-aqua"
+                            data-bs-toggle="modal"
+                            data-bs-target="#producto-modal"
                             data-nombre="{{ producto.nombre }}"
                             data-descripcion="{{ producto.descripcion|default('Sin descripción disponible.') }}"
                             data-precio="{{ precioTexto }}"
