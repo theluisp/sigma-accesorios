@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nosotros — Sigma Accesorios{% endblock %}
+
+{% block body %}
+    <section class="catalogo-header">
+        <h1>Quiénes somos</h1>
+        <p>Accesorios para celular en San Cristóbal de las Casas, con atención en tienda y a domicilio.</p>
+    </section>
+
+    <section class="section section--glass">
+        <div class="nosotros-intro">
+            <p>
+                En Sigma Accesorios nos dedicamos a ofrecer fundas, cargadores, audio y protectores
+                de pantalla para todos los modelos de celular, con un inventario que se actualiza
+                todos los días. Puedes visitarnos en cualquiera de nuestras sucursales o pedir a
+                domicilio por Rappi — la idea es que encuentres lo que buscas rápido, sin vueltas,
+                y con la confianza de comprarle a un negocio local.
+            </p>
+            <p class="nosotros-nota">
+                <em>Texto de ejemplo — lo dejamos como punto de partida. Si quieres contar la historia
+                real del negocio (cuándo empezó, qué los distingue, etc.), lo actualizamos.</em>
+            </p>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Por qué elegirnos</h2>
+        <div class="valores-grid">
+            <div class="aqua-card aqua-card--valor">
+                <span class="valor-icon">{{ include('_partials/_icon_clock.svg.twig') }}</span>
+                <p class="aqua-card__name">Inventario siempre actualizado</p>
+                <p class="valor-desc">Sincronizamos el catálogo varias veces al día, así que lo que ves disponible, lo tenemos de verdad.</p>
+            </div>
+            <div class="aqua-card aqua-card--valor">
+                <span class="valor-icon">{{ include('_partials/_icon_truck.svg.twig') }}</span>
+                <p class="aqua-card__name">Entrega el mismo día</p>
+                <p class="valor-desc">Pide por Rappi y recíbelo directo en tu puerta, sin salir de casa.</p>
+            </div>
+            <div class="aqua-card aqua-card--valor">
+                <span class="valor-icon">{{ include('_partials/_icon_chat.svg.twig') }}</span>
+                <p class="aqua-card__name">Atención personalizada</p>
+                <p class="valor-desc">¿No sabes cuál accesorio es para tu modelo? Escríbenos por WhatsApp y te ayudamos a elegir.</p>
+            </div>
+            <div class="aqua-card aqua-card--valor">
+                <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
+                <p class="aqua-card__name">Sucursales físicas</p>
+                <p class="valor-desc">Negocio local con presencia en San Cristóbal de las Casas, no solo una tienda en línea.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section--glass nosotros-cta">
+        <h2>¿Buscas algo en específico?</h2>
+        <p>Revisa el catálogo completo o escríbenos directo — con gusto te ayudamos.</p>
+        <div class="nosotros-cta__botones">
+            <a href="{{ path('catalogo') }}" class="btn btn--primary">Ver catálogo</a>
+            <a href="{{ path('contacto') }}" class="btn btn--secondary">Contáctanos</a>
+        </div>
+    </section>
+{% endblock %}

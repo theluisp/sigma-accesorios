@@ -3,16 +3,52 @@
 {% block title %}Sigma Accesorios{% endblock %}
 
 {% block body %}
-    <section class="hero">
-        <div class="hero__text">
-            <h1>Fundas, cargadores y más</h1>
-            <p>Inventario actualizado en tiempo real. Encuentra el accesorio para tu modelo.</p>
-            <a href="{{ path('catalogo') }}" class="btn btn--primary">Ver catálogo</a>
+    {% if banners is not empty %}
+        <div id="home-carousel" class="carousel slide banner-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-indicators">
+                {% for banner in banners %}
+                    <button
+                        type="button"
+                        data-bs-target="#home-carousel"
+                        data-bs-slide-to="{{ loop.index0 }}"
+                        class="{{ loop.first ? 'active' : '' }}"
+                        aria-current="{{ loop.first ? 'true' : 'false' }}"
+                        aria-label="Banner {{ loop.index }}"
+                    ></button>
+                {% endfor %}
+            </div>
+            <div class="carousel-inner">
+                {% for banner in banners %}
+                    <div class="carousel-item {{ loop.first ? 'active' : '' }}">
+                        <div
+                            class="banner-slide {{ banner.imagen is null ? 'banner-slide--' ~ banner.numero : '' }}"
+                            {% if banner.imagen %}style="background-image: url('{{ banner.imagen }}')"{% endif %}
+                        >
+                            <div class="banner-slide__content">
+                                <h2>{{ banner.titulo }}</h2>
+                                <p>{{ banner.subtitulo }}</p>
+                                {% if banner.ctaUrl %}
+                                    <a
+                                        href="{{ banner.ctaUrl }}"
+                                        class="btn btn--primary"
+                                        {% if banner.ctaExterna %}target="_blank" rel="noopener"{% endif %}
+                                    >{{ banner.ctaTexto }}</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#home-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#home-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
         </div>
-        <div class="hero__media placeholder-box">
-            {{ include('_partials/_icon_image.svg.twig') }}
-        </div>
-    </section>
+    {% endif %}
 
     <section class="section">
         <h2>Categorías</h2>

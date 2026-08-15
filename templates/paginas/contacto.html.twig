@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contacto — Sigma Accesorios{% endblock %}
+
+{% block body %}
+    <section class="catalogo-header">
+        <h1>Contacto</h1>
+        <p>Escríbenos, síguenos o pide a domicilio — como prefieras.</p>
+    </section>
+
+    <section class="section">
+        <div class="contacto-grid">
+            {% if whatsappUrl is not null %}
+                <a href="{{ whatsappUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
+                    <span class="valor-icon">{{ include('_partials/_icon_chat.svg.twig') }}</span>
+                    <p class="aqua-card__name">WhatsApp</p>
+                    <p class="valor-desc">Escríbenos directo, respondemos rápido.</p>
+                </a>
+            {% endif %}
+
+            {% if rappiUrl is not null %}
+                <a href="{{ rappiUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
+                    <span class="valor-icon">{{ include('_partials/_icon_truck.svg.twig') }}</span>
+                    <p class="aqua-card__name">Rappi</p>
+                    <p class="valor-desc">Pide a domicilio, recíbelo el mismo día.</p>
+                </a>
+            {% endif %}
+
+            {% if facebookUrl is not null %}
+                <a href="{{ facebookUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
+                    <span class="valor-icon">{{ include('_partials/_icon_facebook.svg.twig') }}</span>
+                    <p class="aqua-card__name">Facebook</p>
+                    <p class="valor-desc">Síguenos para ver novedades y promociones.</p>
+                </a>
+            {% endif %}
+
+            <a href="{{ mapsUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
+                <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
+                <p class="aqua-card__name">Cómo llegar</p>
+                <p class="valor-desc">Búscanos en Google Maps.</p>
+            </a>
+        </div>
+
+        {% if whatsappUrl is null or rappiUrl is null or facebookUrl is null %}
+            <p class="section__empty contacto-pendiente">
+                Algunos botones todavía no aparecen porque faltan datos reales por configurar
+                (<code>WHATSAPP_PHONE_NUMBER</code>{% if facebookUrl is null %}, <code>FACEBOOK_URL</code>{% endif %}
+                en <code>.env.local</code>).
+            </p>
+        {% endif %}
+
+        {% if sucursales is not empty %}
+            <h2 class="contacto-sucursales__titulo">Nuestras sucursales</h2>
+            <div class="valores-grid">
+                {% for sucursal in sucursales %}
+                    <div class="aqua-card aqua-card--valor">
+                        <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
+                        <p class="aqua-card__name">{{ sucursal.nombre }}</p>
+                        <a href="{{ sucursal.mapsUrl }}" target="_blank" rel="noopener" class="valor-desc valor-desc--link">Ver en Google Maps →</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

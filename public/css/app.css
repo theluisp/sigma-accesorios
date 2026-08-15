@@ -499,6 +499,239 @@ body {
     padding: 0 4px;
 }
 
+/* ============================================================
+   Carrusel de banners (Home). Bootstrap Carousel + vestido propio:
+   esquinas redondeadas, degradado de marca cuando no hay foto real
+   todavía (public/images/banners/banner-N.*), overlay para que el
+   texto siempre sea legible encima de cualquier foto.
+   ============================================================ */
+.banner-carousel {
+    margin: 24px 0 12px;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 20px 45px rgba(26, 46, 71, 0.18);
+}
+
+.banner-slide {
+    position: relative;
+    height: 380px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+}
+
+.banner-slide::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(10, 20, 32, 0.75) 0%, rgba(10, 20, 32, 0.15) 55%, rgba(10, 20, 32, 0) 100%);
+}
+
+/* Degradados de respaldo (mientras no haya foto real) — variantes de la
+   paleta de marca, para que las 3 slides se sientan distintas entre sí. */
+.banner-slide--1 {
+    background-image: linear-gradient(135deg, var(--color-navy) 0%, var(--color-blue) 100%);
+}
+
+.banner-slide--2 {
+    background-image: linear-gradient(135deg, var(--color-blue) 0%, #5cb1e6 100%);
+}
+
+.banner-slide--3 {
+    background-image: linear-gradient(135deg, #24344a 0%, var(--color-navy) 100%);
+}
+
+.banner-slide__content {
+    position: relative;
+    z-index: 1;
+    padding: 36px 40px;
+    max-width: 560px;
+    color: #fff;
+}
+
+.banner-slide__content h2 {
+    margin: 0 0 8px;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.banner-slide__content p {
+    margin: 0 0 18px;
+    font-size: 1.05rem;
+    opacity: 0.92;
+}
+
+.banner-carousel .carousel-control-prev,
+.banner-carousel .carousel-control-next {
+    width: 48px;
+    height: 48px;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 50%;
+    opacity: 0.85;
+}
+
+.banner-carousel .carousel-control-prev {
+    left: 16px;
+}
+
+.banner-carousel .carousel-control-next {
+    right: 16px;
+}
+
+.banner-carousel .carousel-control-prev:hover,
+.banner-carousel .carousel-control-next:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.banner-carousel .carousel-indicators {
+    margin-bottom: 14px;
+}
+
+.banner-carousel .carousel-indicators [data-bs-target] {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    opacity: 1;
+    transition: width 0.2s ease, background-color 0.2s ease;
+}
+
+.banner-carousel .carousel-indicators .active {
+    background-color: #fff;
+    width: 22px;
+    border-radius: 4px;
+}
+
+@media (max-width: 640px) {
+    .banner-slide {
+        height: 280px;
+    }
+
+    .banner-slide__content {
+        padding: 22px 20px;
+    }
+}
+
+/* ============================================================
+   Nosotros / Contacto: intro, tarjetas de "valores" (con ícono) y
+   tarjetas de contacto — reusan .aqua-card para verse consistentes
+   con el resto del sitio.
+   ============================================================ */
+.nosotros-intro {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.nosotros-intro p {
+    color: var(--color-text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin: 0 0 12px;
+}
+
+.nosotros-nota {
+    font-size: 0.9rem !important;
+    opacity: 0.85;
+}
+
+.valores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.aqua-card--valor {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.valor-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--color-surface);
+    color: var(--color-blue);
+    margin-bottom: 12px;
+}
+
+.valor-desc {
+    margin: 4px 0 0;
+    color: var(--color-text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.valor-desc--link {
+    color: var(--color-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.valor-desc--link:hover {
+    color: var(--color-blue-hover);
+}
+
+.nosotros-cta {
+    text-align: center;
+}
+
+.nosotros-cta h2 {
+    margin-bottom: 6px;
+}
+
+.nosotros-cta p {
+    color: var(--color-text-secondary);
+    margin: 0 0 20px;
+}
+
+.nosotros-cta__botones {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.contacto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 12px;
+}
+
+.contacto-card {
+    align-items: flex-start;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.contacto-pendiente {
+    font-size: 0.85rem;
+}
+
+.contacto-pendiente code {
+    background: var(--color-surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--color-navy);
+}
+
+.contacto-sucursales__titulo {
+    margin-top: 36px;
+}
+
 /* Footer */
 .site-footer {
     background: var(--color-navy);
