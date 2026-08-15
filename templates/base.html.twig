@@ -8,7 +8,12 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/app.css">
+    {# ?v= es cache-busting manual: sin esto, el navegador (y a veces un proxy
+       intermedio) puede seguir sirviendo una copia vieja de app.css/app.js
+       cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
+       ve el cambio" clásico. Súbele el número cada vez que se edite
+       app.css o app.js. #}
+    <link rel="stylesheet" href="/css/app.css?v=3">
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -18,6 +23,7 @@
                 <img src="/images/logo.png" alt="Sigma Accesorios para Celular" class="site-header__logo">
             </a>
             <nav class="site-nav">
+                <a href="{{ path('home') }}">Inicio</a>
                 <a href="{{ path('catalogo') }}">Catálogo</a>
                 <a href="{{ path('nosotros') }}">Nosotros</a>
                 <a href="{{ path('contacto') }}">Contacto</a>
@@ -38,9 +44,9 @@
        Solo se pinta si hay número configurado (ver App\Service\Contacto\ContactoLinks). #}
     {% set waFlotante = whatsapp_url() %}
     {% if waFlotante %}
-        <a href="{{ waFlotante }}" target="_blank" rel="noopener" class="chat-bubble" aria-label="Chatea con un vendedor por WhatsApp">
+        <a href="{{ waFlotante }}" target="_blank" rel="noopener" class="chat-bubble" aria-label="Contactar vendedor por WhatsApp">
             {{ include('_partials/_icon_chat.svg.twig') }}
-            <span class="chat-bubble__label">Chatea con un vendedor</span>
+            <span class="chat-bubble__label">Contactar vendedor</span>
         </a>
     {% endif %}
 
@@ -75,7 +81,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/app.js" defer></script>
+    <script src="/js/app.js?v=2" defer></script>
     {% block javascripts %}{% endblock %}
 </body>
 </html>
