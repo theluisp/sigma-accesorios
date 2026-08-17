@@ -270,6 +270,12 @@ body.is-home .site-header__logo {
     color: var(--color-blue-hover);
 }
 
+.section__subtitle {
+    color: var(--color-text-secondary);
+    margin: -8px 0 20px;
+    font-size: 0.95rem;
+}
+
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

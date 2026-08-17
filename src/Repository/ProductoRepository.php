@@ -81,6 +81,42 @@ class ProductoRepository extends ServiceEntityRepository
     }
 
     /**
+     * Productos "Destacados" de Home: SOLO los que tienen una oferta real
+     * ahora mismo (descuentoPorcentaje > 0 en su existencia más barata
+     * disponible — ver Producto::getDescuentoPorcentaje()), con imagen
+     * propia. Nunca se fabrica un descuento: si ningún producto trae
+     * descuento real en el Sheet, este método regresa un array vacío y
+     * Home debe manejar ese caso (ver home/index.html.twig).
+     * Ordenados por % de descuento de mayor a menor, para que las mejores
+     * ofertas queden primero.
+     *
+     * @return Producto[]
+     */
+    public function findEnOferta(int $limite = 12): array
+    {
+        $productos = $this->createQueryBuilder('p')
+            ->addSelect('e', 's', 'i')
+            ->leftJoin('p.existencias', 'e')
+            ->leftJoin('e.sucursal', 's')
+            ->innerJoin('p.imagen', 'i')
+            ->orderBy('p.actualizadoEn', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        $enOferta = array_values(array_filter(
+            $productos,
+            static fn (Producto $producto): bool => $producto->isDisponible() && $producto->getDescuentoPorcentaje() > 0,
+        ));
+
+        usort(
+            $enOferta,
+            static fn (Producto $a, Producto $b): int => $b->getDescuentoPorcentaje() <=> $a->getDescuentoPorcentaje(),
+        );
+
+        return array_slice($enOferta, 0, $limite);
+    }
+
+    /**
      * Slugs de categoría que tienen al menos un producto disponible ahora
      * mismo — para que el carrusel de categorías de Home muestre solo lo
      * que realmente se vende, nunca una tarjeta muerta hacia un catálogo

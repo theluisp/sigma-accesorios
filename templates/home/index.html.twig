@@ -77,15 +77,25 @@
         </section>
     {% endif %}
 
+    {# Destacados muestra SOLO productos con oferta real ahora mismo
+       (ProductoRepository::findEnOferta — descuentoPorcentaje > 0 en el
+       Sheet, nunca fabricado). Si hoy no hay ninguno en oferta, la sección
+       se explica honestamente en vez de fingir que no hay fotos. #}
     <section class="section section--glass">
         <div class="section__header">
             <h2>Destacados</h2>
             <a href="{{ path('catalogo') }}" class="section__see-all">Ver todo el catálogo →</a>
         </div>
+        <p class="section__subtitle">Nuestras mejores ofertas de hoy — precios más bajos, mientras dure el stock.</p>
         {% if productos is empty %}
             <p class="section__empty">
-                Todavía no hay productos con foto propia — súbelas desde
-                <a href="/admin/imagenes">el panel de imágenes</a>.
+                Ahora mismo no tenemos productos en oferta, pero puedes ver
+                <a href="{{ path('catalogo') }}">todo el catálogo aquí</a>
+                {% if whatsapp_url() %}
+                    o <a href="{{ whatsapp_url() }}" target="_blank" rel="noopener">preguntarnos por WhatsApp</a> por el mejor precio.
+                {% else %}
+                    .
+                {% endif %}
             </p>
         {% else %}
             <div class="products-grid">

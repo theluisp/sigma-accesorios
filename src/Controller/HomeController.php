@@ -20,7 +20,7 @@ class HomeController extends AbstractController
         ProductCategorizer $categorizer,
     ): Response {
         return $this->render('home/index.html.twig', [
-            'productos' => $productoRepository->findDestacados(12),
+            'productos' => $productoRepository->findEnOferta(12),
             'banners' => $this->construirBanners($bannerResolver, $contactoLinks),
             'categorias' => $this->categoriasParaMostrar($productoRepository, $categorizer),
         ]);
