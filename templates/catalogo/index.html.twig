@@ -30,6 +30,7 @@
     </section>
 
     <section class="section">
+        {% set categoriaLabel = categoriaSeleccionada == ofertasSlug ? 'Ofertas' : categorias[categoriaSeleccionada]|default('Otros accesorios') %}
         <div class="category-pills">
             <a
                 href="{{ path('catalogo', {q: texto, categoria: ''}) }}"
@@ -37,6 +38,18 @@
             >
                 Todos <span class="category-pill__count">{{ totalEnBusqueda }}</span>
             </a>
+            {% if conteoOfertas > 0 %}
+                {# Pila de "Ofertas": no es una categoría real de ProductCategorizer,
+                   es un pseudo-filtro (ver CatalogoController::OFERTAS_SLUG) que
+                   solo se muestra cuando hay al menos un producto en oferta ahora
+                   mismo — nunca lleva a un catálogo vacío. #}
+                <a
+                    href="{{ path('catalogo', {q: texto, categoria: ofertasSlug}) }}"
+                    class="category-pill category-pill--ofertas{{ categoriaSeleccionada == ofertasSlug ? ' category-pill--active' : '' }}"
+                >
+                    🔥 Ofertas <span class="category-pill__count">{{ conteoOfertas }}</span>
+                </a>
+            {% endif %}
             {% for slug, label in categorias %}
                 <a
                     href="{{ path('catalogo', {q: texto, categoria: slug}) }}"
@@ -50,10 +63,10 @@
         <p class="catalogo-meta">
             {% if texto is not empty %}
                 {{ totalResultados }} resultado{{ totalResultados == 1 ? '' : 's' }} para «{{ texto }}»
-                {%- if categoriaSeleccionada is not empty %} en {{ categorias[categoriaSeleccionada]|default('Otros accesorios') }}{% endif %}
+                {%- if categoriaSeleccionada is not empty %} en {{ categoriaLabel }}{% endif %}
             {% else %}
                 {{ totalResultados }} producto{{ totalResultados == 1 ? '' : 's' }}
-                {%- if categoriaSeleccionada is not empty %} en {{ categorias[categoriaSeleccionada]|default('Otros accesorios') }}{% endif %}
+                {%- if categoriaSeleccionada is not empty %} en {{ categoriaLabel }}{% endif %}
             {% endif %}
         </p>
 

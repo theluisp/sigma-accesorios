@@ -24,28 +24,27 @@
         </div>
     </section>
 
-    <section class="section">
-        <h2>Por qué elegirnos</h2>
+    {# Sección "por qué elegirnos" con tono tipo apple.com (encabezado grande
+       y centrado) — pedido explícito del usuario. Los 3 puntos (entrega a
+       domicilio, garantía, buenos precios) son los que el usuario dio
+       directamente, no inventados. #}
+    <section class="section nosotros-porque">
+        <h2>Descubre por qué Sigma Accesorios es el mejor lugar para comprar tus accesorios</h2>
         <div class="valores-grid">
             <div class="aqua-card aqua-card--valor">
-                <span class="valor-icon">{{ include('_partials/_icon_clock.svg.twig') }}</span>
-                <p class="aqua-card__name">Inventario siempre actualizado</p>
-                <p class="valor-desc">Sincronizamos el catálogo varias veces al día, así que lo que ves disponible, lo tenemos de verdad.</p>
-            </div>
-            <div class="aqua-card aqua-card--valor">
                 <span class="valor-icon">{{ include('_partials/_icon_truck.svg.twig') }}</span>
-                <p class="aqua-card__name">Entrega el mismo día</p>
+                <p class="aqua-card__name">Entrega a domicilio</p>
                 <p class="valor-desc">Pide por Rappi y recíbelo directo en tu puerta, sin salir de casa.</p>
             </div>
             <div class="aqua-card aqua-card--valor">
-                <span class="valor-icon">{{ include('_partials/_icon_chat.svg.twig') }}</span>
-                <p class="aqua-card__name">Atención personalizada</p>
-                <p class="valor-desc">¿No sabes cuál accesorio es para tu modelo? Escríbenos por WhatsApp y te ayudamos a elegir.</p>
+                <span class="valor-icon">{{ include('_partials/_icon_shield.svg.twig') }}</span>
+                <p class="aqua-card__name">Garantía en defectos de fábrica</p>
+                <p class="valor-desc">Si tu accesorio sale con un defecto de fábrica, te lo respaldamos.</p>
             </div>
             <div class="aqua-card aqua-card--valor">
-                <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
-                <p class="aqua-card__name">Sucursales físicas</p>
-                <p class="valor-desc">Negocio local con presencia en San Cristóbal de las Casas, no solo una tienda en línea.</p>
+                <span class="valor-icon">{{ include('_partials/_icon_tag.svg.twig') }}</span>
+                <p class="aqua-card__name">Buenos precios</p>
+                <p class="valor-desc">Precios pensados para que siempre valga la pena comprar con nosotros.</p>
             </div>
         </div>
     </section>

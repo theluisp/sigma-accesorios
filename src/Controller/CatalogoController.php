@@ -14,6 +14,14 @@ final class CatalogoController extends AbstractController
 {
     private const POR_PAGINA = 12;
 
+    /**
+     * Slug reservado para el filtro de "Ofertas" — no es una categoría real
+     * de ProductCategorizer, es un pseudo-filtro que se resuelve aparte
+     * (ver index() abajo). No puede chocar con un slug real porque
+     * ProductCategorizer no usa "ofertas".
+     */
+    private const OFERTAS_SLUG = 'ofertas';
+
     #[Route('/catalogo', name: 'catalogo', methods: ['GET'])]
     public function index(Request $request, ProductoRepository $productoRepository, ProductCategorizer $categorizer): Response
     {
@@ -25,21 +33,31 @@ final class CatalogoController extends AbstractController
         // la disponibilidad ya viene filtrada por el repositorio.
         $resultadosBusqueda = $productoRepository->buscarDisponibles($texto !== '' ? $texto : null);
 
-        // Conteo por categoría sobre los resultados de la búsqueda de texto
-        // (sin aplicar todavía el filtro de categoría), para que las píldoras
-        // muestren cuántos hay en cada una dado lo que se está buscando.
+        // Conteo por categoría y por ofertas sobre los resultados de la
+        // búsqueda de texto (sin aplicar todavía el filtro seleccionado),
+        // para que las píldoras muestren cuántos hay en cada una dado lo
+        // que se está buscando.
         $conteoPorCategoria = [];
+        $conteoOfertas = 0;
         foreach ($resultadosBusqueda as $producto) {
             $cat = $producto->getCategoria();
             $conteoPorCategoria[$cat] = ($conteoPorCategoria[$cat] ?? 0) + 1;
+            if ($producto->getDescuentoPorcentaje() > 0) {
+                ++$conteoOfertas;
+            }
         }
 
-        $productosFiltrados = $categoriaSeleccionada !== ''
-            ? array_values(array_filter(
+        $productosFiltrados = match (true) {
+            $categoriaSeleccionada === self::OFERTAS_SLUG => array_values(array_filter(
+                $resultadosBusqueda,
+                static fn (Producto $producto): bool => $producto->getDescuentoPorcentaje() > 0,
+            )),
+            $categoriaSeleccionada !== '' => array_values(array_filter(
                 $resultadosBusqueda,
                 static fn (Producto $producto): bool => $producto->getCategoria() === $categoriaSeleccionada,
-            ))
-            : $resultadosBusqueda;
+            )),
+            default => $resultadosBusqueda,
+        };
 
         $total = count($productosFiltrados);
         $totalPaginas = max(1, (int) ceil($total / self::POR_PAGINA));
@@ -53,6 +71,8 @@ final class CatalogoController extends AbstractController
             'categoriaSeleccionada' => $categoriaSeleccionada,
             'categorias' => $categorizer->todas(),
             'conteoPorCategoria' => $conteoPorCategoria,
+            'conteoOfertas' => $conteoOfertas,
+            'ofertasSlug' => self::OFERTAS_SLUG,
             'totalEnBusqueda' => count($resultadosBusqueda),
             'totalResultados' => $total,
             'pagina' => $pagina,

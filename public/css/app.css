@@ -524,6 +524,29 @@ body.is-home .site-header__logo {
     color: var(--color-white);
 }
 
+/* Píldora de "Ofertas" — mismo rojo del badge de descuento en las
+   tarjetas de producto, a propósito fuera de la paleta navy/azul para que
+   salte a la vista entre las demás categorías. */
+.category-pill--ofertas {
+    border-color: rgba(224, 57, 62, 0.35);
+    color: #e0393e;
+}
+
+.category-pill--ofertas:hover {
+    border-color: #e0393e;
+    color: #e0393e;
+}
+
+.category-pill--ofertas.category-pill--active {
+    background: #e0393e;
+    border-color: #e0393e;
+    color: var(--color-white);
+}
+
+.category-pill--ofertas.category-pill--active:hover {
+    color: var(--color-white);
+}
+
 .category-pill__count {
     color: inherit;
     opacity: 0.7;
@@ -731,6 +754,25 @@ body.is-home .site-header__logo {
 .nosotros-nota {
     font-size: 0.9rem !important;
     opacity: 0.85;
+}
+
+/* Encabezado grande y centrado tipo apple.com para la sección "por qué
+   elegirnos" — declaración de marca, no un simple título de sección. */
+.nosotros-porque {
+    text-align: center;
+}
+
+.nosotros-porque h2 {
+    max-width: 720px;
+    margin: 0 auto 32px;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.nosotros-porque .valores-grid {
+    text-align: left;
 }
 
 .valores-grid {
