@@ -962,8 +962,8 @@ body.is-home .site-header__logo {
     opacity: 1 !important;
     align-items: center;
     gap: 10px;
-    height: 56px;
-    padding: 0 20px 0 16px;
+    height: 64px;
+    padding: 0 22px 0 16px;
     border-radius: 999px;
     background: #25d366;
     color: var(--color-white);
@@ -971,39 +971,65 @@ body.is-home .site-header__logo {
     cursor: pointer;
     text-decoration: none;
     box-shadow: 0 6px 16px rgba(37, 211, 102, 0.45);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: box-shadow 0.15s ease;
+    transform-origin: center;
     max-width: calc(100vw - 28px);
+    animation: sigma-fab-pulse 1.8s ease-in-out infinite;
 }
 
 .sigma-fab svg {
-    width: 26px;
-    height: 26px;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
 }
 
 .sigma-fab__label {
     font-weight: 700;
-    font-size: 0.92rem;
+    font-size: 0.98rem;
     white-space: nowrap;
 }
 
 .sigma-fab:hover {
     background: #1fb958;
-    transform: translateY(-2px);
     box-shadow: 0 10px 22px rgba(37, 211, 102, 0.5);
+    animation-play-state: paused;
+    transform: scale(1.05);
+}
+
+/* Efecto de "llamar la atención": crece y se reduce suavemente en bucle.
+   Se detiene en :hover (arriba) para no marear al usuario mientras
+   apunta al botón. Respeta prefers-reduced-motion más abajo. */
+@keyframes sigma-fab-pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sigma-fab {
+        animation: none;
+    }
 }
 
 @media (max-width: 640px) {
     .sigma-fab {
         right: 14px !important;
         bottom: 14px !important;
-        height: 50px;
-        padding: 0 16px 0 12px;
+        height: 56px;
+        padding: 0 18px 0 14px;
         gap: 8px;
     }
 
+    .sigma-fab svg {
+        width: 28px;
+        height: 28px;
+    }
+
     .sigma-fab__label {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
     }
 }
 
