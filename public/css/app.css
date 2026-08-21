@@ -59,15 +59,11 @@ body {
     display: flex;
 }
 
+/* Mismo tamaño en todas las páginas (antes Home tenía un logo más grande
+   que el resto del sitio — se empataron a pedido del usuario). */
 .site-header__logo {
-    height: 72px;
-    width: auto;
-}
-
-/* En Home el logo es la carta de presentación — se pinta más grande que en
-   el resto del sitio (donde 72px ya es suficiente para el header). */
-body.is-home .site-header__logo {
     height: 168px;
+    width: auto;
 }
 
 .site-nav {
@@ -96,10 +92,6 @@ body.is-home .site-header__logo {
     }
 
     .site-header__logo {
-        height: 56px;
-    }
-
-    body.is-home .site-header__logo {
         height: 104px;
     }
 
@@ -951,10 +943,12 @@ body.is-home .site-header__logo {
 }
 
 /* Burbuja flotante de WhatsApp — color de marca de WhatsApp a propósito
-   (#25D366), para que se reconozca de inmediato qué hace el botón. Es una
-   píldora con texto ("Contactar vendedor"), no solo un ícono suelto, para
-   invitar activamente a escribir en vez de depender de que el usuario
-   adivine qué hace el botón.
+   (#25D366), para que se reconozca de inmediato qué hace el botón. Es un
+   botón circular solo con el ícono (antes traía el texto "Contactar
+   vendedor" en píldora; se simplificó a pedido del usuario), con una
+   notificación roja tipo "1 mensaje nuevo" para llamar más la atención —
+   el `aria-label` en base.html.twig sigue describiendo la acción completa
+   para lectores de pantalla, ya que visualmente no queda texto.
 
    Se llama ".sigma-fab" (no ".chat-bubble") a propósito: muchos
    bloqueadores de anuncios/privacidad traen filtros cosméticos genéricos
@@ -976,10 +970,10 @@ body.is-home .site-header__logo {
     visibility: visible !important;
     opacity: 1 !important;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    width: 64px;
     height: 64px;
-    padding: 0 22px 0 16px;
-    border-radius: 999px;
+    border-radius: 50%;
     background: #25d366;
     color: var(--color-white);
     border: none;
@@ -988,7 +982,6 @@ body.is-home .site-header__logo {
     box-shadow: 0 6px 16px rgba(37, 211, 102, 0.45);
     transition: box-shadow 0.15s ease;
     transform-origin: center;
-    max-width: calc(100vw - 28px);
     animation: sigma-fab-pulse 1.8s ease-in-out infinite;
 }
 
@@ -998,10 +991,25 @@ body.is-home .site-header__logo {
     flex-shrink: 0;
 }
 
-.sigma-fab__label {
+/* Insignia roja de "mensaje nuevo" en la esquina del botón — imita el
+   badge de notificaciones de WhatsApp/apps de chat, para incentivar el
+   clic. Es decorativa (aria-hidden), el conteo real vive en el
+   aria-label del enlace. */
+.sigma-fab__badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #ff3b30;
+    color: var(--color-white);
+    border: 2px solid var(--color-white);
+    font-size: 0.72rem;
     font-weight: 700;
-    font-size: 0.98rem;
-    white-space: nowrap;
+    line-height: 18px;
+    text-align: center;
 }
 
 .sigma-fab:hover {
@@ -1033,9 +1041,8 @@ body.is-home .site-header__logo {
     .sigma-fab {
         right: 14px !important;
         bottom: 14px !important;
-        height: 56px;
-        padding: 0 18px 0 14px;
-        gap: 8px;
+        width: 56px !important;
+        height: 56px !important;
     }
 
     .sigma-fab svg {
@@ -1043,23 +1050,13 @@ body.is-home .site-header__logo {
         height: 28px;
     }
 
-    .sigma-fab__label {
-        font-size: 0.85rem;
-    }
-}
-
-/* En pantallas muy angostas la píldora completa no cabe cómodamente —
-   se reduce a solo el ícono (el aria-label sigue explicando la acción a
-   lectores de pantalla). */
-@media (max-width: 360px) {
-    .sigma-fab {
-        width: 50px;
-        padding: 0;
-        justify-content: center;
-    }
-
-    .sigma-fab__label {
-        display: none;
+    .sigma-fab__badge {
+        top: -3px;
+        right: -3px;
+        min-width: 20px;
+        height: 20px;
+        font-size: 0.68rem;
+        line-height: 16px;
     }
 }
 
