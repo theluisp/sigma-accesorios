@@ -26,7 +26,7 @@
                 <a href="{{ path('home') }}">Inicio</a>
                 <a href="{{ path('catalogo') }}">Catálogo</a>
                 <a href="{{ path('nosotros') }}">Nosotros</a>
-                <a href="{{ path('contacto') }}">Contacto</a>
+                <a href="{{ path('contacto') }}">Contacto y pide a domicilio</a>
             </nav>
         </div>
     </header>
@@ -54,7 +54,7 @@
        redundante (máxima especificidad posible sin !important) como
        segunda capa de defensa por si el `app.css` externo llegara a
        bloquearse por el mismo tipo de filtro. #}
-    {% set waFlotante = whatsapp_url() %}
+{% set waFlotante = 'https://wa.me/522219220465?text=Hola%20Sigma!' %}
     {% if waFlotante %}
         <a
             href="{{ waFlotante }}"

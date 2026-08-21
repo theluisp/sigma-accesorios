@@ -11,7 +11,7 @@
     <section class="section">
         {% if whatsappUrl is not null %}
             <p class="contacto-incentivo">
-                💬 ¿Tienes dudas sobre un producto, tu pedido o quieres comprar directo?
+               ¿Tienes dudas sobre un producto, tu pedido o quieres comprar directo?
                 <a href="{{ whatsappUrl }}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a> — respondemos rápido.
             </p>
         {% endif %}
@@ -31,7 +31,17 @@
                         <img src="/images/brands/rappi.png" alt="Rappi" loading="lazy">
                     </span>
                     <p class="aqua-card__name">Rappi</p>
-                    <p class="valor-desc">Pide a domicilio, recíbelo el mismo día.</p>
+                    <p class="valor-desc">Pide a domicilio da clic aqui.</p>
+                </a>
+            {% endif %}
+
+            {% if rappiUrl is not null %}
+                <a href="{{ rappiUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
+                    <span class="contacto-logo">
+                        <img src="/images/brands/didi.jpg" alt="didi" loading="lazy">
+                    </span>
+                    <p class="aqua-card__name">Didi Food</p>
+                    <p class="valor-desc">Pide a domicilio da clic aqui.</p>
                 </a>
             {% endif %}
 
