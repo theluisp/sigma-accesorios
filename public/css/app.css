@@ -19,8 +19,21 @@
     box-sizing: border-box;
 }
 
+html {
+    height: 100%;
+}
+
+/* Footer pegado siempre al fondo de la pantalla (patrón "sticky footer"):
+   si el contenido de una página es corto (ej. Contacto con pocas tarjetas),
+   el footer no debe quedar "flotando" a medio scroll — debe anclarse al
+   fondo del viewport. body ocupa mínimo el alto completo de la pantalla en
+   columna, .site-main crece para llenar el espacio sobrante, y el footer
+   se queda al final sin encogerse. */
 body {
     margin: 0;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
         "Helvetica Neue", Arial, sans-serif;
     color: var(--color-navy);
@@ -101,9 +114,10 @@ body.is-home .site-header__logo {
 /* Main */
 .site-main {
     max-width: 1100px;
+    width: 100%;
     margin: 0 auto;
     padding: 40px 20px;
-    min-height: 50vh;
+    flex: 1 0 auto;
 }
 
 .hero {
@@ -929,6 +943,7 @@ body.is-home .site-header__logo {
 
 /* Footer */
 .site-footer {
+    flex-shrink: 0;
     background: var(--color-navy);
     color: var(--color-white);
     text-align: center;
