@@ -1130,6 +1130,105 @@ body {
     flex-wrap: wrap;
 }
 
+/* Nav simple entre las páginas de /admin (imágenes, analíticas) */
+.admin-nav {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.admin-nav__link {
+    padding: 10px 16px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 2px solid transparent;
+}
+
+.admin-nav__link:hover {
+    color: var(--color-navy);
+}
+
+.admin-nav__link--active {
+    color: var(--color-blue);
+    border-bottom-color: var(--color-blue);
+}
+
+/* Admin: panel de analíticas (conteo básico de visitas diarias) */
+.admin-analiticas__nota {
+    color: var(--color-text-secondary);
+    max-width: 640px;
+    margin-bottom: 24px;
+}
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.admin-stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 20px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: var(--color-white);
+}
+
+.admin-stat-card--highlight {
+    border-color: var(--color-blue);
+    background: var(--color-surface);
+}
+
+.admin-stat-card__label {
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+}
+
+.admin-stat-card__value {
+    color: var(--color-navy);
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.admin-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 160px;
+    margin-bottom: 32px;
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: var(--color-white);
+}
+
+.admin-chart__bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    gap: 4px;
+}
+
+.admin-chart__bar {
+    width: 100%;
+    min-height: 2px;
+    background: var(--color-blue);
+    border-radius: 3px 3px 0 0;
+}
+
+.admin-chart__day {
+    font-size: 0.65rem;
+    color: var(--color-text-secondary);
+}
+
 /* ============================================================
    Modal de detalle de producto — usa el componente Modal de
    Bootstrap (posicionamiento/backdrop/foco los resuelve su JS),

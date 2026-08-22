@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin · Analíticas{% endblock %}
+
+{% block body %}
+    <h1>Analíticas del sitio</h1>
+    <nav class="admin-nav">
+        <a href="{{ path('admin_analiticas_index') }}" class="admin-nav__link admin-nav__link--active">Analíticas</a>
+        <a href="{{ path('admin_images_index') }}" class="admin-nav__link">Imágenes de productos</a>
+    </nav>
+
+    <p class="admin-analiticas__nota">
+        Conteo básico de visitas: cada navegador distinto se cuenta una sola vez por día
+        (vía una cookie propia, sin guardar IP ni ningún otro dato personal). No es un
+        análisis de tráfico completo, pero da una idea real de cuánta gente entra al sitio.
+        Las visitas al propio panel de administración no se cuentan.
+    </p>
+
+    <div class="admin-stats">
+        <div class="admin-stat-card admin-stat-card--highlight">
+            <span class="admin-stat-card__label">Hoy</span>
+            <span class="admin-stat-card__value">{{ hoy.contador }}</span>
+        </div>
+        <div class="admin-stat-card">
+            <span class="admin-stat-card__label">Últimos {{ diasAMostrar }} días</span>
+            <span class="admin-stat-card__value">{{ totalPeriodo }}</span>
+        </div>
+        <div class="admin-stat-card">
+            <span class="admin-stat-card__label">Promedio diario</span>
+            <span class="admin-stat-card__value">{{ promedioPeriodo }}</span>
+        </div>
+        <div class="admin-stat-card">
+            <span class="admin-stat-card__label">Total histórico</span>
+            <span class="admin-stat-card__value">{{ totalHistorico }}</span>
+        </div>
+    </div>
+
+    <h2>Últimos {{ diasAMostrar }} días</h2>
+    <div class="admin-chart">
+        {% for dia in ultimosDias %}
+            <div class="admin-chart__bar-wrap" title="{{ dia.fecha|date('d/m/Y') }}: {{ dia.contador }} visita{{ dia.contador == 1 ? '' : 's' }}">
+                <div class="admin-chart__bar" style="height: {{ (dia.contador / maxContador * 100)|round(1) }}%"></div>
+                <span class="admin-chart__day">{{ dia.fecha|date('d') }}</span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Visitas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dia in ultimosDias|reverse %}
+                <tr>
+                    <td>{{ dia.fecha|date('d/m/Y') }}</td>
+                    <td>{{ dia.contador }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
