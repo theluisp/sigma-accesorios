@@ -13,7 +13,7 @@
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=7">
+    <link rel="stylesheet" href="/css/app.css?v=8">
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -22,12 +22,23 @@
             <a href="{{ path('home') }}" class="site-header__brand">
                 <img src="/images/logo.png" alt="Sigma Accesorios para Celular" class="site-header__logo">
             </a>
-            <nav class="site-nav">
-                <a href="{{ path('home') }}">Inicio</a>
-                <a href="{{ path('catalogo') }}">Catálogo</a>
-                <a href="{{ path('nosotros') }}">Nosotros</a>
-                <a href="{{ path('contacto') }}">Contacto y pide a domicilio</a>
-            </nav>
+            <div class="site-header__right">
+                <nav class="site-nav">
+                    <a href="{{ path('home') }}">Inicio</a>
+                    <a href="{{ path('catalogo') }}">Catálogo</a>
+                    <a href="{{ path('nosotros') }}">Nosotros</a>
+                    <a href="{{ path('contacto') }}">Contacto y pide a domicilio</a>
+                </nav>
+                {# Botón del carrito: el conteo/contenido vive en localStorage
+                   del navegador (ver public/js/app.js, objeto Carrito) — no
+                   hay backend de pedidos todavía. js-carrito-contador se
+                   actualiza al cargar la página y cada vez que cambia el
+                   carrito. #}
+                <button type="button" class="site-cart-btn" data-bs-toggle="modal" data-bs-target="#carrito-modal" aria-label="Ver carrito">
+                    {{ include('_partials/_icon_cart.svg.twig') }}
+                    <span class="site-cart-btn__badge js-carrito-contador" hidden>0</span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -94,13 +105,51 @@
                         {{ include('_partials/_icon_whatsapp.svg.twig') }}
                         Preguntar por WhatsApp
                     </a>
+                    {# Agregar al carrito desde el modal de detalle: mismo patrón
+                       data-* que el botón de la tarjeta (js-carrito-agregar), se
+                       llena vía JS al abrir el modal (ver app.js). Oculto si el
+                       producto no tiene precio (no hay con qué calcular total). #}
+                    <button type="button" id="producto-modal-carrito" class="btn btn--secondary w-100 mt-2 js-carrito-agregar" hidden>
+                        🛒 Agregar al carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Modal del carrito: lista de productos agregados, total y botón para
+       mandar el pedido por WhatsApp con el resumen ya armado como texto.
+       Todo el contenido vive en localStorage (ver Carrito en app.js) — no
+       hay backend de pedidos todavía, esta es la versión "MVP" del carrito
+       mientras se construye el sistema completo de pagos/envío. #}
+    <div class="modal fade" id="carrito-modal" tabindex="-1" aria-labelledby="carrito-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content aqua-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="carrito-modal-title">Tu carrito</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="carrito-vacio js-carrito-vacio">Tu carrito está vacío. Agrega productos desde el catálogo.</p>
+                    <div class="carrito-items js-carrito-items"></div>
+                    <div class="carrito-total js-carrito-total-wrap" hidden>
+                        <span>Total</span>
+                        <span class="js-carrito-total">$0</span>
+                    </div>
+                </div>
+                <div class="modal-footer carrito-modal__footer">
+                    <button type="button" class="btn btn--secondary btn--small js-carrito-vaciar" hidden>Vaciar carrito</button>
+                    <a href="#" id="carrito-whatsapp" target="_blank" rel="noopener" class="btn btn--whatsapp w-100" data-whatsapp-base="{{ whatsapp_url() }}" hidden>
+                        {{ include('_partials/_icon_whatsapp.svg.twig') }}
+                        Enviar pedido por WhatsApp
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/app.js?v=2" defer></script>
+    <script src="/js/app.js?v=3" defer></script>
     {% block javascripts %}{% endblock %}
 </body>
 </html>

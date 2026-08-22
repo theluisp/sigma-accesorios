@@ -1184,3 +1184,201 @@ body {
     white-space: pre-line;
     margin: 0;
 }
+
+/* ============================================================
+   Carrito (MVP): botón del header + modal con la lista de
+   productos agregados. Todo el estado vive en localStorage
+   (ver Carrito en app.js) — el "checkout" de esta primera
+   versión es mandar el resumen por WhatsApp.
+   ============================================================ */
+.site-header__right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.site-cart-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-navy);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.site-cart-btn:hover {
+    background: var(--color-surface);
+    color: var(--color-blue);
+}
+
+.site-cart-btn__badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: #ff3b30;
+    color: var(--color-white);
+    border: 2px solid var(--color-white);
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 14px;
+    text-align: center;
+}
+
+@media (max-width: 640px) {
+    .site-header__right {
+        width: 100%;
+        justify-content: center;
+        gap: 14px;
+    }
+}
+
+/* Botones "Ver detalle" / "Agregar" en la tarjeta de producto, uno al
+   lado del otro. Si solo hay un botón (sin precio), ocupa todo el ancho. */
+.aqua-card__acciones {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.aqua-card__acciones .btn {
+    margin-top: 0;
+    flex: 1;
+}
+
+/* Lista de productos dentro del modal del carrito */
+.carrito-vacio {
+    color: var(--color-text-secondary);
+    text-align: center;
+    padding: 12px 0;
+    margin: 0;
+}
+
+.carrito-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.carrito-item {
+    display: grid;
+    grid-template-columns: 52px 1fr auto auto;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.carrito-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.carrito-item__imagen {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: var(--color-surface);
+}
+
+.carrito-item__info {
+    min-width: 0;
+}
+
+.carrito-item__nombre {
+    margin: 0;
+    font-weight: 600;
+    color: var(--color-navy);
+    font-size: 0.92rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.carrito-item__precio {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+}
+
+.carrito-item__cantidad {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.carrito-item__paso {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-white);
+    color: var(--color-navy);
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.carrito-item__paso:hover {
+    border-color: var(--color-blue);
+    color: var(--color-blue);
+}
+
+.carrito-item__cantidad-num {
+    min-width: 18px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+.carrito-item__quitar {
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.carrito-item__quitar:hover {
+    color: #ff3b30;
+}
+
+.carrito-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 2px solid var(--color-border);
+    font-weight: 700;
+    color: var(--color-navy);
+    font-size: 1.1rem;
+}
+
+.carrito-modal__footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.carrito-modal__footer .btn {
+    margin: 0;
+    width: 100%;
+}

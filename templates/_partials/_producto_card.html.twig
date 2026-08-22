@@ -25,17 +25,40 @@
     {% if producto.precioDesde is not null %}
         <p class="aqua-card__disponibilidad">✓ Disponible hoy</p>
     {% endif %}
-    <button
-        type="button"
-        class="btn btn--primary btn--small"
-        data-bs-toggle="modal"
-        data-bs-target="#producto-modal"
-        data-nombre="{{ producto.nombre }}"
-        data-descripcion="{{ producto.descripcion|default('Sin descripción disponible.') }}"
-        data-precio="{{ precioTexto }}"
-        data-imagen="{{ imagenSrc }}"
-        data-whatsapp="{{ whatsapp_url() }}"
-    >
-        Ver detalle
-    </button>
+    <div class="aqua-card__acciones">
+        <button
+            type="button"
+            class="btn btn--primary btn--small"
+            data-bs-toggle="modal"
+            data-bs-target="#producto-modal"
+            data-nombre="{{ producto.nombre }}"
+            data-descripcion="{{ producto.descripcion|default('Sin descripción disponible.') }}"
+            data-precio="{{ precioTexto }}"
+            data-imagen="{{ imagenSrc }}"
+            data-whatsapp="{{ whatsapp_url() }}"
+            data-slug="{{ producto.slug }}"
+            data-precio-numero="{{ producto.precioDesde }}"
+        >
+            Ver detalle
+        </button>
+        {% if producto.precioDesde is not null %}
+            {# Botón de carrito: solo si hay precio real (si no, no hay con qué
+               calcular un total). El carrito vive 100% en el navegador
+               (localStorage, ver public/js/app.js) — no hay backend de
+               pedidos todavía, el "checkout" de esta primera versión es
+               mandar el resumen por WhatsApp. #}
+            <button
+                type="button"
+                class="btn btn--secondary btn--small js-carrito-agregar"
+                data-slug="{{ producto.slug }}"
+                data-nombre="{{ producto.nombre }}"
+                data-precio-numero="{{ producto.precioDesde }}"
+                data-precio="{{ precioTexto }}"
+                data-imagen="{{ imagenSrc }}"
+                aria-label="Agregar {{ producto.nombre }} al carrito"
+            >
+                🛒 Agregar
+            </button>
+        {% endif %}
+    </div>
 </div>
