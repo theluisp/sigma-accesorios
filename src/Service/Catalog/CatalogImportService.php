@@ -63,7 +63,7 @@ final class CatalogImportService
                     continue;
                 }
 
-                $categoria = $this->categorizer->classify($mapped['nombre']);
+                $categoria = $this->categorizer->classify($mapped['nombre'], $mapped['descripcion']);
 
                 $producto = $productosPorSlug[$mapped['slug']] ?? null;
                 if ($producto === null) {

@@ -75,9 +75,16 @@ final class ProductCategorizer
         ],
     ];
 
-    public function classify(string $nombre): string
+    /**
+     * Clasifica por nombre Y descripción (pedido explícito del usuario: si
+     * la descripción menciona "iPhone" —o cualquier otra palabra clave—
+     * aunque el nombre no lo diga, el producto debe caer en esa categoría
+     * igual). Se concatenan ambos textos normalizados antes de buscar, así
+     * que aplica parejo a todas las categorías, no solo a iPhone.
+     */
+    public function classify(string $nombre, string $descripcion = ''): string
     {
-        $normalizado = $this->normalizar($nombre);
+        $normalizado = $this->normalizar($nombre.' '.$descripcion);
 
         foreach (self::CATEGORIAS as $slug => $config) {
             foreach ($config['keywords'] as $keyword) {
