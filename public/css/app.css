@@ -553,6 +553,29 @@ body {
     color: var(--color-white);
 }
 
+/* Píldora de "Novedades" — morado, fuera de la paleta navy/azul/rojo de
+   Ofertas, para que las tres se distingan claramente entre sí a simple
+   vista. */
+.category-pill--novedades {
+    border-color: rgba(124, 77, 255, 0.35);
+    color: #7c4dff;
+}
+
+.category-pill--novedades:hover {
+    border-color: #7c4dff;
+    color: #7c4dff;
+}
+
+.category-pill--novedades.category-pill--active {
+    background: #7c4dff;
+    border-color: #7c4dff;
+    color: var(--color-white);
+}
+
+.category-pill--novedades.category-pill--active:hover {
+    color: var(--color-white);
+}
+
 .category-pill__count {
     color: inherit;
     opacity: 0.7;

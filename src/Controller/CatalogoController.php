@@ -22,6 +22,16 @@ final class CatalogoController extends AbstractController
      */
     private const OFERTAS_SLUG = 'ofertas';
 
+    /**
+     * Slug reservado para el filtro de "Novedades" — igual que Ofertas, NO
+     * es una categoría real: es "productos que aparecieron por primera vez
+     * en un app:catalog:sync en los últimos N días" (ver
+     * Producto::getCreadoEn(), que se fija una sola vez al crear el
+     * producto y nunca se actualiza en syncs posteriores).
+     */
+    private const NOVEDADES_SLUG = 'novedades';
+    private const NOVEDADES_DIAS = 15;
+
     #[Route('/catalogo', name: 'catalogo', methods: ['GET'])]
     public function index(Request $request, ProductoRepository $productoRepository, ProductCategorizer $categorizer): Response
     {
@@ -33,17 +43,23 @@ final class CatalogoController extends AbstractController
         // la disponibilidad ya viene filtrada por el repositorio.
         $resultadosBusqueda = $productoRepository->buscarDisponibles($texto !== '' ? $texto : null);
 
-        // Conteo por categoría y por ofertas sobre los resultados de la
-        // búsqueda de texto (sin aplicar todavía el filtro seleccionado),
-        // para que las píldoras muestren cuántos hay en cada una dado lo
-        // que se está buscando.
+        $umbralNovedades = (new \DateTimeImmutable())->modify(sprintf('-%d days', self::NOVEDADES_DIAS));
+
+        // Conteo por categoría, por ofertas y por novedades sobre los
+        // resultados de la búsqueda de texto (sin aplicar todavía el filtro
+        // seleccionado), para que las píldoras muestren cuántos hay en cada
+        // una dado lo que se está buscando.
         $conteoPorCategoria = [];
         $conteoOfertas = 0;
+        $conteoNovedades = 0;
         foreach ($resultadosBusqueda as $producto) {
             $cat = $producto->getCategoria();
             $conteoPorCategoria[$cat] = ($conteoPorCategoria[$cat] ?? 0) + 1;
             if ($producto->getDescuentoPorcentaje() > 0) {
                 ++$conteoOfertas;
+            }
+            if ($producto->getCreadoEn() >= $umbralNovedades) {
+                ++$conteoNovedades;
             }
         }
 
@@ -51,6 +67,10 @@ final class CatalogoController extends AbstractController
             $categoriaSeleccionada === self::OFERTAS_SLUG => array_values(array_filter(
                 $resultadosBusqueda,
                 static fn (Producto $producto): bool => $producto->getDescuentoPorcentaje() > 0,
+            )),
+            $categoriaSeleccionada === self::NOVEDADES_SLUG => array_values(array_filter(
+                $resultadosBusqueda,
+                static fn (Producto $producto): bool => $producto->getCreadoEn() >= $umbralNovedades,
             )),
             $categoriaSeleccionada !== '' => array_values(array_filter(
                 $resultadosBusqueda,
@@ -73,6 +93,8 @@ final class CatalogoController extends AbstractController
             'conteoPorCategoria' => $conteoPorCategoria,
             'conteoOfertas' => $conteoOfertas,
             'ofertasSlug' => self::OFERTAS_SLUG,
+            'conteoNovedades' => $conteoNovedades,
+            'novedadesSlug' => self::NOVEDADES_SLUG,
             'totalEnBusqueda' => count($resultadosBusqueda),
             'totalResultados' => $total,
             'pagina' => $pagina,

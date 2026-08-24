@@ -94,6 +94,17 @@ class Producto
         $this->categoria = $categoria;
     }
 
+    /**
+     * Fecha en que el producto apareció POR PRIMERA VEZ en un
+     * app:catalog:sync (se fija una sola vez en el constructor, nunca se
+     * actualiza en syncs posteriores — ver CatalogImportService). Es la
+     * base del pseudo-filtro "Novedades" del Catálogo.
+     */
+    public function getCreadoEn(): \DateTimeImmutable
+    {
+        return $this->creadoEn;
+    }
+
     public function getActualizadoEn(): \DateTimeImmutable
     {
         return $this->actualizadoEn;

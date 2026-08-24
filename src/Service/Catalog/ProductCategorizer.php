@@ -15,7 +15,14 @@ final class ProductCategorizer
 
     /**
      * @var array<string, array{label: string, keywords: string[]}>
-     *      Orden importa: se evalúan en este orden y gana la primera que matchee.
+     *      Orden importa: se evalúan en este orden y gana la primera que matchee
+     *      (ej. "Soporte para auto" debe evaluarse ANTES que una categoría
+     *      genérica de cargadores/adaptadores para no perder el matiz de "auto").
+     *      Lista ampliada a pedido del usuario (ago 2026) — antes solo había
+     *      Fundas/Micas/Audio/Cargadores/Soportes genérico; Fundas y Micas se
+     *      mantuvieron explícitamente, "Soportes" genérico se reemplazó por
+     *      las dos variantes específicas (auto/moto) que pidió, y se agregaron
+     *      Adaptadores, Hogar, Videojuegos, Computación, Chips e iPhone.
      */
     private const CATEGORIAS = [
         'fundas' => [
@@ -26,17 +33,45 @@ final class ProductCategorizer
             'label' => 'Micas y vidrios',
             'keywords' => ['mica', 'vidrio', 'templado', 'protector de pantalla', 'screen protector'],
         ],
-        'audio' => [
-            'label' => 'Audio',
-            'keywords' => ['audifono', 'auricular', 'audio', 'bocina', 'speaker', 'diadema', 'manos libres', 'earbuds', 'earpods', 'bluetooth'],
+        'chips' => [
+            'label' => 'Chips',
+            'keywords' => ['chip telcel', 'chip movistar', 'chip at&t', 'chip unefon', 'simcard', 'sim card', 'mini sim', 'micro sim', 'nano sim', 'chip'],
+        ],
+        'soportes-auto' => [
+            'label' => 'Soportes y accesorios para auto',
+            'keywords' => ['soporte para auto', 'soporte auto', 'soporte para carro', 'soporte coche', 'base para auto', 'soporte parabrisas', 'soporte tablero', 'soporte rejilla', 'car mount'],
+        ],
+        'soportes-moto' => [
+            'label' => 'Soportes y accesorios para motos',
+            'keywords' => ['soporte para moto', 'soporte moto', 'soporte motocicleta', 'soporte manubrio', 'moto mount'],
+        ],
+        'adaptadores' => [
+            'label' => 'Adaptadores',
+            'keywords' => ['adaptador', 'otg', 'hub usb', 'lightning a ', 'tipo c a '],
         ],
         'cargadores' => [
             'label' => 'Cargadores y cables',
-            'keywords' => ['cargador', 'cable', 'charger', 'adaptador', 'power bank', 'powerbank', 'bateria', 'pila'],
+            'keywords' => ['cargador', 'cable', 'charger', 'power bank', 'powerbank', 'bateria portatil', 'pila'],
         ],
-        'soportes' => [
-            'label' => 'Soportes y otros accesorios',
-            'keywords' => ['soporte', 'tripie', 'tripode', 'holder', 'stand', 'selfie', 'popsocket', 'anillo'],
+        'bocinas-audifonos' => [
+            'label' => 'Bocinas y audífonos',
+            'keywords' => ['audifono', 'auricular', 'bocina', 'speaker', 'diadema', 'manos libres', 'earbuds', 'earpods'],
+        ],
+        'videojuegos' => [
+            'label' => 'Videojuegos',
+            'keywords' => ['videojuego', 'gamer', 'control inalambrico', 'joystick', 'gamepad', 'consola', 'ps4', 'ps5', 'playstation', 'xbox', 'nintendo', 'switch'],
+        ],
+        'computacion' => [
+            'label' => 'Computación',
+            'keywords' => ['laptop', 'computadora', 'teclado', 'mouse', 'monitor', 'disco duro', 'memoria usb', 'webcam', 'impresora'],
+        ],
+        'hogar' => [
+            'label' => 'Hogar',
+            'keywords' => ['hogar', 'lampara led', 'foco inteligente', 'extension electrica', 'regleta', 'ventilador'],
+        ],
+        'iphone' => [
+            'label' => 'iPhone',
+            'keywords' => ['iphone'],
         ],
     ];
 

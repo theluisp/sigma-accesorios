@@ -30,7 +30,7 @@
     </section>
 
     <section class="section">
-        {% set categoriaLabel = categoriaSeleccionada == ofertasSlug ? 'Ofertas' : categorias[categoriaSeleccionada]|default('Otros accesorios') %}
+        {% set categoriaLabel = categoriaSeleccionada == ofertasSlug ? 'Ofertas' : (categoriaSeleccionada == novedadesSlug ? 'Novedades' : categorias[categoriaSeleccionada]|default('Otros accesorios')) %}
         <div class="category-pills">
             <a
                 href="{{ path('catalogo', {q: texto, categoria: ''}) }}"
@@ -38,6 +38,19 @@
             >
                 Todos <span class="category-pill__count">{{ totalEnBusqueda }}</span>
             </a>
+            {% if conteoNovedades > 0 %}
+                {# Pila de "Novedades": tampoco es una categoría real de
+                   ProductCategorizer — es un pseudo-filtro por fecha de alta
+                   (ver CatalogoController::NOVEDADES_SLUG/NOVEDADES_DIAS),
+                   solo se muestra si hay al menos un producto agregado en los
+                   últimos NOVEDADES_DIAS días. #}
+                <a
+                    href="{{ path('catalogo', {q: texto, categoria: novedadesSlug}) }}"
+                    class="category-pill category-pill--novedades{{ categoriaSeleccionada == novedadesSlug ? ' category-pill--active' : '' }}"
+                >
+                    ✨ Novedades <span class="category-pill__count">{{ conteoNovedades }}</span>
+                </a>
+            {% endif %}
             {% if conteoOfertas > 0 %}
                 {# Pila de "Ofertas": no es una categoría real de ProductCategorizer,
                    es un pseudo-filtro (ver CatalogoController::OFERTAS_SLUG) que

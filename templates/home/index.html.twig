@@ -56,12 +56,17 @@
        (App\Controller\HomeController::categoriasParaMostrar) — nunca una
        tarjeta que lleve a un catálogo vacío. #}
     {% if categorias is not empty %}
+        {# Categorías sin ícono propio todavía (adaptadores, hogar,
+           videojuegos, computacion, chips, iphone) caen en el ícono
+           genérico de "otros" vía el fallback de abajo — se puede diseñar
+           uno específico para cada una más adelante si se pide. #}
         {% set categoriaIconos = {
             'fundas': '_partials/_icon_case.svg.twig',
             'mica-vidrio': '_partials/_icon_shield.svg.twig',
-            'audio': '_partials/_icon_audio.svg.twig',
+            'bocinas-audifonos': '_partials/_icon_audio.svg.twig',
             'cargadores': '_partials/_icon_charger.svg.twig',
-            'soportes': '_partials/_icon_stand.svg.twig',
+            'soportes-auto': '_partials/_icon_stand.svg.twig',
+            'soportes-moto': '_partials/_icon_stand.svg.twig',
             'otros': '_partials/_icon_other.svg.twig',
         } %}
         <section class="section">
