@@ -1504,3 +1504,47 @@ body {
     margin: 0;
     width: 100%;
 }
+
+/* Aviso ("toast") de "producto agregado al carrito" — el Toast de
+   Bootstrap por default sale blanco/gris, aquí se pinta con el navy de
+   marca en vez del gris genérico para que se sienta parte del sitio. */
+.carrito-toast {
+    background: var(--color-navy);
+    color: var(--color-white);
+    border-radius: 12px;
+    box-shadow: 0 12px 28px rgba(26, 46, 71, 0.35);
+}
+
+.carrito-toast__body {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.carrito-toast__check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #25d366;
+    color: var(--color-white);
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+    .toast-container {
+        left: 0;
+        right: 0;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    .carrito-toast {
+        width: 100%;
+    }
+}

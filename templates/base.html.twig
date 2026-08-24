@@ -13,7 +13,7 @@
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=9">
+    <link rel="stylesheet" href="/css/app.css?v=10">
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -148,8 +148,25 @@
         </div>
     </div>
 
+    {# Aviso ("toast") de "producto agregado al carrito" — antes, al dar clic
+       en Agregar, no pasaba nada visible hasta que el usuario abría el
+       carrito manualmente. Usa el componente Toast de Bootstrap (ya viene
+       cargado, mismo patrón que los Modal), se dispara desde
+       public/js/app.js justo después de agregar el producto. #}
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 2147483647;">
+        <div id="carrito-toast" class="toast carrito-toast align-items-center border-0" role="status" aria-live="polite" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body carrito-toast__body">
+                    <span class="carrito-toast__check" aria-hidden="true">✓</span>
+                    <span id="carrito-toast-texto"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/app.js?v=3" defer></script>
+    <script src="/js/app.js?v=4" defer></script>
     {% block javascripts %}{% endblock %}
 </body>
 </html>

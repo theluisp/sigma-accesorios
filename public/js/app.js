@@ -126,6 +126,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formatoMoneda = (numero) => `$${Number(numero).toLocaleString('es-MX', { maximumFractionDigits: 0 })}`;
 
+    // Aviso de "producto agregado al carrito" (#carrito-toast en
+    // base.html.twig) — antes, dar clic en "Agregar" no mostraba ninguna
+    // confirmación visible hasta que el usuario abría el carrito manualmente.
+    // Reutiliza el componente Toast de Bootstrap (ya viene cargado, mismo
+    // patrón que los Modal).
+    function mostrarToastCarrito(nombre) {
+        const toastEl = document.getElementById('carrito-toast');
+        const textoEl = document.getElementById('carrito-toast-texto');
+        if (!toastEl || !textoEl || typeof bootstrap === 'undefined') {
+            return;
+        }
+        textoEl.textContent = `${nombre || 'Producto'} se agregó al carrito`;
+        bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 2500 }).show();
+    }
+
     function construirMensajeWhatsapp(items, total) {
         const lineas = items.map((i) => `• ${i.nombre} x${i.cantidad} — ${formatoMoneda((Number(i.precioNumero) || 0) * i.cantidad)}`);
         return [
@@ -219,6 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     precio: precio || '',
                     imagen: imagen || '',
                 });
+                mostrarToastCarrito(nombre);
             }
             return;
         }
