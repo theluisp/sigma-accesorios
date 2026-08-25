@@ -31,8 +31,16 @@ final class BannerImageResolver
     {
         foreach (self::EXTENSIONS as $extension) {
             $filename = "banner-{$numero}.{$extension}";
-            if (is_file($this->bannersDir.'/'.$filename)) {
-                return $this->publicPath.'/'.$filename;
+            $fullPath = $this->bannersDir.'/'.$filename;
+            if (is_file($fullPath)) {
+                // Cache-busting por fecha de modificación del archivo (igual
+                // que app.css/app.js?v=N en base.html.twig, pero automático):
+                // el nombre del banner nunca cambia al reemplazarlo, así que
+                // sin esto el navegador (y la caché de Hostinger) sigue
+                // sirviendo la imagen vieja después de subir una nueva.
+                $mtime = filemtime($fullPath) ?: 0;
+
+                return $this->publicPath.'/'.$filename.'?v='.$mtime;
             }
         }
 
