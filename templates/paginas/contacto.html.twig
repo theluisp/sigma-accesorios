@@ -51,15 +51,15 @@
 
             {# "Puntos de entrega" y "Nuestras sucursales" abren el mismo modal
                (#sucursales-modal, ver abajo) — son 2 accesos distintos a la
-               misma información (sucursales con link a Maps, ya venía
-               armado en PaginasController pero no se usaba en la plantilla).
-               Se ocultan si todavía no hay sucursales cargadas en la BD,
-               para nunca llevar a un modal vacío. #}
+               misma información (nombres de sucursales desde la BD, sin
+               link a Maps — se quitó a pedido del usuario). Se ocultan si
+               todavía no hay sucursales cargadas en la BD, para nunca
+               llevar a un modal vacío. #}
             {% if sucursales is not empty %}
                 <button type="button" class="aqua-card contacto-card contacto-card--btn" data-bs-toggle="modal" data-bs-target="#sucursales-modal">
                     <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
                     <p class="aqua-card__name">Puntos de entrega</p>
-                    <p class="valor-desc">Consulta nuestras sucursales y ubícalas en el mapa.</p>
+                    <p class="valor-desc">Consulta nuestras sucursales para recoger tu pedido.</p>
                 </button>
             {% endif %}
 
@@ -131,10 +131,13 @@
         </div>
     </div>
 
-    {# Modal de sucursales: lista las sucursales reales (SucursalRepository)
-       con un link de búsqueda a Google Maps por cada una (mapsUrlPara() en
-       ContactoLinks — no es un pin exacto porque no tenemos coordenadas
-       confirmadas, es una búsqueda con el nombre de la sucursal). #}
+    {# Modal de sucursales: lista las sucursales reales (SucursalRepository).
+       Ya NO enlaza a Google Maps (pedido explícito del usuario: quitar las
+       direcciones de Maps) — antes cada una era un link a
+       ContactoLinks::mapsUrlPara(), que de todos modos era solo una
+       búsqueda por texto, no un pin exacto. El método sigue existiendo en
+       ContactoLinks por si se retoma más adelante con coordenadas reales,
+       pero la plantilla ya no lo usa. #}
     {% if sucursales is not empty %}
         <div class="modal fade" id="sucursales-modal" tabindex="-1" aria-labelledby="sucursales-modal-title" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -147,13 +150,10 @@
                         <p class="sucursales-modal__intro">Recoge tu pedido o visítanos en cualquiera de nuestras sucursales:</p>
                         <div class="sucursales-lista">
                             {% for sucursal in sucursales %}
-                                <a href="{{ sucursal.mapsUrl }}" target="_blank" rel="noopener" class="sucursal-item">
+                                <div class="sucursal-item">
                                     <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
-                                    <span class="sucursal-item__texto">
-                                        <span class="sucursal-item__nombre">{{ sucursal.nombre }}</span>
-                                        <span class="sucursal-item__cta">Ver en el mapa →</span>
-                                    </span>
-                                </a>
+                                    <span class="sucursal-item__nombre">{{ sucursal.nombre }}</span>
+                                </div>
                             {% endfor %}
                         </div>
                     </div>

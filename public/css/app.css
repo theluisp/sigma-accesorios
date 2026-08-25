@@ -663,11 +663,16 @@ body {
    del contenedor en cualquier pantalla, así que el recorte de cover es
    siempre el mismo — el banner simplemente se achica entero, no se ve
    "más grande" en mobile. 2:1 es el ratio real de banner-3 (1774x887);
-   banner-1/2 (1942x809, ~2.4:1) recortan un poco los lados, aceptable. */
+   banner-1/2 (1942x809, ~2.4:1) recortan un poco los lados, aceptable.
+   Sin max-height: el primer intento traía max-height:420px como tope para
+   pantallas muy anchas, pero .site-main ya limita el contenedor a 1100px
+   (1060px de contenido), así que con aspect-ratio 2/1 la altura nunca pasa
+   de ~530px de por sí — el tope de 420px sí se activaba en desktop normal,
+   angostando el recuadro más de la cuenta y recortando la imagen por
+   arriba/abajo (justo lo que se reportó: "en pc se ven recortadas"). */
 .banner-slide {
     position: relative;
     aspect-ratio: 2 / 1;
-    max-height: 420px;
     background-size: cover;
     background-position: center;
     display: flex;
@@ -1001,10 +1006,10 @@ body {
     display: block;
 }
 
-/* Modal de sucursales (#sucursales-modal): lista de tarjetas clicables,
-   cada una abre la búsqueda de esa sucursal en Google Maps en una pestaña
-   nueva. Reusa .valor-icon (mismo ícono que las tarjetas de la grid) pero
-   sin el margin-bottom de ahí, porque aquí va al lado del texto, no arriba. */
+/* Modal de sucursales (#sucursales-modal): lista simple, solo nombre de
+   cada sucursal (ya NO enlaza a Maps — pedido explícito del usuario). Reusa
+   .valor-icon (mismo ícono que las tarjetas de la grid) pero sin el
+   margin-bottom de ahí, porque aquí va al lado del texto, no arriba. */
 .sucursales-modal__intro {
     color: var(--color-text-secondary);
     font-size: 0.92rem;
@@ -1024,14 +1029,6 @@ body {
     padding: 12px 14px;
     border: 1px solid var(--color-border);
     border-radius: 14px;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.15s ease, background-color 0.15s ease;
-}
-
-.sucursal-item:hover {
-    border-color: var(--color-blue);
-    background: var(--color-surface);
 }
 
 .sucursal-item .valor-icon {
@@ -1039,20 +1036,9 @@ body {
     flex-shrink: 0;
 }
 
-.sucursal-item__texto {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
 .sucursal-item__nombre {
     font-weight: 700;
     color: var(--color-navy);
-}
-
-.sucursal-item__cta {
-    font-size: 0.85rem;
-    color: var(--color-blue);
 }
 
 .contacto-pendiente {
