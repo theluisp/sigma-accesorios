@@ -35,15 +35,19 @@
                 </a>
             {% endif %}
 
-            {% if rappiUrl is not null %}
-                <a href="{{ rappiUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
-                    <span class="contacto-logo">
-                        <img src="/images/brands/didi.jpg" alt="didi" loading="lazy">
-                    </span>
-                    <p class="aqua-card__name">Didi Food</p>
-                    <p class="valor-desc">Pide a domicilio da clic aqui.</p>
-                </a>
-            {% endif %}
+            {# Didi Food no tiene un link directo de pedido (a diferencia de
+               Rappi/WhatsApp) — antes esta tarjeta reusaba por error rappiUrl
+               como href, así que el botón mandaba a Rappi en vez de a Didi.
+               Ahora abre un modal con instrucciones (la app de Didi no tiene
+               un deep link público a la tienda), así que no depende de
+               ninguna URL de contacto y siempre se muestra. #}
+            <button type="button" class="aqua-card contacto-card contacto-card--btn" data-bs-toggle="modal" data-bs-target="#didi-modal">
+                <span class="contacto-logo">
+                    <img src="/images/brands/didi.jpg" alt="didi" loading="lazy">
+                </span>
+                <p class="aqua-card__name">Didi Food</p>
+                <p class="valor-desc">Pide a domicilio — ve cómo aquí.</p>
+            </button>
 
             {% if facebookUrl is not null %}
                 <a href="{{ facebookUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
@@ -65,6 +69,37 @@
             </p>
         {% endif %}
 
-       
+
     </section>
+
+    {# Modal con instrucciones para pedir por Didi Food: la app no tiene un
+       link directo a la tienda, así que en vez de un botón roto se explica
+       en 2 pasos cómo encontrarnos dentro de la app (capturas de pantalla
+       provistas por el usuario). #}
+    <div class="modal fade" id="didi-modal" tabindex="-1" aria-labelledby="didi-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content aqua-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="didi-modal-title">Pide por Didi Food</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="didi-paso">
+                        <p class="didi-paso__titulo">
+                            <span class="didi-paso__numero">1</span>
+                            Abre la app de DiDi y da clic en la sección Shop
+                        </p>
+                        <img src="/images/didi/paso-1.png" alt="Paso 1: abrir la sección Shop en la app de DiDi" loading="lazy">
+                    </div>
+                    <div class="didi-paso">
+                        <p class="didi-paso__titulo">
+                            <span class="didi-paso__numero">2</span>
+                            Busca "Sigma Accesorios Para Celular" y realiza tu pedido
+                        </p>
+                        <img src="/images/didi/paso-2.png" alt="Paso 2: buscar Sigma Accesorios Para Celular en DiDi" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

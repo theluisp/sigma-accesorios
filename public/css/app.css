@@ -941,6 +941,59 @@ body {
     text-decoration: underline;
 }
 
+/* La tarjeta de Didi Food es un <button> (abre el modal de instrucciones,
+   ver #didi-modal en contacto.html.twig) en vez de un <a> como las demás
+   tarjetas de .contacto-grid — reset de estilos por default del navegador
+   para que se vea idéntica al resto. */
+.contacto-card--btn {
+    font: inherit;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Modal de instrucciones de Didi Food: 2 pasos con captura de pantalla
+   real de la app, porque Didi no ofrece un link directo a la tienda de
+   Sigma dentro de su app — la forma de "pedir" es que el cliente busque
+   la tienda él mismo siguiendo estos pasos. */
+.didi-paso {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.didi-paso:last-child {
+    margin-bottom: 0;
+}
+
+.didi-paso__titulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--color-navy);
+}
+
+.didi-paso__numero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--color-blue);
+    color: var(--color-white);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.didi-paso img {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    display: block;
+}
+
 .contacto-pendiente {
     font-size: 0.85rem;
 }

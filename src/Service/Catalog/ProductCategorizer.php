@@ -19,19 +19,18 @@ final class ProductCategorizer
      *      (ej. "Soporte para auto" debe evaluarse ANTES que una categoría
      *      genérica de cargadores/adaptadores para no perder el matiz de "auto").
      *      Lista ampliada a pedido del usuario (ago 2026) — antes solo había
-     *      Fundas/Micas/Audio/Cargadores/Soportes genérico; Fundas y Micas se
-     *      mantuvieron explícitamente, "Soportes" genérico se reemplazó por
-     *      las dos variantes específicas (auto/moto) que pidió, y se agregaron
-     *      Adaptadores, Hogar, Videojuegos, Computación, Chips e iPhone.
+     *      Fundas/Micas/Audio/Cargadores/Soportes genérico; "Soportes"
+     *      genérico se reemplazó por las dos variantes específicas
+     *      (auto/moto), y se agregaron Adaptadores, Hogar, Videojuegos,
+     *      Computación y Chips. "Micas y vidrios" e "iPhone" se agregaron y
+     *      luego se quitaron de nuevo (pedido explícito del usuario) — los
+     *      productos que antes caían ahí ahora pasan a la siguiente
+     *      categoría que matchee, o a "Otros" si ninguna aplica.
      */
     private const CATEGORIAS = [
         'fundas' => [
             'label' => 'Fundas',
             'keywords' => ['funda', 'case', 'estuche', 'cover'],
-        ],
-        'mica-vidrio' => [
-            'label' => 'Micas y vidrios',
-            'keywords' => ['mica', 'vidrio', 'templado', 'protector de pantalla', 'screen protector'],
         ],
         'chips' => [
             'label' => 'Chips',
@@ -68,10 +67,6 @@ final class ProductCategorizer
         'hogar' => [
             'label' => 'Hogar',
             'keywords' => ['hogar', 'lampara led', 'foco inteligente', 'extension electrica', 'regleta', 'ventilador'],
-        ],
-        'iphone' => [
-            'label' => 'iPhone',
-            'keywords' => ['iphone'],
         ],
     ];
 

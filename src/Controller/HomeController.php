@@ -82,7 +82,11 @@ class HomeController extends AbstractController
                 'titulo' => '',
                 'subtitulo' => '',
                 'ctaTexto' => '',
-                'ctaUrl' => $contactoLinks->whatsappUrl(),
+                // Sin botón a propósito (pedido explícito del usuario) — solo
+                // la imagen del banner, sin CTA. ctaUrl en null es lo que
+                // evita que la plantilla pinte el botón (ver home/index.html.twig,
+                // el bloque del botón está condicionado a `banner.ctaUrl`).
+                'ctaUrl' => null,
                 'ctaExterna' => true,
             ],
         ];

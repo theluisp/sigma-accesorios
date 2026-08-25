@@ -117,11 +117,13 @@ class ProductoRepository extends ServiceEntityRepository
     }
 
     /**
-     * Slugs de categoría que tienen al menos un producto disponible ahora
-     * mismo — para que el carrusel de categorías de Home muestre solo lo
-     * que realmente se vende, nunca una tarjeta muerta hacia un catálogo
-     * vacío. El catálogo es chico (~200 productos), así que traer todo y
-     * filtrar en PHP (reusando Producto::isDisponible()) es suficiente.
+     * Slugs de categoría que tienen al menos un producto disponible Y con
+     * imagen propia cargada ahora mismo — para que el carrusel de
+     * categorías de Home muestre solo lo que realmente se va a poder ver
+     * en el Catálogo (que también exige imagen, ver buscarDisponibles()),
+     * nunca una tarjeta que lleve a un catálogo vacío. El catálogo es
+     * chico (~200 productos), así que traer todo y filtrar en PHP
+     * (reusando Producto::isDisponible()) es suficiente.
      *
      * @return string[]
      */
@@ -131,6 +133,7 @@ class ProductoRepository extends ServiceEntityRepository
             ->addSelect('e', 's')
             ->leftJoin('p.existencias', 'e')
             ->leftJoin('e.sucursal', 's')
+            ->innerJoin('p.imagen', 'i')
             ->getQuery()
             ->getResult();
 
@@ -146,7 +149,10 @@ class ProductoRepository extends ServiceEntityRepository
 
     /**
      * Productos disponibles para el Catálogo público, con búsqueda de texto
-     * opcional. El filtro de categoría y la paginación se resuelven en el
+     * opcional. Exige imagen propia cargada (innerJoin descarta los que no
+     * la tienen — pedido explícito del usuario: un producto sin foto no se
+     * muestra en el sitio, aunque esté disponible en el inventario real).
+     * El filtro de categoría y la paginación se resuelven en el
      * controlador (CatalogoController) sobre este resultado — el catálogo es
      * chico (~200 productos), así que no vale la pena complicar la consulta.
      *
@@ -162,7 +168,7 @@ class ProductoRepository extends ServiceEntityRepository
             ->addSelect('e', 's', 'i')
             ->leftJoin('p.existencias', 'e')
             ->leftJoin('e.sucursal', 's')
-            ->leftJoin('p.imagen', 'i')
+            ->innerJoin('p.imagen', 'i')
             ->orderBy('p.nombre', 'ASC');
 
         $texto = $texto !== null ? trim($texto) : '';
