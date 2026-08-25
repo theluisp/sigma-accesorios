@@ -17,4 +17,5 @@
 /config/google/service-account.json
 .DS_Store
 .idea/
+*:Zone.Identifier
 ###< sigma/local ###
