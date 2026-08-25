@@ -49,6 +49,36 @@
                 <p class="valor-desc">Pide a domicilio — ve cómo aquí.</p>
             </button>
 
+            {# "Puntos de entrega" y "Nuestras sucursales" abren el mismo modal
+               (#sucursales-modal, ver abajo) — son 2 accesos distintos a la
+               misma información (sucursales con link a Maps, ya venía
+               armado en PaginasController pero no se usaba en la plantilla).
+               Se ocultan si todavía no hay sucursales cargadas en la BD,
+               para nunca llevar a un modal vacío. #}
+            {% if sucursales is not empty %}
+                <button type="button" class="aqua-card contacto-card contacto-card--btn" data-bs-toggle="modal" data-bs-target="#sucursales-modal">
+                    <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
+                    <p class="aqua-card__name">Puntos de entrega</p>
+                    <p class="valor-desc">Consulta nuestras sucursales y ubícalas en el mapa.</p>
+                </button>
+            {% endif %}
+
+            {% if whatsappUrl is not null %}
+                <a href="{{ whatsappUrl }}?text={{ 'Hola, quiero cotizar el envío a domicilio de mi pedido.'|url_encode }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
+                    <span class="valor-icon">{{ include('_partials/_icon_truck.svg.twig') }}</span>
+                    <p class="aqua-card__name">Envío a domicilio</p>
+                    <p class="valor-desc">Nosotros te lo enviamos — cotiza por WhatsApp.</p>
+                </a>
+            {% endif %}
+
+            {% if sucursales is not empty %}
+                <button type="button" class="aqua-card contacto-card contacto-card--btn" data-bs-toggle="modal" data-bs-target="#sucursales-modal">
+                    <span class="valor-icon">{{ include('_partials/_icon_home.svg.twig') }}</span>
+                    <p class="aqua-card__name">Nuestras sucursales</p>
+                    <p class="valor-desc">Contamos con sucursal cerca de Capu y otra cerca de la Central de Abastos.</p>
+                </button>
+            {% endif %}
+
             {% if facebookUrl is not null %}
                 <a href="{{ facebookUrl }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
                     <span class="contacto-logo contacto-logo--facebook">
@@ -58,8 +88,6 @@
                     <p class="valor-desc">Síguenos para ver novedades y promociones.</p>
                 </a>
             {% endif %}
-
-         
         </div>
 
         {% if facebookUrl is null %}
@@ -102,4 +130,35 @@
             </div>
         </div>
     </div>
+
+    {# Modal de sucursales: lista las sucursales reales (SucursalRepository)
+       con un link de búsqueda a Google Maps por cada una (mapsUrlPara() en
+       ContactoLinks — no es un pin exacto porque no tenemos coordenadas
+       confirmadas, es una búsqueda con el nombre de la sucursal). #}
+    {% if sucursales is not empty %}
+        <div class="modal fade" id="sucursales-modal" tabindex="-1" aria-labelledby="sucursales-modal-title" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content aqua-modal">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="sucursales-modal-title">Nuestras sucursales</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="sucursales-modal__intro">Recoge tu pedido o visítanos en cualquiera de nuestras sucursales:</p>
+                        <div class="sucursales-lista">
+                            {% for sucursal in sucursales %}
+                                <a href="{{ sucursal.mapsUrl }}" target="_blank" rel="noopener" class="sucursal-item">
+                                    <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
+                                    <span class="sucursal-item__texto">
+                                        <span class="sucursal-item__nombre">{{ sucursal.nombre }}</span>
+                                        <span class="sucursal-item__cta">Ver en el mapa →</span>
+                                    </span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
