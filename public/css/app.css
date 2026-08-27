@@ -250,6 +250,26 @@ body {
     box-shadow: 0 8px 20px rgba(26, 46, 71, 0.10);
 }
 
+/* Tarjetas de Marcas (sección "Marcas" de Home): mismo .category-card que
+   Categorías, pero con el logo real de cada marca en vez del ícono SVG
+   dibujado. Caja de tamaño fijo + object-fit:contain es lo que hace que
+   las 5 se vean "del mismo tamaño" sin importar que las imágenes fuente
+   tengan proporciones/fondos distintos entre sí (mismo patrón que
+   .contacto-logo en Contacto). */
+.marca-card__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+}
+
+.marca-card__logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
 /* Destacados */
 .section__header {
     display: flex;
