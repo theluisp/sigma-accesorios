@@ -148,6 +148,49 @@ class ProductoRepository extends ServiceEntityRepository
     }
 
     /**
+     * Slugs de marca (de $marcas, ej. ['apple' => 'iPhone'] — la palabra
+     * clave puede ser distinta al label visible, ej. iPhone para Apple)
+     * que tienen al menos un producto disponible, con imagen propia, Y esa
+     * palabra clave en el NOMBRE del producto (pedido explícito del
+     * usuario: solo título, a diferencia de ProductCategorizer::classify()
+     * que sí revisa nombre + descripción). Mismo criterio que
+     * categoriasConStock(): nunca una tarjeta de marca que lleve a un
+     * catálogo vacío. El catálogo es chico (~200 productos), así que traer
+     * todo y filtrar en PHP es suficiente — misma filosofía que el resto
+     * de este repositorio.
+     *
+     * @param array<string, string> $marcas slug => palabra clave a buscar en el nombre
+     * @return string[] slugs de marca con al menos un producto
+     */
+    public function marcasConStock(array $marcas): array
+    {
+        $productos = $this->createQueryBuilder('p')
+            ->addSelect('e', 's')
+            ->leftJoin('p.existencias', 'e')
+            ->leftJoin('e.sucursal', 's')
+            ->innerJoin('p.imagen', 'i')
+            ->getQuery()
+            ->getResult();
+
+        $disponibles = array_values(array_filter(
+            $productos,
+            static fn (Producto $producto): bool => $producto->isDisponible(),
+        ));
+
+        $resultado = [];
+        foreach ($marcas as $slug => $palabraClave) {
+            foreach ($disponibles as $producto) {
+                if (mb_stripos($producto->getNombre(), $palabraClave) !== false) {
+                    $resultado[] = $slug;
+                    break;
+                }
+            }
+        }
+
+        return $resultado;
+    }
+
+    /**
      * Productos disponibles para el Catálogo público, con búsqueda de texto
      * opcional. Exige imagen propia cargada (innerJoin descarta los que no
      * la tienen — pedido explícito del usuario: un producto sin foto no se

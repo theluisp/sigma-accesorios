@@ -12,6 +12,23 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
+    /**
+     * Marcas para la sección "Marcas" de Home (pedido explícito del
+     * usuario, ago 2026) — NO es una categoría de ProductCategorizer, es
+     * un agrupador aparte que busca la palabra clave directo en el NOMBRE
+     * del producto (ver ProductoRepository::marcasConStock()). Orden fijo
+     * pedido por el usuario: Apple, Xiaomi, Motorola, Oppo, Samsung.
+     *
+     * @var array<string, string> slug => palabra clave a buscar en el nombre
+     */
+    private const MARCAS = [
+        'apple' => 'Apple',
+        'xiaomi' => 'Xiaomi',
+        'motorola' => 'Motorola',
+        'oppo' => 'Oppo',
+        'samsung' => 'Samsung',
+    ];
+
     #[Route('/', name: 'home')]
     public function index(
         ProductoRepository $productoRepository,
@@ -23,6 +40,7 @@ class HomeController extends AbstractController
             'productos' => $productoRepository->findEnOferta(12),
             'banners' => $this->construirBanners($bannerResolver, $contactoLinks),
             'categorias' => $this->categoriasParaMostrar($productoRepository, $categorizer),
+            'marcas' => $this->marcasParaMostrar($productoRepository),
         ]);
     }
 
@@ -39,6 +57,28 @@ class HomeController extends AbstractController
 
         $resultado = [];
         foreach ($categorizer->todas() as $slug => $label) {
+            if (isset($conStock[$slug])) {
+                $resultado[] = ['slug' => $slug, 'label' => $label];
+            }
+        }
+
+        return $resultado;
+    }
+
+    /**
+     * Marcas de la sección "Marcas" de Home: solo las que tienen producto
+     * disponible ahora mismo con esa palabra en el nombre (mismo criterio
+     * de "nunca una tarjeta vacía" que categoriasParaMostrar()), en el
+     * orden fijo de self::MARCAS.
+     *
+     * @return array<int, array{slug: string, label: string}>
+     */
+    private function marcasParaMostrar(ProductoRepository $productoRepository): array
+    {
+        $conStock = array_flip($productoRepository->marcasConStock(self::MARCAS));
+
+        $resultado = [];
+        foreach (self::MARCAS as $slug => $label) {
             if (isset($conStock[$slug])) {
                 $resultado[] = ['slug' => $slug, 'label' => $label];
             }

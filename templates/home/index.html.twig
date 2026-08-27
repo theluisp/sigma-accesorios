@@ -52,6 +52,27 @@
         </div>
     {% endif %}
 
+    {# Marcas: agrupa por palabra clave en el NOMBRE del producto (no
+       categorías de ProductCategorizer) — ver
+       App\Controller\HomeController::marcasParaMostrar(). Mismo criterio
+       de "nunca una tarjeta vacía" que Categorías. Usa un ícono genérico de
+       celular (no el logo real de cada marca, que es material con derechos
+       de marca registrada) + el nombre de la marca como texto — cada
+       tarjeta manda al Catálogo con una búsqueda de texto por esa marca. #}
+    {% if marcas is not empty %}
+        <section class="section">
+            <h2>Marcas</h2>
+            <div class="categories-grid">
+                {% for marca in marcas %}
+                    <a href="{{ path('catalogo', {q: marca.label}) }}" class="category-card">
+                        <span class="category-card__icon">{{ include('_partials/_icon_phone.svg.twig') }}</span>
+                        <span class="category-card__label">{{ marca.label }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
     {# Solo se listan categorías con producto disponible ahora mismo
        (App\Controller\HomeController::categoriasParaMostrar) — nunca una
        tarjeta que lleve a un catálogo vacío. #}
