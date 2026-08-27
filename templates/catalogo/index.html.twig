@@ -30,7 +30,9 @@
     </section>
 
     <section class="section">
-        {% set categoriaLabel = categoriaSeleccionada == ofertasSlug ? 'Ofertas' : (categoriaSeleccionada == novedadesSlug ? 'Novedades' : categorias[categoriaSeleccionada]|default('Otros accesorios')) %}
+        {# categoriaLabel ya viene resuelto desde CatalogoController (incluye
+           el caso de un pseudo-filtro de marca, ej. "marca-apple" → "Apple",
+           ver MarcaCatalog) — no se recalcula aquí. #}
         <div class="category-pills">
             <a
                 href="{{ path('catalogo', {q: texto, categoria: ''}) }}"

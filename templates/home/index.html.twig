@@ -52,20 +52,24 @@
         </div>
     {% endif %}
 
-    {# Marcas: agrupa por palabra clave en el NOMBRE del producto (no
-       categorías de ProductCategorizer) — ver
-       App\Controller\HomeController::marcasParaMostrar(). Mismo criterio
+    {# Marcas: agrupa por palabra(s) clave en el NOMBRE del producto (no
+       categorías de ProductCategorizer) — ver App\Service\Catalog\MarcaCatalog
+       y App\Controller\HomeController::marcasParaMostrar(). Mismo criterio
        de "nunca una tarjeta vacía" que Categorías. Logos reales subidos
        por el usuario (public/images/brands/marca-<slug>.png, ya
        procesados a 320x320 parejo para que se vean del mismo tamaño) —
-       cada tarjeta manda al Catálogo con una búsqueda de texto por esa
-       marca. #}
+       cada tarjeta manda al Catálogo con el pseudo-filtro "marca-<slug>"
+       (mismo mecanismo que Ofertas/Novedades, ver
+       CatalogoController::MARCA_PREFIX), NO con una búsqueda de texto
+       genérica — así los productos que aparecen coinciden exactamente con
+       los que hicieron aparecer la tarjeta (ej. un producto que solo dice
+       "Cable Lightning" en el título cuenta para Apple en ambos lados). #}
     {% if marcas is not empty %}
         <section class="section">
             <h2>Marcas</h2>
             <div class="categories-grid">
                 {% for marca in marcas %}
-                    <a href="{{ path('catalogo', {q: marca.label}) }}" class="category-card">
+                    <a href="{{ path('catalogo', {categoria: 'marca-' ~ marca.slug}) }}" class="category-card">
                         <span class="marca-card__logo">
                             <img src="/images/brands/marca-{{ marca.slug }}.png" alt="{{ marca.label }}" loading="lazy">
                         </span>

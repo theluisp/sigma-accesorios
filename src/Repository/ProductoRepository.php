@@ -148,18 +148,19 @@ class ProductoRepository extends ServiceEntityRepository
     }
 
     /**
-     * Slugs de marca (de $marcas, ej. ['apple' => 'iPhone'] — la palabra
-     * clave puede ser distinta al label visible, ej. iPhone para Apple)
-     * que tienen al menos un producto disponible, con imagen propia, Y esa
-     * palabra clave en el NOMBRE del producto (pedido explícito del
-     * usuario: solo título, a diferencia de ProductCategorizer::classify()
-     * que sí revisa nombre + descripción). Mismo criterio que
-     * categoriasConStock(): nunca una tarjeta de marca que lleve a un
-     * catálogo vacío. El catálogo es chico (~200 productos), así que traer
-     * todo y filtrar en PHP es suficiente — misma filosofía que el resto
-     * de este repositorio.
+     * Slugs de marca (de $marcas, ej. ['apple' => ['apple', 'iphone',
+     * 'lightning']] — varias palabras clave por marca, para agarrar
+     * títulos como "Cable Lightning" o "Funda iPhone" que no dicen
+     * "Apple") que tienen al menos un producto disponible, con imagen
+     * propia, Y alguna de esas palabras clave en el NOMBRE del producto
+     * (pedido explícito del usuario: solo título, a diferencia de
+     * ProductCategorizer::classify() que sí revisa nombre + descripción).
+     * Mismo criterio que categoriasConStock(): nunca una tarjeta de marca
+     * que lleve a un catálogo vacío. El catálogo es chico (~200
+     * productos), así que traer todo y filtrar en PHP es suficiente —
+     * misma filosofía que el resto de este repositorio.
      *
-     * @param array<string, string> $marcas slug => palabra clave a buscar en el nombre
+     * @param array<string, string[]> $marcas slug => palabras clave a buscar en el nombre (basta con que UNA coincida)
      * @return string[] slugs de marca con al menos un producto
      */
     public function marcasConStock(array $marcas): array
@@ -178,9 +179,16 @@ class ProductoRepository extends ServiceEntityRepository
         ));
 
         $resultado = [];
-        foreach ($marcas as $slug => $palabraClave) {
+        foreach ($marcas as $slug => $palabrasClave) {
             foreach ($disponibles as $producto) {
-                if (mb_stripos($producto->getNombre(), $palabraClave) !== false) {
+                $coincide = false;
+                foreach ($palabrasClave as $palabraClave) {
+                    if (mb_stripos($producto->getNombre(), $palabraClave) !== false) {
+                        $coincide = true;
+                        break;
+                    }
+                }
+                if ($coincide) {
                     $resultado[] = $slug;
                     break;
                 }

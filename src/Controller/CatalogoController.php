@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Producto;
 use App\Repository\ProductoRepository;
+use App\Service\Catalog\MarcaCatalog;
 use App\Service\Catalog\ProductCategorizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,12 +33,27 @@ final class CatalogoController extends AbstractController
     private const NOVEDADES_SLUG = 'novedades';
     private const NOVEDADES_DIAS = 15;
 
+    /**
+     * Prefijo reservado para el pseudo-filtro de Marcas (ver MarcaCatalog):
+     * "marca-apple", "marca-xiaomi", etc. — mismo mecanismo que
+     * OFERTAS_SLUG/NOVEDADES_SLUG, así las tarjetas de Marcas de Home
+     * enlazan directo a un filtro consistente con la regla de coincidencia
+     * real (MarcaCatalog::coincide()), en vez de depender de la búsqueda
+     * de texto genérica (?q=), que tiene semántica distinta (AND de
+     * palabras sobre el texto literal, no OR de palabras clave de marca).
+     */
+    private const MARCA_PREFIX = 'marca-';
+
     #[Route('/catalogo', name: 'catalogo', methods: ['GET'])]
-    public function index(Request $request, ProductoRepository $productoRepository, ProductCategorizer $categorizer): Response
+    public function index(Request $request, ProductoRepository $productoRepository, ProductCategorizer $categorizer, MarcaCatalog $marcaCatalog): Response
     {
         $texto = trim((string) $request->query->get('q', ''));
         $categoriaSeleccionada = (string) $request->query->get('categoria', '');
         $paginaSolicitada = max(1, (int) $request->query->get('pagina', 1));
+
+        $marcaSlug = str_starts_with($categoriaSeleccionada, self::MARCA_PREFIX)
+            ? substr($categoriaSeleccionada, \strlen(self::MARCA_PREFIX))
+            : null;
 
         // Búsqueda de texto a nivel SQL (aprovecha el collation de MySQL);
         // la disponibilidad ya viene filtrada por el repositorio.
@@ -72,11 +88,26 @@ final class CatalogoController extends AbstractController
                 $resultadosBusqueda,
                 static fn (Producto $producto): bool => $producto->getCreadoEn() >= $umbralNovedades,
             )),
+            $marcaSlug !== null => array_values(array_filter(
+                $resultadosBusqueda,
+                static fn (Producto $producto): bool => $marcaCatalog->coincide($producto->getNombre(), $marcaSlug),
+            )),
             $categoriaSeleccionada !== '' => array_values(array_filter(
                 $resultadosBusqueda,
                 static fn (Producto $producto): bool => $producto->getCategoria() === $categoriaSeleccionada,
             )),
             default => $resultadosBusqueda,
+        };
+
+        // Label legible del filtro activo para el texto "N resultados en
+        // X" — resuelto aquí (no en la plantilla) para que la marca use la
+        // misma fuente de verdad (MarcaCatalog) que el resto de la lógica.
+        $categoriaLabel = match (true) {
+            $categoriaSeleccionada === self::OFERTAS_SLUG => 'Ofertas',
+            $categoriaSeleccionada === self::NOVEDADES_SLUG => 'Novedades',
+            $marcaSlug !== null => $marcaCatalog->label($marcaSlug),
+            $categoriaSeleccionada !== '' => $categorizer->label($categoriaSeleccionada),
+            default => '',
         };
 
         $total = count($productosFiltrados);
@@ -89,6 +120,7 @@ final class CatalogoController extends AbstractController
             'productos' => $productosPagina,
             'texto' => $texto,
             'categoriaSeleccionada' => $categoriaSeleccionada,
+            'categoriaLabel' => $categoriaLabel,
             'categorias' => $categorizer->todas(),
             'conteoPorCategoria' => $conteoPorCategoria,
             'conteoOfertas' => $conteoOfertas,

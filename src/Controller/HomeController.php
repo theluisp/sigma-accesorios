@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ProductoRepository;
 use App\Service\Banner\BannerImageResolver;
+use App\Service\Catalog\MarcaCatalog;
 use App\Service\Catalog\ProductCategorizer;
 use App\Service\Contacto\ContactoLinks;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,35 +13,19 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    /**
-     * Marcas para la sección "Marcas" de Home (pedido explícito del
-     * usuario, ago 2026) — NO es una categoría de ProductCategorizer, es
-     * un agrupador aparte que busca la palabra clave directo en el NOMBRE
-     * del producto (ver ProductoRepository::marcasConStock()). Orden fijo
-     * pedido por el usuario: Apple, Xiaomi, Motorola, Oppo, Samsung.
-     *
-     * @var array<string, string> slug => palabra clave a buscar en el nombre
-     */
-    private const MARCAS = [
-        'apple' => 'Apple',
-        'xiaomi' => 'Xiaomi',
-        'motorola' => 'Motorola',
-        'oppo' => 'Oppo',
-        'samsung' => 'Samsung',
-    ];
-
     #[Route('/', name: 'home')]
     public function index(
         ProductoRepository $productoRepository,
         BannerImageResolver $bannerResolver,
         ContactoLinks $contactoLinks,
         ProductCategorizer $categorizer,
+        MarcaCatalog $marcaCatalog,
     ): Response {
         return $this->render('home/index.html.twig', [
             'productos' => $productoRepository->findEnOferta(12),
             'banners' => $this->construirBanners($bannerResolver, $contactoLinks),
             'categorias' => $this->categoriasParaMostrar($productoRepository, $categorizer),
-            'marcas' => $this->marcasParaMostrar($productoRepository),
+            'marcas' => $this->marcasParaMostrar($productoRepository, $marcaCatalog),
         ]);
     }
 
@@ -67,18 +52,21 @@ class HomeController extends AbstractController
 
     /**
      * Marcas de la sección "Marcas" de Home: solo las que tienen producto
-     * disponible ahora mismo con esa palabra en el nombre (mismo criterio
-     * de "nunca una tarjeta vacía" que categoriasParaMostrar()), en el
-     * orden fijo de self::MARCAS.
+     * disponible ahora mismo con alguna de sus palabras clave en el nombre
+     * (mismo criterio de "nunca una tarjeta vacía" que
+     * categoriasParaMostrar()), en el orden fijo de MarcaCatalog. La regla
+     * de coincidencia vive en MarcaCatalog para que sea exactamente la
+     * misma que usa CatalogoController al resolver el pseudo-filtro
+     * "marca-<slug>" cuando se da clic en una tarjeta.
      *
      * @return array<int, array{slug: string, label: string}>
      */
-    private function marcasParaMostrar(ProductoRepository $productoRepository): array
+    private function marcasParaMostrar(ProductoRepository $productoRepository, MarcaCatalog $marcaCatalog): array
     {
-        $conStock = array_flip($productoRepository->marcasConStock(self::MARCAS));
+        $conStock = array_flip($productoRepository->marcasConStock($marcaCatalog->keywordsPorSlug()));
 
         $resultado = [];
-        foreach (self::MARCAS as $slug => $label) {
+        foreach ($marcaCatalog->todas() as $slug => $label) {
             if (isset($conStock[$slug])) {
                 $resultado[] = ['slug' => $slug, 'label' => $label];
             }
