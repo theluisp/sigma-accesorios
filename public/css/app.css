@@ -250,6 +250,32 @@ body {
     box-shadow: 0 8px 20px rgba(26, 46, 71, 0.10);
 }
 
+/* Tarjetas de categoría del Catálogo (antes eran píldoras de texto, ver
+   .category-pill más abajo — se movieron aquí desde Home como tarjetas
+   con ícono, pedido explícito del usuario, ago 2026). "--active" marca la
+   categoría seleccionada ahora mismo, mismo lenguaje visual que
+   .category-pill--active pero como tarjeta. */
+.category-card--active {
+    border-color: var(--color-blue);
+    background: rgba(42, 135, 202, 0.08);
+    color: var(--color-blue);
+}
+
+.category-card--active:hover {
+    color: var(--color-blue);
+}
+
+.category-card__count {
+    color: inherit;
+    opacity: 0.65;
+    font-weight: 500;
+    font-size: 0.82em;
+}
+
+.catalogo-categorias {
+    margin-bottom: 18px;
+}
+
 /* Tarjetas de Marcas (sección "Marcas" de Home): mismo .category-card que
    Categorías, pero con el logo real de cada marca en vez del ícono SVG
    dibujado. Caja de tamaño fijo + object-fit:contain es lo que hace que
@@ -1024,6 +1050,19 @@ body {
     border-radius: 12px;
     border: 1px solid var(--color-border);
     display: block;
+}
+
+/* Modal de "Puntos de entrega" (#puntos-entrega-modal): un solo póster
+   (imagen), sin padding extra del modal-body de Bootstrap para que la
+   imagen se vea a tamaño completo de pared a pared. */
+.modal-body--imagen {
+    padding: 0;
+}
+
+.modal-body--imagen img {
+    width: 100%;
+    display: block;
+    border-radius: 0 0 calc(var(--bs-modal-border-radius, 0.5rem) - 1px) calc(var(--bs-modal-border-radius, 0.5rem) - 1px);
 }
 
 /* Modal de sucursales (#sucursales-modal): lista simple, solo nombre de

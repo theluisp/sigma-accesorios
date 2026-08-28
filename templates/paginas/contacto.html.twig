@@ -49,19 +49,16 @@
                 <p class="valor-desc">Pide a domicilio — ve cómo aquí.</p>
             </button>
 
-            {# "Puntos de entrega" y "Nuestras sucursales" abren el mismo modal
-               (#sucursales-modal, ver abajo) — son 2 accesos distintos a la
-               misma información (nombres de sucursales desde la BD, sin
-               link a Maps — se quitó a pedido del usuario). Se ocultan si
-               todavía no hay sucursales cargadas en la BD, para nunca
-               llevar a un modal vacío. #}
-            {% if sucursales is not empty %}
-                <button type="button" class="aqua-card contacto-card contacto-card--btn" data-bs-toggle="modal" data-bs-target="#sucursales-modal">
-                    <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
-                    <p class="aqua-card__name">Puntos de entrega</p>
-                    <p class="valor-desc">Consulta nuestras sucursales para recoger tu pedido.</p>
-                </button>
-            {% endif %}
+            {# "Puntos de entrega" abre un modal con el póster de la campaña
+               (lista completa de puntos de la zona norte/centro, punto
+               nuevo de Gallito, etc. — imagen provista por el usuario, ago
+               2026). Es información distinta a "Nuestras sucursales" de
+               abajo (esa sigue viniendo de la BD vía #sucursales-modal). #}
+            <button type="button" class="aqua-card contacto-card contacto-card--btn" data-bs-toggle="modal" data-bs-target="#puntos-entrega-modal">
+                <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
+                <p class="aqua-card__name">Puntos de entrega</p>
+                <p class="valor-desc">Consulta todos nuestros puntos de entrega.</p>
+            </button>
 
             {% if whatsappUrl is not null %}
                 <a href="{{ whatsappUrl }}?text={{ 'Hola, quiero cotizar el envío a domicilio de mi pedido.'|url_encode }}" target="_blank" rel="noopener" class="aqua-card contacto-card">
@@ -126,6 +123,27 @@
                         </p>
                         <img src="/images/didi/paso-2.png" alt="Paso 2: buscar Sigma Accesorios Para Celular en DiDi" loading="lazy">
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Modal de "Puntos de entrega": muestra el póster completo de la
+       campaña (imagen provista por el usuario, ago 2026) con todos los
+       puntos de entrega de la zona norte/centro y el punto nuevo de
+       Gallito. Es una sola imagen estática (no viene de la BD, a
+       diferencia de #sucursales-modal), así que si algún día cambian los
+       puntos hay que subir un póster nuevo a
+       public/images/entrega/puntos-entrega.jpg. #}
+    <div class="modal fade" id="puntos-entrega-modal" tabindex="-1" aria-labelledby="puntos-entrega-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content aqua-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="puntos-entrega-modal-title">Puntos de entrega</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body modal-body--imagen">
+                    <img src="/images/entrega/puntos-entrega.jpg" alt="Puntos de entrega Sigma Accesorios — zona norte y centro" loading="lazy">
                 </div>
             </div>
         </div>

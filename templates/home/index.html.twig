@@ -80,35 +80,9 @@
         </section>
     {% endif %}
 
-    {# Solo se listan categorías con producto disponible ahora mismo
-       (App\Controller\HomeController::categoriasParaMostrar) — nunca una
-       tarjeta que lleve a un catálogo vacío. #}
-    {% if categorias is not empty %}
-        {% set categoriaIconos = {
-            'fundas': '_partials/_icon_case.svg.twig',
-            'bocinas-audifonos': '_partials/_icon_audio.svg.twig',
-            'cargadores': '_partials/_icon_charger.svg.twig',
-            'soportes-auto': '_partials/_icon_stand.svg.twig',
-            'soportes-moto': '_partials/_icon_stand.svg.twig',
-            'adaptadores': '_partials/_icon_adapter.svg.twig',
-            'hogar': '_partials/_icon_home.svg.twig',
-            'videojuegos': '_partials/_icon_gamepad.svg.twig',
-            'computacion': '_partials/_icon_computer.svg.twig',
-            'chips': '_partials/_icon_chip.svg.twig',
-            'otros': '_partials/_icon_other.svg.twig',
-        } %}
-        <section class="section">
-            <h2>Categorías</h2>
-            <div class="categories-grid">
-                {% for categoria in categorias %}
-                    <a href="{{ path('catalogo', {categoria: categoria.slug}) }}" class="category-card">
-                        <span class="category-card__icon">{{ include(categoriaIconos[categoria.slug] ?? categoriaIconos['otros']) }}</span>
-                        <span class="category-card__label">{{ categoria.label }}</span>
-                    </a>
-                {% endfor %}
-            </div>
-        </section>
-    {% endif %}
+    {# Categorías: se movió al Catálogo (pedido explícito del usuario, ago
+       2026) — ahí es donde de verdad se filtra el listado, ver
+       templates/catalogo/index.html.twig. #}
 
     {# Destacados muestra SOLO productos con oferta real ahora mismo
        (ProductoRepository::findEnOferta — descuentoPorcentaje > 0 en el

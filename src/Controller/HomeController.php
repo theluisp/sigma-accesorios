@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Repository\ProductoRepository;
 use App\Service\Banner\BannerImageResolver;
 use App\Service\Catalog\MarcaCatalog;
-use App\Service\Catalog\ProductCategorizer;
 use App\Service\Contacto\ContactoLinks;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,46 +17,22 @@ class HomeController extends AbstractController
         ProductoRepository $productoRepository,
         BannerImageResolver $bannerResolver,
         ContactoLinks $contactoLinks,
-        ProductCategorizer $categorizer,
         MarcaCatalog $marcaCatalog,
     ): Response {
         return $this->render('home/index.html.twig', [
             'productos' => $productoRepository->findEnOferta(12),
             'banners' => $this->construirBanners($bannerResolver, $contactoLinks),
-            'categorias' => $this->categoriasParaMostrar($productoRepository, $categorizer),
             'marcas' => $this->marcasParaMostrar($productoRepository, $marcaCatalog),
         ]);
     }
 
     /**
-     * Categorías del carrusel de Home: solo las que tienen producto
-     * disponible ahora mismo (nunca una categoría vacía que decepcione al
-     * usuario), en el orden definido por ProductCategorizer.
-     *
-     * @return array<int, array{slug: string, label: string}>
-     */
-    private function categoriasParaMostrar(ProductoRepository $productoRepository, ProductCategorizer $categorizer): array
-    {
-        $conStock = array_flip($productoRepository->categoriasConStock());
-
-        $resultado = [];
-        foreach ($categorizer->todas() as $slug => $label) {
-            if (isset($conStock[$slug])) {
-                $resultado[] = ['slug' => $slug, 'label' => $label];
-            }
-        }
-
-        return $resultado;
-    }
-
-    /**
      * Marcas de la sección "Marcas" de Home: solo las que tienen producto
      * disponible ahora mismo con alguna de sus palabras clave en el nombre
-     * (mismo criterio de "nunca una tarjeta vacía" que
-     * categoriasParaMostrar()), en el orden fijo de MarcaCatalog. La regla
-     * de coincidencia vive en MarcaCatalog para que sea exactamente la
-     * misma que usa CatalogoController al resolver el pseudo-filtro
-     * "marca-<slug>" cuando se da clic en una tarjeta.
+     * (nunca una tarjeta que lleve a un catálogo vacío), en el orden fijo
+     * de MarcaCatalog. La regla de coincidencia vive en MarcaCatalog para
+     * que sea exactamente la misma que usa CatalogoController al resolver
+     * el pseudo-filtro "marca-<slug>" cuando se da clic en una tarjeta.
      *
      * @return array<int, array{slug: string, label: string}>
      */
