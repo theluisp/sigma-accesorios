@@ -27,9 +27,22 @@ class Producto
     #[ORM\Column(type: 'text')]
     private string $descripcion = '';
 
-    /** Inferida del nombre por App\Service\Catalog\ProductCategorizer (el Sheet no trae categoría). */
+    /** Inferida del nombre por App\Service\Catalog\ProductCategorizer (el Sheet no trae categoría),
+     *  a menos que $categoriaManual esté en true — ver setCategoriaManual(). */
     #[ORM\Column(length: 40)]
     private string $categoria = 'otros';
+
+    /**
+     * true cuando la categoría fue elegida a mano en /admin/categorias (ver
+     * App\Controller\Admin\CategoriaController), en vez de inferida por
+     * palabras clave. CatalogImportService revisa esta bandera en cada
+     * sync para NO pisar una clasificación manual con la automática —
+     * antes cada sync recalculaba la categoría de TODOS los productos sin
+     * excepción, así que cualquier corrección manual se perdía en horas
+     * (la sync corre varias veces al día).
+     */
+    #[ORM\Column]
+    private bool $categoriaManual = false;
 
     #[ORM\Column]
     private \DateTimeImmutable $creadoEn;
@@ -89,9 +102,32 @@ class Producto
         return $this->categoria;
     }
 
+    /**
+     * Usado por el clasificador automático (App\Service\Catalog\ProductCategorizer,
+     * vía CatalogImportService) — NO marca la categoría como manual. Para
+     * una corrección hecha a mano en /admin/categorias, usar
+     * setCategoriaManual() en su lugar.
+     */
     public function setCategoria(string $categoria): void
     {
         $this->categoria = $categoria;
+    }
+
+    public function isCategoriaManual(): bool
+    {
+        return $this->categoriaManual;
+    }
+
+    /**
+     * Clasificación elegida a mano en /admin/categorias. A diferencia de
+     * setCategoria(), esto también prende $categoriaManual — a partir de
+     * aquí CatalogImportService ya no va a recalcular la categoría de este
+     * producto en los syncs automáticos.
+     */
+    public function setCategoriaManual(string $categoria): void
+    {
+        $this->categoria = $categoria;
+        $this->categoriaManual = true;
     }
 
     /**

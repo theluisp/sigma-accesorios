@@ -1337,6 +1337,78 @@ body {
     border-bottom-color: var(--color-blue);
 }
 
+/* Admin: panel de categorías (/admin/categorias) — reclasificación manual
+   masiva, un solo <select> por producto y un solo botón de guardar para
+   todos (a diferencia de /admin/imagenes, que sube de una en una). */
+.admin-categorias__toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: var(--color-white);
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 12px;
+}
+
+.admin-categorias__filtro {
+    flex: 1 1 260px;
+    max-width: 360px;
+    padding: 9px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--color-navy);
+}
+
+.admin-categorias__contador {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+.admin-categorias__toolbar--footer {
+    position: static;
+    border-bottom: none;
+    border-top: 1px solid var(--color-border);
+    justify-content: flex-end;
+}
+
+.admin-categorias__automatica {
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+}
+
+.admin-table__select {
+    padding: 6px 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: var(--color-white);
+    color: var(--color-navy);
+}
+
+/* Fila con categoría clasificada a mano — mismo azul de marca que el resto
+   del sitio, distinto del amarillo de "--pending" en /admin/imagenes para
+   no confundir los dos estados. */
+.admin-table__row--manual {
+    background: #eef6fc;
+}
+
+.admin-badge--manual {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 980px;
+    background: var(--color-blue);
+    color: var(--color-white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
 /* Admin: panel de analíticas (conteo básico de visitas diarias) */
 .admin-analiticas__nota {
     color: var(--color-text-secondary);

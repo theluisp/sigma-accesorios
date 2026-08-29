@@ -75,8 +75,14 @@ final class CatalogImportService
                 } else {
                     $producto->setNombre($mapped['nombre']);
                     $producto->setDescripcion($mapped['descripcion']);
-                    // Recalculamos por si el producto cambió de nombre entre syncs.
-                    $producto->setCategoria($categoria);
+                    // Recalculamos por si el producto cambió de nombre entre
+                    // syncs — PERO solo si nadie la clasificó a mano en
+                    // /admin/categorias (ver Producto::$categoriaManual):
+                    // una corrección manual no debe perderse en el próximo
+                    // sync automático.
+                    if (!$producto->isCategoriaManual()) {
+                        $producto->setCategoria($categoria);
+                    }
                     $producto->marcarActualizado();
                 }
 

@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin · Categorías{% endblock %}
+
+{% block body %}
+    <h1>Categoría de productos</h1>
+    <nav class="admin-nav">
+        <a href="{{ path('admin_images_index') }}" class="admin-nav__link">Imágenes de productos</a>
+        <a href="{{ path('admin_categorias_index') }}" class="admin-nav__link admin-nav__link--active">Categorías</a>
+        <a href="{{ path('admin_analiticas_index') }}" class="admin-nav__link">Analíticas</a>
+    </nav>
+
+    <p>
+        {{ productos|length }} productos. El clasificador automático agrupa por palabras clave en el nombre y a veces se equivoca
+        (ej. algo de "soporte para moto" cayendo en otra categoría) — aquí puedes corregir la categoría de cada producto a mano.
+        Un producto que corriges aquí <strong>ya no se recalcula</strong> en las sincronizaciones automáticas con el Sheet.
+        Revisa todos los que quieras y guarda todo junto con un solo clic.
+    </p>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="admin-flash admin-flash--{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <form action="{{ path('admin_categorias_guardar') }}" method="post" id="form-categorias">
+        <input type="hidden" name="_token" value="{{ csrf_token('guardar-categorias') }}">
+
+        <div class="admin-categorias__toolbar">
+            <input
+                type="search"
+                id="filtro-productos"
+                class="admin-categorias__filtro"
+                placeholder="Buscar producto por nombre… ej. audífono, moto, bocina"
+                aria-label="Buscar producto por nombre"
+            >
+            <span class="admin-categorias__contador"><span id="contador-visible">{{ productos|length }}</span> de {{ productos|length }} productos</span>
+            <button type="submit" class="btn btn--primary btn--small">Guardar todas las categorías</button>
+        </div>
+
+        <table class="admin-table" id="tabla-categorias">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                    <tr class="{{ producto.categoriaManual ? 'admin-table__row--manual' : '' }}" data-nombre="{{ producto.nombre|lower }}">
+                        <td>
+                            <strong>{{ producto.nombre }}</strong><br>
+                            <code>{{ producto.slug }}</code>
+                        </td>
+                        <td>
+                            <select name="categoria[{{ producto.slug }}]" class="admin-table__select">
+                                {% for slug, label in categorias %}
+                                    <option value="{{ slug }}"{{ producto.categoria == slug ? ' selected' : '' }}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            {% if producto.categoriaManual %}
+                                <span class="admin-badge--manual">Manual</span>
+                            {% else %}
+                                <span class="admin-categorias__automatica">Automática</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="admin-categorias__toolbar admin-categorias__toolbar--footer">
+            <button type="submit" class="btn btn--primary">Guardar todas las categorías</button>
+        </div>
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    {# Filtro de texto client-side: con ~200 productos, buscar por nombre
+       (ej. "audífono", "moto", "bocina") antes de clasificar es mucho más
+       rápido que recorrer toda la tabla. No toca el servidor — solo
+       oculta filas, el <select> de las filas ocultas sigue mandándose
+       igual al guardar (nadie pierde su selección por filtrar). #}
+    <script>
+        (function () {
+            var filtro = document.getElementById('filtro-productos');
+            var contador = document.getElementById('contador-visible');
+            var filas = document.querySelectorAll('#tabla-categorias tbody tr');
+            if (!filtro) {
+                return;
+            }
+
+            filtro.addEventListener('input', function () {
+                var termino = filtro.value.trim().toLowerCase();
+                var visibles = 0;
+                filas.forEach(function (fila) {
+                    var coincide = termino === '' || fila.dataset.nombre.indexOf(termino) !== -1;
+                    fila.hidden = !coincide;
+                    if (coincide) {
+                        visibles++;
+                    }
+                });
+                if (contador) {
+                    contador.textContent = visibles;
+                }
+            });
+        })();
+    </script>
+{% endblock %}
