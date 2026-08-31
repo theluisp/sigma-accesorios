@@ -1,10 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sigma Accesorios para Celular{% endblock %}
+{% block title %}Sigma Accesorios para Celular — Fundas, Cargadores y Más{% endblock %}
+{% block metaDescription %}Compra fundas, cargadores, audífonos y accesorios para todos los modelos de celular. Recoge en sucursal o pide a domicilio por WhatsApp, Rappi o Didi Food.{% endblock %}
 
 {% block body_class %}is-home{% endblock %}
 
 {% block body %}
+    {# Antes Home no tenía ningún <h1> (el resto de páginas sí) — Google usa
+       el h1 para entender de qué trata la página, así que sin uno el
+       Inicio quedaba en desventaja de SEO frente al resto del sitio. Va
+       chico/discreto arriba del carrusel a propósito, no como un banner
+       grande, para no pelearse visualmente con el carrusel de banners
+       reales de abajo (pedido: "SEO básico", ago 2026). #}
+    <h1 class="home-eyebrow">Accesorios para celular — fundas, cargadores, audífonos y más</h1>
+
     {% if banners is not empty %}
         <div id="home-carousel" class="carousel slide banner-carousel" data-bs-ride="carousel" data-bs-interval="5000">
             <div class="carousel-indicators">

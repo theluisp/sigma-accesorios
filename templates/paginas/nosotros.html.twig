@@ -1,6 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nosotros — Sigma Accesorios{% endblock %}
+{% block title %}Quiénes somos — Sigma Accesorios para Celular{% endblock %}
+{# OJO: no se menciona ciudad aquí a propósito — el texto de abajo (línea
+   con <p>) dice "Puebla, México", pero en TODO el resto de la
+   conversación/documentación del proyecto la operación se describe en San
+   Cristóbal de las Casas, Chiapas (sucursales "cerca de Central de
+   Abastos" y "Capu"), y el póster de puntos de entrega que subió el
+   usuario trae nombres claramente de Puebla ("China Poblana", "Parque
+   Puebla"). Hay una contradicción real sin resolver — hasta que el
+   usuario confirme la ciudad correcta, más vale no repetir ninguna de las
+   dos en meta tags (evita meter una ciudad incorrecta a las descripciones
+   que lee Google, algo que además de confundir clientes reales, es malo
+   para SEO local por inconsistencia de NAP). #}
+{% block metaDescription %}Cargadores, adaptadores, audio y accesorios para todos los modelos de celular. Recoge en sucursal, pide por Rappi/Didi Food, o te lo enviamos a domicilio.{% endblock %}
 
 {% block body %}
     <section class="catalogo-header">

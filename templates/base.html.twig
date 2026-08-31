@@ -3,17 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Sigma Accesorios para Celular{% endblock %}</title>
+    {# SEO básico (pedido explícito del usuario, ago 2026): meta description +
+       canónica + Open Graph/Twitter Card por página. Cada plantilla hija
+       puede sobreescribir title/metaDescription/ogImage; si no lo hace, se
+       usan estos valores por defecto. La canónica y las URLs og:url/
+       twitter usan app.request.uri (URL absoluta tal como llegó la
+       petición, con el dominio real de producción) — así funciona correcto
+       sin tener que hardcodear el dominio en ningún lado. #}
+    <meta name="description" content="{% block metaDescription %}Fundas, cargadores, audífonos y más accesorios para celular. Recoge en sucursal o pide a domicilio por WhatsApp, Rappi o Didi Food.{% endblock %}">
+    <link rel="canonical" href="{{ app.request.uri }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Sigma Accesorios para Celular">
+    <meta property="og:locale" content="es_MX">
+    <meta property="og:title" content="{{ block('title') }}">
+    <meta property="og:description" content="{{ block('metaDescription') }}">
+    <meta property="og:url" content="{{ app.request.uri }}">
+    <meta property="og:image" content="{% block ogImage %}{{ app.request.schemeAndHttpHost }}{{ asset('images/logo.png') }}{% endblock %}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ block('title') }}">
+    <meta name="twitter:description" content="{{ block('metaDescription') }}">
+    <meta name="twitter:image" content="{{ block('ogImage') }}">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
     {# ?v= es cache-busting manual: sin esto, el navegador (y a veces un proxy
        intermedio) puede seguir sirviendo una copia vieja de app.css/app.js
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=17">
+    <link rel="stylesheet" href="/css/app.css?v=18">
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">

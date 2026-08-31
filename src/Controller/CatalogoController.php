@@ -116,11 +116,29 @@ final class CatalogoController extends AbstractController
 
         $productosPagina = array_slice($productosFiltrados, ($pagina - 1) * self::POR_PAGINA, self::POR_PAGINA);
 
+        // Título/descripción para SEO (pedido explícito del usuario, ago
+        // 2026): cada filtro real (categoría, marca, ofertas, novedades)
+        // tiene su propio <title>/meta description en vez de que TODO el
+        // catálogo comparta el mismo — así Google puede indexar
+        // "Fundas — Catálogo Sigma Accesorios" y "Ofertas — Catálogo Sigma
+        // Accesorios" como páginas distintas. La búsqueda de texto libre
+        // (?q=) no cambia el título — son demasiadas combinaciones
+        // posibles como para que valga la pena, y no son búsquedas que
+        // Google deba indexar por separado.
+        $metaTitulo = $categoriaLabel !== ''
+            ? $categoriaLabel.' — Catálogo Sigma Accesorios'
+            : 'Catálogo completo — Sigma Accesorios para Celular';
+        $metaDescripcion = $categoriaLabel !== ''
+            ? $categoriaLabel.' — catálogo de Sigma Accesorios para Celular. Recoge en sucursal o pide a domicilio por WhatsApp, Rappi o Didi Food.'
+            : 'Explora todo el catálogo: fundas, cargadores, audífonos, soportes y más accesorios para celular. Recoge en sucursal o pide a domicilio.';
+
         return $this->render('catalogo/index.html.twig', [
             'productos' => $productosPagina,
             'texto' => $texto,
             'categoriaSeleccionada' => $categoriaSeleccionada,
             'categoriaLabel' => $categoriaLabel,
+            'metaTitulo' => $metaTitulo,
+            'metaDescripcion' => $metaDescripcion,
             'categorias' => $categorizer->todas(),
             'conteoPorCategoria' => $conteoPorCategoria,
             'conteoOfertas' => $conteoOfertas,
