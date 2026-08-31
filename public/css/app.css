@@ -21,6 +21,20 @@
 
 html {
     height: 100%;
+    /* Al dar clic en un filtro de categoría en el Catálogo (o en una
+       tarjeta de Marcas de Home), la página recarga con el filtro
+       aplicado pero aterriza arriba del todo — con esto el navegador
+       hace scroll animado hasta #catalogo-resultados en vez de un salto
+       seco, para que se note claramente que el filtro sí hizo algo
+       (pedido explícito del usuario, ago 2026). Se respeta
+       prefers-reduced-motion por accesibilidad. */
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
 }
 
 /* Footer pegado siempre al fondo de la pantalla (patrón "sticky footer"):

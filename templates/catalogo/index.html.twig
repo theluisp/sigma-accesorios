@@ -35,7 +35,7 @@
            ver MarcaCatalog) — no se recalcula aquí. #}
         <div class="category-pills">
             <a
-                href="{{ path('catalogo', {q: texto, categoria: ''}) }}"
+                href="{{ path('catalogo', {q: texto, categoria: ''}) }}#catalogo-resultados"
                 class="category-pill{{ categoriaSeleccionada is empty ? ' category-pill--active' : '' }}"
             >
                 Todos <span class="category-pill__count">{{ totalEnBusqueda }}</span>
@@ -47,7 +47,7 @@
                    solo se muestra si hay al menos un producto agregado en los
                    últimos NOVEDADES_DIAS días. #}
                 <a
-                    href="{{ path('catalogo', {q: texto, categoria: novedadesSlug}) }}"
+                    href="{{ path('catalogo', {q: texto, categoria: novedadesSlug}) }}#catalogo-resultados"
                     class="category-pill category-pill--novedades{{ categoriaSeleccionada == novedadesSlug ? ' category-pill--active' : '' }}"
                 >
                     ✨ Novedades <span class="category-pill__count">{{ conteoNovedades }}</span>
@@ -59,7 +59,7 @@
                    solo se muestra cuando hay al menos un producto en oferta ahora
                    mismo — nunca lleva a un catálogo vacío. #}
                 <a
-                    href="{{ path('catalogo', {q: texto, categoria: ofertasSlug}) }}"
+                    href="{{ path('catalogo', {q: texto, categoria: ofertasSlug}) }}#catalogo-resultados"
                     class="category-pill category-pill--ofertas{{ categoriaSeleccionada == ofertasSlug ? ' category-pill--active' : '' }}"
                 >
                     🔥 Ofertas <span class="category-pill__count">{{ conteoOfertas }}</span>
@@ -91,7 +91,7 @@
         <div class="categories-grid catalogo-categorias">
             {% for slug, label in categorias %}
                 <a
-                    href="{{ path('catalogo', {q: texto, categoria: slug}) }}"
+                    href="{{ path('catalogo', {q: texto, categoria: slug}) }}#catalogo-resultados"
                     class="category-card{{ categoriaSeleccionada == slug ? ' category-card--active' : '' }}"
                 >
                     <span class="category-card__icon">{{ include(categoriaIconos[slug] ?? categoriaIconos['otros']) }}</span>
@@ -101,7 +101,13 @@
             {% endfor %}
         </div>
 
-        <p class="catalogo-meta">
+        {# Ancla para que al dar clic en un filtro (píldora o tarjeta de
+           categoría) el navegador baje solo hasta aquí — pedido explícito
+           del usuario, ago 2026: sin esto, después de recargar la página
+           filtrada, el usuario aterriza arriba del todo (en el buscador) y
+           puede parecer que el clic no hizo nada, porque los resultados
+           quedan más abajo sin que se note el cambio. #}
+        <p class="catalogo-meta" id="catalogo-resultados">
             {% if texto is not empty %}
                 {{ totalResultados }} resultado{{ totalResultados == 1 ? '' : 's' }} para «{{ texto }}»
                 {%- if categoriaSeleccionada is not empty %} en {{ categoriaLabel }}{% endif %}

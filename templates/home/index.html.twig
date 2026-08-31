@@ -69,7 +69,7 @@
             <h2>Marcas</h2>
             <div class="categories-grid">
                 {% for marca in marcas %}
-                    <a href="{{ path('catalogo', {categoria: 'marca-' ~ marca.slug}) }}" class="category-card">
+                    <a href="{{ path('catalogo', {categoria: 'marca-' ~ marca.slug}) }}#catalogo-resultados" class="category-card">
                         <span class="marca-card__logo">
                             <img src="/images/brands/marca-{{ marca.slug }}.png" alt="{{ marca.label }}" loading="lazy">
                         </span>
