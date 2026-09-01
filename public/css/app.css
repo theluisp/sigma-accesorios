@@ -1146,8 +1146,72 @@ body {
     flex-shrink: 0;
     background: var(--color-navy);
     color: var(--color-white);
+    padding: 36px 20px 20px;
+}
+
+/* Footer: 2 columnas (Contacto de Sigma Accesorios + promo de Sigma
+   Thecnologies) arriba de la línea de copyright — antes el footer era
+   solo esa línea centrada, ver .site-footer__copy más abajo. */
+.site-footer__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    text-align: left;
+}
+
+.site-footer__heading {
+    margin: 0 0 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-white);
+}
+
+.site-footer__promo-texto {
+    margin: 0 0 12px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.9rem;
+}
+
+.site-footer__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.site-footer__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.15s ease;
+}
+
+.site-footer__links a svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.site-footer__links a:hover {
+    color: var(--color-white);
+    text-decoration: underline;
+}
+
+.site-footer__copy {
+    max-width: 1100px;
+    margin: 28px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
     text-align: center;
-    padding: 16px 20px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.65);
 }
 
 /* Burbuja flotante de WhatsApp — color de marca de WhatsApp a propósito

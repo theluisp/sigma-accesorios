@@ -36,7 +36,7 @@
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=18">
+    <link rel="stylesheet" href="/css/app.css?v=19">
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -69,8 +69,74 @@
         {% block body %}{% endblock %}
     </main>
 
+    {# Footer con datos de contacto + promo del otro negocio del usuario
+       (Sigma Thecnologies) — pedido explícito, sep 2026. El correo se deja
+       escrito directo aquí (no en ContactoLinks/.env como WhatsApp/Facebook
+       de Sigma Accesorios) porque el usuario lo dio tal cual en el chat, sin
+       pedir que sea configurable; mismo patrón que ya usa el botón
+       flotante de WhatsApp de arriba. Sigma Thecnologies comparte el mismo
+       correo y WhatsApp que Sigma Accesorios (así lo confirmó el usuario:
+       "al correo o al whatsapp igual"), pero tiene su propia página de
+       Facebook, distinta a la de accesorios. #}
     <footer class="site-footer">
-        <p>&copy; {{ "now"|date("Y") }} Sigma Accesorios Para Celular</p>
+        <div class="site-footer__inner">
+            <div class="site-footer__col">
+                <h2 class="site-footer__heading">Contacto</h2>
+                <ul class="site-footer__links">
+                    <li>
+                        <a href="mailto:sigma.sw.contacto@gmail.com">
+                            {{ include('_partials/_icon_mail.svg.twig') }}
+                            sigma.sw.contacto@gmail.com
+                        </a>
+                    </li>
+                    {% if whatsapp_url() %}
+                        <li>
+                            <a href="{{ whatsapp_url() }}" target="_blank" rel="noopener">
+                                {{ include('_partials/_icon_whatsapp.svg.twig') }}
+                                WhatsApp
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if facebook_url() %}
+                        <li>
+                            <a href="{{ facebook_url() }}" target="_blank" rel="noopener">
+                                {{ include('_partials/_icon_facebook.svg.twig') }}
+                                Facebook
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div class="site-footer__col">
+                <h2 class="site-footer__heading">Sigma Thecnologies</h2>
+                <p class="site-footer__promo-texto">Nuestro otro negocio — contáctanos si buscas sus servicios.</p>
+                <ul class="site-footer__links">
+                    <li>
+                        <a href="mailto:sigma.sw.contacto@gmail.com">
+                            {{ include('_partials/_icon_mail.svg.twig') }}
+                            sigma.sw.contacto@gmail.com
+                        </a>
+                    </li>
+                    {% if whatsapp_url() %}
+                        <li>
+                            <a href="{{ whatsapp_url() }}" target="_blank" rel="noopener">
+                                {{ include('_partials/_icon_whatsapp.svg.twig') }}
+                                WhatsApp
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href="https://www.facebook.com/profile.php?id=61569422122664" target="_blank" rel="noopener">
+                            {{ include('_partials/_icon_facebook.svg.twig') }}
+                            Facebook
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="site-footer__copy">&copy; {{ "now"|date("Y") }} Sigma Accesorios Para Celular</p>
     </footer>
 
     {# Burbuja flotante: WhatsApp de verdad (no un placeholder decorativo),
