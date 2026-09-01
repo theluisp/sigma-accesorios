@@ -127,10 +127,10 @@ final class CatalogoController extends AbstractController
         // Google deba indexar por separado.
         $metaTitulo = $categoriaLabel !== ''
             ? $categoriaLabel.' — Catálogo Sigma Accesorios'
-            : 'Catálogo completo — Sigma Accesorios para Celular';
+            : 'Catálogo completo — Sigma Accesorios para Celular en Puebla';
         $metaDescripcion = $categoriaLabel !== ''
-            ? $categoriaLabel.' — catálogo de Sigma Accesorios para Celular. Recoge en sucursal o pide a domicilio por WhatsApp, Rappi o Didi Food.'
-            : 'Explora todo el catálogo: fundas, cargadores, audífonos, soportes y más accesorios para celular. Recoge en sucursal o pide a domicilio.';
+            ? $categoriaLabel.' — catálogo de Sigma Accesorios para Celular en Puebla. Recoge en sucursal o pide a domicilio por WhatsApp, Rappi o Didi Food.'
+            : 'Explora todo el catálogo: fundas, cargadores, audífonos, soportes y más accesorios para celular en Puebla. Recoge en sucursal o pide a domicilio.';
 
         return $this->render('catalogo/index.html.twig', [
             'productos' => $productosPagina,
