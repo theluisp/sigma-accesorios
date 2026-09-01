@@ -23,7 +23,7 @@
     <meta property="og:title" content="{{ block('title') }}">
     <meta property="og:description" content="{{ block('metaDescription') }}">
     <meta property="og:url" content="{{ app.request.uri }}">
-    <meta property="og:image" content="{% block ogImage %}{{ app.request.schemeAndHttpHost }}{{ asset('images/logo.png') }}{% endblock %}">
+    <meta property="og:image" content="{% block ogImage %}{{ app.request.schemeAndHttpHost }}/images/logo.png{% endblock %}">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ block('title') }}">
