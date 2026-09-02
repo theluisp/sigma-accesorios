@@ -55,65 +55,85 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
+/* Header — barra delgada estilo apple.com (pedido explícito del usuario,
+   sep 2026, mandó captura de referencia de apple.com): franja oscura de
+   todo el ancho, marca chica a la izquierda, nav repartido de forma pareja
+   ocupando el espacio del centro (flex: 1 + space-evenly, igual que los
+   links de Apple), carrito a la derecha. Antes era un header alto y claro
+   con el logo grande — este rediseño lo reemplaza por completo. */
 .site-header {
-    border-bottom: 2px solid var(--color-blue);
+    background: var(--color-navy);
+    border-bottom: none;
 }
 
 .site-header__inner {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 12px 20px;
+    padding: 8px 20px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 20px;
 }
 
 .site-header__brand {
     display: flex;
+    flex-shrink: 0;
 }
 
-/* Mismo tamaño en todas las páginas (antes Home tenía un logo más grande
-   que el resto del sitio — se empataron a pedido del usuario). */
+/* El logo real trae fondo blanco sólido (es un badge cuadrado, no un
+   wordmark con fondo transparente), así que no se pone suelto sobre la
+   barra oscura — se ve como un cuadro blanco roto/raro. En vez de eso va
+   dentro de una placa blanca redondeada chica, como un ícono de marca. */
 .site-header__logo {
-    height: 168px;
-    width: auto;
+    height: 32px;
+    width: 32px;
+    object-fit: cover;
+    border-radius: 7px;
+    background: var(--color-white);
+    display: block;
 }
 
 .site-nav {
     display: flex;
-    gap: 24px;
+    flex: 1;
+    justify-content: space-evenly;
+    gap: 10px;
 }
 
 .site-nav a {
-    color: var(--color-navy);
+    color: rgba(255, 255, 255, 0.82);
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 400;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    transition: color 0.15s ease;
 }
 
 .site-nav a:hover {
-    color: var(--color-blue);
+    color: var(--color-white);
 }
 
-/* Responsivo: header en 2 filas (logo arriba, nav abajo centrado) antes de
-   que el logo + 3 links se amontonen/desborden en pantallas angostas. */
+/* Responsivo: en pantallas angostas el nav se envuelve en su propia fila
+   debajo de logo + carrito, en vez de amontonarse en una sola línea. */
 @media (max-width: 640px) {
     .site-header__inner {
         flex-wrap: wrap;
-        justify-content: center;
-        gap: 6px;
-        padding: 10px 16px;
-    }
-
-    .site-header__logo {
-        height: 104px;
+        justify-content: space-between;
+        padding: 8px 16px;
     }
 
     .site-nav {
+        order: 3;
         width: 100%;
+        flex: none;
         justify-content: center;
-        gap: 18px;
+        gap: 14px;
         flex-wrap: wrap;
+        padding-top: 6px;
+    }
+
+    .site-nav a {
+        font-size: 0.76rem;
     }
 }
 
@@ -300,6 +320,35 @@ body {
 
 .catalogo-categorias {
     margin-bottom: 18px;
+}
+
+/* Tarjetas de categoría MÁS CHICAS solo en el Catálogo (pedido explícito
+   del usuario, sep 2026: "ocupan mucho espacio") — se limita el scope a
+   .catalogo-categorias para no afectar las tarjetas de Marcas en Home, que
+   reusan la misma base .category-card. Icono y grid se achican junto con
+   el padding/tipografía. */
+.catalogo-categorias.categories-grid {
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+    gap: 10px;
+}
+
+.catalogo-categorias .category-card {
+    gap: 4px;
+    padding: 10px 6px;
+    border-radius: 12px;
+}
+
+.catalogo-categorias .category-card__icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.catalogo-categorias .category-card__label {
+    font-size: 0.8rem;
+}
+
+.catalogo-categorias .category-card__count {
+    font-size: 0.72rem;
 }
 
 /* Tarjetas de Marcas (sección "Marcas" de Home): mismo .category-card que
@@ -969,6 +1018,25 @@ body {
     color: #fff;
 }
 
+/* Mercado Libre no tiene logo oficial subido (igual que WhatsApp arriba),
+   así que se usa un ícono dibujado con el amarillo de su marca de fondo. */
+.contacto-icon--mercadolibre {
+    background: #fee600;
+    color: var(--color-navy);
+}
+
+/* Tarjeta puramente informativa (Mercado Libre) — es un <div>, no un link,
+   así que no debe verse ni comportarse como clickeable: sin el "levante" en
+   hover que sí tienen las demás tarjetas de contacto. */
+.contacto-card--info {
+    cursor: default;
+}
+
+.contacto-card--info:hover {
+    transform: none;
+    box-shadow: 0 8px 30px rgba(26, 46, 71, 0.10);
+}
+
 /* Logos reales de marca (Rappi/Facebook/Maps), subidos por el usuario —
    ver public/images/brands/. Caja cuadrada con fondo neutro + padding para
    que los logos con fondo transparente (Rappi, el pin de Maps) tengan
@@ -1634,30 +1702,27 @@ body {
    (ver Carrito en app.js) — el "checkout" de esta primera
    versión es mandar el resumen por WhatsApp.
    ============================================================ */
-.site-header__right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
 .site-cart-btn {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
     border: none;
     border-radius: 50%;
     background: transparent;
-    color: var(--color-navy);
+    /* Barra oscura ahora (ver .site-header) — el ícono va en blanco en vez
+       del navy de antes, si no, es invisible sobre el fondo. */
+    color: var(--color-white);
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .site-cart-btn:hover {
-    background: var(--color-surface);
-    color: var(--color-blue);
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--color-white);
 }
 
 .site-cart-btn__badge {
@@ -1675,14 +1740,6 @@ body {
     font-weight: 700;
     line-height: 14px;
     text-align: center;
-}
-
-@media (max-width: 640px) {
-    .site-header__right {
-        width: 100%;
-        justify-content: center;
-        gap: 14px;
-    }
 }
 
 /* Botones "Ver detalle" / "Agregar" en la tarjeta de producto, uno al

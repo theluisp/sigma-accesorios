@@ -86,6 +86,17 @@
                     <p class="valor-desc">Síguenos para ver novedades y promociones.</p>
                 </a>
             {% endif %}
+
+            {# Tarjeta de Mercado Libre: solo informativa, pedido explícito
+               del usuario (sep 2026) — no lleva link ni modal, solo avisa
+               que también hacen envíos a todo México por ahí. Por eso es un
+               <div>, no <a>/<button>, y usa el modificador --info para
+               quitarle el hover de "tarjeta clickeable" de .aqua-card. #}
+            <div class="aqua-card contacto-card contacto-card--info">
+                <span class="valor-icon contacto-icon--mercadolibre">{{ include('_partials/_icon_bag.svg.twig') }}</span>
+                <p class="aqua-card__name">Mercado Libre</p>
+                <p class="valor-desc">Contáctanos, tenemos envíos a todo México con Mercado Libre.</p>
+            </div>
         </div>
 
         {% if facebookUrl is null %}

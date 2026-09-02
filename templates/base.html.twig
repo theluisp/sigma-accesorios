@@ -36,32 +36,38 @@
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=19">
+    <link rel="stylesheet" href="/css/app.css?v=20">
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
+    {# Navbar rediseñado al estilo "barra delgada" de apple.com (pedido
+       explícito del usuario, sep 2026, mandó captura de referencia): franja
+       oscura de todo el ancho, marca chica a la izquierda, links repartidos
+       de forma pareja al centro y el carrito a la derecha — en vez del
+       header alto de antes con el logo grande. El logo real (public/images/
+       logo.png) trae fondo blanco sólido, así que se muestra dentro de una
+       placa blanca redondeada chica en vez de ponerlo suelto sobre la barra
+       oscura (se perdería/se vería como un cuadro blanco raro). #}
     <header class="site-header">
         <div class="site-header__inner">
             <a href="{{ path('home') }}" class="site-header__brand">
                 <img src="/images/logo.png" alt="Sigma Accesorios para Celular" class="site-header__logo">
             </a>
-            <div class="site-header__right">
-                <nav class="site-nav">
-                    <a href="{{ path('home') }}">Inicio</a>
-                    <a href="{{ path('catalogo') }}">Catálogo</a>
-                    <a href="{{ path('nosotros') }}">Nosotros</a>
-                    <a href="{{ path('contacto') }}">Contacto y pide a domicilio</a>
-                </nav>
-                {# Botón del carrito: el conteo/contenido vive en localStorage
-                   del navegador (ver public/js/app.js, objeto Carrito) — no
-                   hay backend de pedidos todavía. js-carrito-contador se
-                   actualiza al cargar la página y cada vez que cambia el
-                   carrito. #}
-                <button type="button" class="site-cart-btn" data-bs-toggle="modal" data-bs-target="#carrito-modal" aria-label="Ver carrito">
-                    {{ include('_partials/_icon_cart.svg.twig') }}
-                    <span class="site-cart-btn__badge js-carrito-contador" hidden>0</span>
-                </button>
-            </div>
+            <nav class="site-nav">
+                <a href="{{ path('home') }}">Inicio</a>
+                <a href="{{ path('catalogo') }}">Catálogo</a>
+                <a href="{{ path('nosotros') }}">Nosotros</a>
+                <a href="{{ path('contacto') }}">Contacto y pide a domicilio</a>
+            </nav>
+            {# Botón del carrito: el conteo/contenido vive en localStorage
+               del navegador (ver public/js/app.js, objeto Carrito) — no
+               hay backend de pedidos todavía. js-carrito-contador se
+               actualiza al cargar la página y cada vez que cambia el
+               carrito. #}
+            <button type="button" class="site-cart-btn" data-bs-toggle="modal" data-bs-target="#carrito-modal" aria-label="Ver carrito">
+                {{ include('_partials/_icon_cart.svg.twig') }}
+                <span class="site-cart-btn__badge js-carrito-contador" hidden>0</span>
+            </button>
         </div>
     </header>
 
