@@ -67,6 +67,7 @@ body {
 }
 
 .site-header__inner {
+    position: relative;
     max-width: 1100px;
     margin: 0 auto;
     padding: 8px 20px;
@@ -85,10 +86,12 @@ body {
    barra oscura — se ve como un cuadro blanco roto/raro. En vez de eso va
    dentro de una placa blanca redondeada chica, como un ícono de marca. */
 .site-header__logo {
-    height: 32px;
-    width: 32px;
+    /* Pedido explícito del usuario (sep 2026): un poco más grande que el
+       32px original, mismo tamaño en todas las páginas y anchos. */
+    height: 42px;
+    width: 42px;
     object-fit: cover;
-    border-radius: 7px;
+    border-radius: 9px;
     background: var(--color-white);
     display: block;
 }
@@ -113,27 +116,81 @@ body {
     color: var(--color-white);
 }
 
-/* Responsivo: en pantallas angostas el nav se envuelve en su propia fila
-   debajo de logo + carrito, en vez de amontonarse en una sola línea. */
+.site-header__actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 4px;
+}
+
+/* Botón hamburguesa: oculto en desktop, el nav ya se ve completo repartido
+   en la barra. Solo aparece en mobile (ver media query abajo). */
+.site-nav-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-white);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.site-nav-toggle:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+/* Responsivo (pedido explícito del usuario, sep 2026: "responsive la
+   barra de navegacion en mobile se ve rara" — antes el nav de 4 links se
+   envolvía en su propia fila debajo del logo/carrito y se veía apretado).
+   Ahora en mobile el nav se oculta y se abre como panel desplegable con el
+   botón hamburguesa — el toggle real (clase .is-open) vive en app.js. */
 @media (max-width: 640px) {
     .site-header__inner {
-        flex-wrap: wrap;
-        justify-content: space-between;
-        padding: 8px 16px;
+        padding: 10px 16px;
+    }
+
+    .site-nav-toggle {
+        display: flex;
     }
 
     .site-nav {
-        order: 3;
-        width: 100%;
-        flex: none;
-        justify-content: center;
-        gap: 14px;
-        flex-wrap: wrap;
-        padding-top: 6px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        background: var(--color-navy);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: max-height 0.25s ease, opacity 0.2s ease;
+    }
+
+    .site-nav.is-open {
+        max-height: 320px;
+        opacity: 1;
     }
 
     .site-nav a {
-        font-size: 0.76rem;
+        padding: 14px 20px;
+        font-size: 0.92rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .site-nav a:last-child {
+        border-bottom: none;
+    }
+
+    .site-nav a:active {
+        background: rgba(255, 255, 255, 0.08);
     }
 }
 
@@ -318,37 +375,93 @@ body {
     font-size: 0.82em;
 }
 
-.catalogo-categorias {
-    margin-bottom: 18px;
+/* Categorías del Catálogo — 2do rediseño (sep 2026): al usuario no le
+   gustó la grilla de tarjetas cuadradas (ni siquiera achicada), así que se
+   reemplaza por un riel horizontal de íconos circulares con scroll-snap,
+   estilo el carrusel de categorías de apps como Mercado Libre/Amazon: cada
+   categoría es un círculo con ícono + etiqueta abajo, en una sola fila que
+   se desliza en vez de ocupar varias filas de la página. Ocupa mucho menos
+   alto que la grilla anterior y en mobile se usa igual que un carrusel
+   nativo (swipe). Es un componente nuevo (.categoria-chip), NO reusa
+   .category-card — esa clase se queda intacta para las tarjetas de Marcas
+   en Home. */
+.categorias-rail {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 6px 4px 14px;
+    margin-bottom: 4px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
 }
 
-/* Tarjetas de categoría MÁS CHICAS solo en el Catálogo (pedido explícito
-   del usuario, sep 2026: "ocupan mucho espacio") — se limita el scope a
-   .catalogo-categorias para no afectar las tarjetas de Marcas en Home, que
-   reusan la misma base .category-card. Icono y grid se achican junto con
-   el padding/tipografía. */
-.catalogo-categorias.categories-grid {
-    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
-    gap: 10px;
+.categorias-rail::-webkit-scrollbar {
+    height: 6px;
 }
 
-.catalogo-categorias .category-card {
-    gap: 4px;
-    padding: 10px 6px;
-    border-radius: 12px;
+.categorias-rail::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 999px;
 }
 
-.catalogo-categorias .category-card__icon svg {
-    width: 20px;
-    height: 20px;
+.categoria-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    width: 74px;
+    text-decoration: none;
+    color: var(--color-navy);
+    text-align: center;
+    scroll-snap-align: start;
 }
 
-.catalogo-categorias .category-card__label {
-    font-size: 0.8rem;
+.categoria-chip__icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-blue);
+    transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
 }
 
-.catalogo-categorias .category-card__count {
-    font-size: 0.72rem;
+.categoria-chip__icono svg {
+    width: 24px;
+    height: 24px;
+}
+
+.categoria-chip:hover .categoria-chip__icono {
+    transform: translateY(-3px);
+    border-color: var(--color-blue);
+}
+
+.categoria-chip--active .categoria-chip__icono {
+    background: var(--color-blue);
+    border-color: var(--color-blue);
+    color: var(--color-white);
+}
+
+.categoria-chip__label {
+    font-size: 0.74rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.categoria-chip--active .categoria-chip__label {
+    color: var(--color-blue);
+}
+
+.categoria-chip__count {
+    font-size: 0.66rem;
+    color: var(--color-text-secondary);
 }
 
 /* Tarjetas de Marcas (sección "Marcas" de Home): mismo .category-card que

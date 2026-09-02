@@ -1,5 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
     /* =========================================================
+       Menú del header en mobile (botón hamburguesa)
+       ========================================================= */
+    const navToggleEl = document.getElementById('site-nav-toggle');
+    const navEl = document.getElementById('site-nav');
+    if (navToggleEl && navEl) {
+        navToggleEl.addEventListener('click', () => {
+            const abierto = navEl.classList.toggle('is-open');
+            navToggleEl.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+        });
+
+        // Al dar clic en un link del menú (navegación normal, recarga la
+        // página) no hace falta cerrarlo a mano, pero si el usuario vuelve
+        // con el botón "atrás" del navegador el menú puede quedar abierto
+        // en el estado guardado — se cierra por si acaso.
+        navEl.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', () => {
+                navEl.classList.remove('is-open');
+                navToggleEl.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
+
+    /* =========================================================
        Modal de detalle de producto (#producto-modal)
        ========================================================= */
     const modalEl = document.getElementById('producto-modal');

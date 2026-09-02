@@ -69,13 +69,15 @@
         </div>
 
         {# Categorías reales de ProductCategorizer: antes eran píldoras de
-           texto igual que Todos/Ofertas/Novedades, ahora son tarjetas con
-           ícono (pedido explícito del usuario, ago 2026) — se movieron
-           aquí desde Home (donde antes vivía este mismo carrusel de
-           categorías, ver App\Controller\HomeController) porque el
-           Catálogo es donde de verdad se filtra. Soportes para auto/moto
-           usan íconos propios (auto/moto) en vez de compartir un ícono de
-           "soporte" genérico. #}
+           texto igual que Todos/Ofertas/Novedades, luego tarjetas con
+           ícono en grilla (ago 2026) — se movieron aquí desde Home (donde
+           antes vivía este mismo carrusel de categorías, ver
+           App\Controller\HomeController) porque el Catálogo es donde de
+           verdad se filtra. Al usuario no le gustó cómo se veía la grilla
+           de tarjetas (ni achicada), así que ahora es un riel horizontal
+           de íconos circulares con scroll (.categoria-chip, sep 2026).
+           Soportes para auto/moto usan íconos propios (auto/moto) en vez
+           de compartir un ícono de "soporte" genérico. #}
         {% set categoriaIconos = {
             'fundas': '_partials/_icon_case.svg.twig',
             'bocinas-audifonos': '_partials/_icon_audio.svg.twig',
@@ -89,15 +91,15 @@
             'chips': '_partials/_icon_chip.svg.twig',
             'otros': '_partials/_icon_other.svg.twig',
         } %}
-        <div class="categories-grid catalogo-categorias">
+        <div class="categorias-rail catalogo-categorias">
             {% for slug, label in categorias %}
                 <a
                     href="{{ path('catalogo', {q: texto, categoria: slug}) }}#catalogo-resultados"
-                    class="category-card{{ categoriaSeleccionada == slug ? ' category-card--active' : '' }}"
+                    class="categoria-chip{{ categoriaSeleccionada == slug ? ' categoria-chip--active' : '' }}"
                 >
-                    <span class="category-card__icon">{{ include(categoriaIconos[slug] ?? categoriaIconos['otros']) }}</span>
-                    <span class="category-card__label">{{ label }}</span>
-                    <span class="category-card__count">{{ conteoPorCategoria[slug] ?? 0 }}</span>
+                    <span class="categoria-chip__icono">{{ include(categoriaIconos[slug] ?? categoriaIconos['otros']) }}</span>
+                    <span class="categoria-chip__label">{{ label }}</span>
+                    <span class="categoria-chip__count">{{ conteoPorCategoria[slug] ?? 0 }}</span>
                 </a>
             {% endfor %}
         </div>
