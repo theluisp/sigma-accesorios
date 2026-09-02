@@ -64,6 +64,17 @@ body {
 .site-header {
     background: var(--color-navy);
     border-bottom: none;
+    /* Bug reportado (sep 2026): en mobile el menú desplegable (.site-nav
+       abierto, position:absolute) aparecía "detrás" del contenido de la
+       página en vez de flotar encima. Causa: varias tarjetas del sitio
+       (.aqua-card y similares) usan backdrop-filter, que crea su propio
+       nivel de apilamiento aunque sean position:static — al estar más
+       abajo en el HTML que el header, el navegador las pintaba encima del
+       menú. position:relative + z-index aquí convierte a todo el header
+       (con su dropdown) en un solo bloque que siempre queda arriba de
+       cualquier cosa en el resto de la página. */
+    position: relative;
+    z-index: 1000;
 }
 
 .site-header__inner {
@@ -86,12 +97,12 @@ body {
    barra oscura — se ve como un cuadro blanco roto/raro. En vez de eso va
    dentro de una placa blanca redondeada chica, como un ícono de marca. */
 .site-header__logo {
-    /* Pedido explícito del usuario (sep 2026): un poco más grande que el
-       32px original, mismo tamaño en todas las páginas y anchos. */
-    height: 42px;
-    width: 42px;
+    /* Pedido explícito del usuario (sep 2026, dos rondas: 32px → 42px →
+       50px), mismo tamaño en todas las páginas y anchos. */
+    height: 50px;
+    width: 50px;
     object-fit: cover;
-    border-radius: 9px;
+    border-radius: 11px;
     background: var(--color-white);
     display: block;
 }
