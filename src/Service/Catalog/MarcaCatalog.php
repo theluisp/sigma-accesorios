@@ -23,7 +23,8 @@ namespace App\Service\Catalog;
 final class MarcaCatalog
 {
     /**
-     * Orden fijo pedido por el usuario: Apple, Xiaomi, Motorola, Oppo, Samsung.
+     * Orden fijo pedido por el usuario: Apple, Xiaomi, Motorola, Oppo,
+     * Samsung, Honor/Huawei (agregada sep 2026).
      *
      * @var array<string, array{label: string, keywords: string[]}>
      */
@@ -47,6 +48,13 @@ final class MarcaCatalog
         'samsung' => [
             'label' => 'Samsung',
             'keywords' => ['samsung'],
+        ],
+        // Marca combinada (pedido explícito del usuario, sep 2026): un solo
+        // grupo "Honor/Huawei" que junta productos de ambas marcas bajo una
+        // sola tarjeta/filtro, igual que Apple agrupa varias palabras clave.
+        'honor-huawei' => [
+            'label' => 'Honor/Huawei',
+            'keywords' => ['honor', 'huawei'],
         ],
     ];
 
