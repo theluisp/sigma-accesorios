@@ -63,10 +63,8 @@
                 </span>
                 <p class="aqua-card__name">¿Se te complican tus impuestos?</p>
                 <p class="valor-desc">Declaraciones, IMSS, trámites y más — asesoría contable de confianza.</p>
-                {# Sin WhatsApp/link confirmado todavía — ver comentario en
-                   PaginasController::negocios(). Se muestra esto en vez de
-                   un botón roto. #}
-                <span class="negocio-card__proximamente">Próximamente</span>
+                {# WhatsApp confirmado por el usuario, sep 2026: 2225346246. #}
+                <a href="https://wa.me/522225346246?text={{ 'Hola, quiero información de ContaConfiable.'|url_encode }}" target="_blank" rel="noopener" class="btn btn--primary btn--small negocio-card__cta">Chatear</a>
             </div>
 
             <div class="aqua-card negocio-card">
@@ -75,7 +73,8 @@
                 </span>
                 <p class="aqua-card__name">Contabilidad sin dolores de cabeza</p>
                 <p class="valor-desc">Soluciones contables a la medida, estrategias inteligentes.</p>
-                <span class="negocio-card__proximamente">Próximamente</span>
+                {# WhatsApp confirmado por el usuario, sep 2026: 2212630971. #}
+                <a href="https://wa.me/522212630971?text={{ 'Hola, quiero información de IntegraCont.'|url_encode }}" target="_blank" rel="noopener" class="btn btn--primary btn--small negocio-card__cta">Chatear</a>
             </div>
         </div>
     </section>

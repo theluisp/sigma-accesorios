@@ -53,9 +53,10 @@ final class PaginasController extends AbstractController
      * Sigma Tecnologies y Sigma Recargas comparten el mismo WhatsApp que
      * Sigma Accesorios (mismo dueño, mismo teléfono) — se reusa
      * ContactoLinks::whatsappUrl(), ya configurado. ContaConfiable e
-     * IntegraCont todavía no tienen un link/WhatsApp confirmado por el
-     * usuario — el template muestra "Próximamente" en vez de un botón roto
-     * hasta que se confirme.
+     * IntegraCont ya tienen su WhatsApp propio confirmado por el usuario
+     * (sep 2026) — hardcodeado directo en el template (mismo patrón que el
+     * Facebook de Sigma Thecnologies en el footer), no vía ContactoLinks
+     * porque no son números de Luis.
      */
     #[Route('/negocios', name: 'negocios', methods: ['GET'])]
     public function negocios(ContactoLinks $contactoLinks): Response
