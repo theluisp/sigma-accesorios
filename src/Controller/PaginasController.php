@@ -39,4 +39,29 @@ final class PaginasController extends AbstractController
             'mapsUrl' => $contactoLinks->mapsUrlPara(),
         ]);
     }
+
+    /**
+     * Cross-promoción de los otros negocios de Luis (Pandora Pets, Sigma
+     * Tecnologies, Sigma Recargas) y de los de un familiar (ContaConfiable,
+     * IntegraCont) — pedido explícito del usuario, sep 2026, con la
+     * condición de NO competirle atención al Catálogo de accesorios (por
+     * eso es su propia página aparte, no una sección del Home) y de NO
+     * decir explícitamente que dos de las tarjetas son de un familiar (así
+     * lo pidió el usuario — no confundir con deshonestidad: son negocios
+     * reales, solo no se etiqueta el parentesco).
+     *
+     * Sigma Tecnologies y Sigma Recargas comparten el mismo WhatsApp que
+     * Sigma Accesorios (mismo dueño, mismo teléfono) — se reusa
+     * ContactoLinks::whatsappUrl(), ya configurado. ContaConfiable e
+     * IntegraCont todavía no tienen un link/WhatsApp confirmado por el
+     * usuario — el template muestra "Próximamente" en vez de un botón roto
+     * hasta que se confirme.
+     */
+    #[Route('/negocios', name: 'negocios', methods: ['GET'])]
+    public function negocios(ContactoLinks $contactoLinks): Response
+    {
+        return $this->render('paginas/negocios.html.twig', [
+            'whatsappUrl' => $contactoLinks->whatsappUrl(),
+        ]);
+    }
 }

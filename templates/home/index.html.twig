@@ -86,6 +86,13 @@
                     </a>
                 {% endfor %}
             </div>
+            {# Pedido explícito del usuario (sep 2026): en mobile, después de
+               ver solo las Marcas, un cliente puede pensar que nada más
+               vendemos accesorios de esas marcas reconocidas — este botón
+               deja clarísimo que hay catálogo completo más allá de eso. #}
+            <div class="marcas-ver-catalogo">
+                <a href="{{ path('catalogo') }}" class="btn btn--secondary btn--small">Ver catálogo completo</a>
+            </div>
         </section>
     {% endif %}
 

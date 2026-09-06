@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{# Página de cross-promoción de los otros negocios de Luis (Pandora Pets,
+   Sigma Tecnologies, Sigma Recargas) y de dos negocios de un familiar
+   (ContaConfiable, IntegraCont) — pedido explícito del usuario, sep 2026.
+   A propósito es su PROPIA página (no una sección del Home ni de
+   Nosotros): así el Catálogo de accesorios sigue siendo lo único que
+   compite por atención en las páginas principales, y esta página no le
+   resta foco temático a esas para SEO. No se indexa en sitemap.xml a
+   propósito por la misma razón — sigue siendo alcanzable desde el link del
+   footer y de Nosotros.
+
+   El título de la página y de cada tarjeta usan un gancho de beneficio en
+   vez de un genérico "Nuestros negocios" (pedido explícito del usuario) —
+   y tampoco se aclara que ContaConfiable/IntegraCont son de un familiar,
+   también pedido explícito del usuario. #}
+
+{% block title %}Esto también te puede interesar — Sigma Accesorios{% endblock %}
+{% block metaDescription %}Descuentos y otros negocios de Sigma: accesorios para mascotas, desarrollo de software, sistema de recargas y asesoría contable.{% endblock %}
+
+{% block body %}
+    <section class="catalogo-header">
+        <h1>Esto también te puede interesar</h1>
+        <p>Descuentos, oportunidades y servicios más allá de los accesorios.</p>
+    </section>
+
+    <section class="section">
+        <div class="negocios-grid">
+            <div class="aqua-card negocio-card">
+                <span class="aqua-card__media">
+                    <img src="/images/negocios/pandora-pets.png" alt="Pandora Pets" loading="lazy">
+                </span>
+                <p class="aqua-card__name">¿Tienes mascota? Te regalamos 10% de descuento</p>
+                <p class="valor-desc">Accesorios para perros y gatos — usa este link y aprovecha tu descuento.</p>
+                <a href="https://sites.google.com/view/pandora-pets" target="_blank" rel="noopener" class="btn btn--primary btn--small negocio-card__cta">Ver catálogo</a>
+            </div>
+
+            <div class="aqua-card negocio-card">
+                <span class="aqua-card__media">
+                    <img src="/images/negocios/sigma-tecnologies.png" alt="Sigma Tecnologies" loading="lazy">
+                </span>
+                <p class="aqua-card__name">¿Tu negocio necesita presencia en internet?</p>
+                <p class="valor-desc">Páginas web, sistemas a la medida y puntos de venta — como este mismo sitio.</p>
+                {% if whatsappUrl is not null %}
+                    <a href="{{ whatsappUrl }}?text={{ 'Hola, quiero cotizar una página web o sistema.'|url_encode }}" target="_blank" rel="noopener" class="btn btn--primary btn--small negocio-card__cta">Cotiza por WhatsApp</a>
+                {% endif %}
+            </div>
+
+            <div class="aqua-card negocio-card">
+                <span class="aqua-card__media">
+                    <img src="/images/negocios/sigma-recargas.png" alt="Sigma Recargas" loading="lazy">
+                </span>
+                <p class="aqua-card__name">¿Quieres ganar dinero extra?</p>
+                <p class="valor-desc">Ten tu propio sistema de recargas con tu marca y gana comisión por cada venta.</p>
+                {% if whatsappUrl is not null %}
+                    <a href="{{ whatsappUrl }}?text={{ 'Hola, quiero información de Sigma Recargas.'|url_encode }}" target="_blank" rel="noopener" class="btn btn--primary btn--small negocio-card__cta">Quiero ganar</a>
+                {% endif %}
+            </div>
+
+            <div class="aqua-card negocio-card">
+                <span class="aqua-card__media">
+                    <img src="/images/negocios/contaconfiable.png" alt="Corporativo ContaConfiable" loading="lazy">
+                </span>
+                <p class="aqua-card__name">¿Se te complican tus impuestos?</p>
+                <p class="valor-desc">Declaraciones, IMSS, trámites y más — asesoría contable de confianza.</p>
+                {# Sin WhatsApp/link confirmado todavía — ver comentario en
+                   PaginasController::negocios(). Se muestra esto en vez de
+                   un botón roto. #}
+                <span class="negocio-card__proximamente">Próximamente</span>
+            </div>
+
+            <div class="aqua-card negocio-card">
+                <span class="aqua-card__media">
+                    <img src="/images/negocios/integracont.png" alt="IntegraCont Asesores" loading="lazy">
+                </span>
+                <p class="aqua-card__name">Contabilidad sin dolores de cabeza</p>
+                <p class="valor-desc">Soluciones contables a la medida, estrategias inteligentes.</p>
+                <span class="negocio-card__proximamente">Próximamente</span>
+            </div>
+        </div>
+    </section>
+{% endblock %}

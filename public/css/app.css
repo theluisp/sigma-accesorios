@@ -342,6 +342,14 @@ body {
     gap: 16px;
 }
 
+/* Botón "Ver catálogo completo" debajo de Marcas en Home (pedido explícito
+   del usuario, sep 2026) — evita que en mobile alguien piense que solo
+   vendemos accesorios de esas marcas reconocidas. */
+.marcas-ver-catalogo {
+    margin-top: 20px;
+    text-align: center;
+}
+
 .category-card {
     display: flex;
     flex-direction: column;
@@ -1121,11 +1129,60 @@ body {
     flex-wrap: wrap;
 }
 
+.nosotros-negocios-link {
+    margin: 20px 0 0;
+    text-align: center;
+}
+
+.nosotros-negocios-link a {
+    color: var(--color-blue);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.nosotros-negocios-link a:hover {
+    color: var(--color-blue-hover);
+    text-decoration: underline;
+}
+
 .contacto-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
     margin-bottom: 12px;
+}
+
+/* Página /negocios (cross-promoción, sep 2026) — mismo patrón de grid que
+   .contacto-grid, clase aparte porque semánticamente es otra página, pero
+   las tarjetas en sí reusan .aqua-card tal cual (mismo lenguaje visual que
+   el resto del sitio, "sin romper la estructura"). */
+.negocios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.negocio-card {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.negocio-card__cta {
+    margin-top: 4px;
+}
+
+/* ContaConfiable/IntegraCont: todavía no hay link/WhatsApp confirmado por
+   el usuario — placeholder honesto en vez de un botón que no lleva a
+   ningún lado. Quitar en cuanto se confirme el contacto real. */
+.negocio-card__proximamente {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 6px 14px;
+    border-radius: 980px;
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
 .contacto-card {
@@ -1396,11 +1453,29 @@ body {
     text-decoration: underline;
 }
 
-.site-footer__copy {
+.site-footer__negocios-link {
     max-width: 1100px;
     margin: 28px auto 0;
     padding-top: 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.15);
+    text-align: center;
+}
+
+.site-footer__negocios-link a {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.site-footer__negocios-link a:hover {
+    color: var(--color-white);
+    text-decoration: underline;
+}
+
+.site-footer__copy {
+    max-width: 1100px;
+    margin: 16px auto 0;
     text-align: center;
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.65);

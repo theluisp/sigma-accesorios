@@ -36,7 +36,7 @@
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=22">
+    <link rel="stylesheet" href="/css/app.css?v=23">
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -155,6 +155,13 @@
                 </ul>
             </div>
         </div>
+
+        {# Link discreto a la página de cross-promoción (/negocios, ver
+           PaginasController) — a propósito chico y sin llamar "Nuestros
+           negocios" (pedido explícito del usuario, sep 2026). #}
+        <p class="site-footer__negocios-link">
+            <a href="{{ path('negocios') }}">Esto también te puede interesar</a>
+        </p>
 
         <p class="site-footer__copy">&copy; {{ "now"|date("Y") }} Sigma Accesorios Para Celular</p>
     </footer>

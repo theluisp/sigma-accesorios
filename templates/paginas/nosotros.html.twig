@@ -59,5 +59,10 @@
             <a href="{{ path('catalogo') }}" class="btn btn--primary">Ver catálogo</a>
             <a href="{{ path('contacto') }}" class="btn btn--secondary">Contáctanos</a>
         </div>
+        {# Link discreto a /negocios (cross-promoción) — pedido explícito
+           del usuario, sep 2026, ver PaginasController::negocios(). #}
+        <p class="nosotros-negocios-link">
+            <a href="{{ path('negocios') }}">Esto también te puede interesar</a>
+        </p>
     </section>
 {% endblock %}
