@@ -44,6 +44,31 @@ final class CatalogoController extends AbstractController
      */
     private const MARCA_PREFIX = 'marca-';
 
+    /**
+     * Frase específica por categoría real para el <meta description> del
+     * Catálogo filtrado (SEO, sep 2026) — antes todas las categorías
+     * compartían la misma frase genérica ("catálogo de Sigma Accesorios
+     * para Celular en Puebla") y solo cambiaba el nombre de la categoría al
+     * frente; ahora cada una menciona lo que de verdad se vende ahí, para
+     * que Google tenga una razón real para mostrar esta página en vez de
+     * otra ante una búsqueda como "fundas para iPhone en Puebla". Los
+     * pseudo-filtros (Ofertas, Novedades, Marca-X) no están aquí a propósito
+     * — no son categorías de ProductCategorizer, se quedan con la frase
+     * genérica de respaldo (ver metaDescripcion() abajo).
+     */
+    private const DESCRIPCIONES_SEO = [
+        'fundas' => 'fundas y estuches protectores para iPhone, Samsung y más marcas',
+        'chips' => 'chips y SIM para Telcel, Movistar, AT&T y Unefon',
+        'soportes-auto' => 'soportes para auto: parabrisas, tablero y rejilla',
+        'soportes-moto' => 'soportes para moto, para manubrio',
+        'adaptadores' => 'adaptadores OTG, hubs USB y adaptadores Lightning/Tipo C',
+        'cargadores' => 'cargadores, cables, power banks y baterías portátiles',
+        'bocinas-audifonos' => 'audífonos, bocinas portátiles y manos libres',
+        'videojuegos' => 'controles, joysticks y accesorios gamer',
+        'computacion' => 'teclados, mouse, memorias y accesorios de cómputo',
+        'hogar' => 'lámparas LED, focos inteligentes y accesorios para el hogar',
+    ];
+
     #[Route('/catalogo', name: 'catalogo', methods: ['GET'])]
     public function index(Request $request, ProductoRepository $productoRepository, ProductCategorizer $categorizer, MarcaCatalog $marcaCatalog): Response
     {
@@ -128,9 +153,17 @@ final class CatalogoController extends AbstractController
         $metaTitulo = $categoriaLabel !== ''
             ? $categoriaLabel.' — Catálogo Sigma Accesorios'
             : 'Catálogo completo — Sigma Accesorios para Celular en Puebla';
-        $metaDescripcion = $categoriaLabel !== ''
-            ? $categoriaLabel.' — catálogo de Sigma Accesorios para Celular en Puebla. Recoge en sucursal o pide a domicilio por WhatsApp, Rappi o Didi Food.'
-            : 'Explora todo el catálogo: fundas, cargadores, audífonos, soportes y más accesorios para celular en Puebla. Recoge en sucursal o pide a domicilio.';
+
+        // Ver DESCRIPCIONES_SEO arriba: si la categoría seleccionada tiene
+        // una frase específica, la usamos; si no (pseudo-filtro de marca,
+        // Ofertas, Novedades, o sin filtro), cae a la frase genérica de
+        // siempre — mismo comportamiento que antes para esos casos.
+        $descripcionEspecifica = self::DESCRIPCIONES_SEO[$categoriaSeleccionada] ?? null;
+        $metaDescripcion = match (true) {
+            $descripcionEspecifica !== null => $categoriaLabel.' en Puebla: '.$descripcionEspecifica.'. Recoge en sucursal o a domicilio.',
+            $categoriaLabel !== '' => $categoriaLabel.' — catálogo de Sigma Accesorios para Celular en Puebla. Recoge en sucursal o pide a domicilio por WhatsApp, Rappi o Didi Food.',
+            default => 'Explora todo el catálogo: fundas, cargadores, audífonos, soportes y más accesorios para celular en Puebla. Recoge en sucursal o pide a domicilio.',
+        };
 
         return $this->render('catalogo/index.html.twig', [
             'productos' => $productosPagina,

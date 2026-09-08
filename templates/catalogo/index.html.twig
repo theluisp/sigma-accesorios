@@ -5,8 +5,14 @@
 
 {% block body %}
     <section class="catalogo-header">
-        <h1>Catálogo</h1>
-        <p>Explora todo nuestro inventario.</p>
+        {# H1 dinámico por filtro (SEO, sep 2026): antes decía siempre
+           "Catálogo" sin importar la categoría/marca elegida, aunque el
+           <title>/meta description de arriba ya sí cambiaban por filtro —
+           Google pondera mucho el H1 visible, así que dejarlo genérico
+           desaprovechaba justo lo que metaTitulo/metaDescripcion ya
+           resuelven (ver CatalogoController::index()). #}
+        <h1>{{ categoriaLabel is not empty ? categoriaLabel : 'Catálogo' }}</h1>
+        <p>{{ categoriaLabel is not empty ? 'Explora nuestro catálogo de ' ~ categoriaLabel ~ ' en Puebla.' : 'Explora todo nuestro inventario.' }}</p>
 
         <form method="get" action="{{ path('catalogo') }}" class="catalogo-search" role="search">
             {% if categoriaSeleccionada is not empty %}

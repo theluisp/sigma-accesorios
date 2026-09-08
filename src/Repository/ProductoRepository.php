@@ -199,6 +199,31 @@ class ProductoRepository extends ServiceEntityRepository
     }
 
     /**
+     * Productos disponibles con imagen propia, para el sitemap de imágenes
+     * (ver SeoController::sitemap(), SEO sep 2026) — mismo criterio que el
+     * Catálogo público (buscarDisponibles()): solo lo que un cliente real
+     * puede ver y comprar ahora mismo, nunca un producto agotado o sin
+     * foto.
+     *
+     * @return Producto[]
+     */
+    public function findParaSitemapImagenes(): array
+    {
+        $productos = $this->createQueryBuilder('p')
+            ->addSelect('e', 's', 'i')
+            ->leftJoin('p.existencias', 'e')
+            ->leftJoin('e.sucursal', 's')
+            ->innerJoin('p.imagen', 'i')
+            ->getQuery()
+            ->getResult();
+
+        return array_values(array_filter(
+            $productos,
+            static fn (Producto $producto): bool => $producto->isDisponible(),
+        ));
+    }
+
+    /**
      * Productos disponibles para el Catálogo público, con búsqueda de texto
      * opcional. Exige imagen propia cargada (innerJoin descarta los que no
      * la tienen — pedido explícito del usuario: un producto sin foto no se

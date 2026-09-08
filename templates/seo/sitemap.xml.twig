@@ -2,8 +2,15 @@
 {# Solo las páginas "de verdad" (no las combinaciones de filtros del
    Catálogo con ?categoria=/?q=/?pagina= — esas se descubren solas por los
    links internos, no hace falta forzarlas aquí) y nunca /admin (ver
-   robots.txt). #}
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   robots.txt).
+
+   xmlns:image (SEO sep 2026): permite listar varias <image:image> bajo
+   una misma <url> — se usa en la entrada del Catálogo para que Google
+   Imágenes indexe la foto de cada producto disponible, aunque todas
+   compartan la misma URL de página (el Catálogo no tiene página propia
+   por producto todavía). #}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>{{ url('home') }}</loc>
         <changefreq>daily</changefreq>
@@ -13,6 +20,13 @@
         <loc>{{ url('catalogo') }}</loc>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
+        {% if ultimaActualizacion %}<lastmod>{{ ultimaActualizacion|date('c') }}</lastmod>{% endif %}
+        {% for producto in productos %}
+            <image:image>
+                <image:loc>{{ app.request.schemeAndHttpHost }}{{ producto.imagen.path }}</image:loc>
+                <image:title>{{ producto.nombre }}</image:title>
+            </image:image>
+        {% endfor %}
     </url>
     <url>
         <loc>{{ url('contacto') }}</loc>
