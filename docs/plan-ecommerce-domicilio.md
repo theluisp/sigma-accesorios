@@ -27,16 +27,16 @@ Todo lo de abajo se construye sobre esta base, no la reemplaza: el catálogo y l
   2. Si no aplica Rappi: pedidos con subtotal mayor a **$299** tienen entrega gratis (reparto propio del negocio).
   3. Pedidos que no llegan a $299: el cliente cotiza su propio envío en la herramienta pública de DiDi Entrega Business y captura ese monto en nuestro checkout. Como incentivo, Sigma aplica **15% de descuento sobre el subtotal de productos** (no sobre el envío) para animar a que complete la compra.
   - Se descarta integrar una API de Uber Direct o DiDi para automatizar la entrega — ver la nota técnica en la sección 5, es más complejidad y trámite de lo que vale la pena para el volumen actual.
+- **Quién agenda y paga el viaje real de DiDi:** el monto que el cliente reporta del cotizador de DiDi es solo una referencia para armar el total. El cliente paga todo junto a Sigma (producto con descuento + envío reportado) por transferencia/depósito; **el negocio** es quien valida ese pago y, ya validado, agenda y paga el viaje real con DiDi para recoger el paquete en la sucursal. Nunca se agenda ni se entrega nada antes de esa validación manual, así que un monto mal reportado no es un riesgo real de fraude — solo se corrige a mano si no cuadra contra lo que Luis ve al agendar el viaje real.
 - **Pagos:** depósito/transferencia manual **y** PayPal en línea. La validación de pago por transferencia/depósito siempre es manual: el cliente manda su comprobante por WhatsApp y el negocio autoriza el pedido antes de que quede confirmado.
 - **Costo de envío:** no es una tarifa fija para todos los casos — ver el árbol de decisión de arriba (gratis por monto, o cotizado por el cliente vía DiDi).
 
 ## 3. Decisiones pendientes (necesito tu respuesta antes de construir ciertas partes)
 
-1. **¿Quién agenda y paga el viaje real de DiDi una vez pagado el pedido?** Mi entendimiento del flujo: el cliente solo usa el cotizador de DiDi para *saber* cuánto costaría el envío y nos reporta ese monto; nosotros lo sumamos al total y el cliente nos paga todo junto (producto con descuento + envío) por transferencia/depósito. Después de validar el pago, **el negocio** sería quien agenda y paga el viaje de DiDi para que recoja el paquete en la sucursal y lo entregue — usando el monto que el cliente ya cotizó como referencia. Confírmame si es así o si lo pensabas distinto (por ejemplo, que el cliente pague su propio viaje de DiDi por separado).
-2. **Cuenta business de PayPal**: ¿ya existe una cuenta PayPal Business de Sigma, o hay que crearla? Se necesita antes de poder integrar el checkout de PayPal (API keys, modo sandbox para pruebas).
-3. **¿Requiere cuenta de cliente (login) o todo es "guest checkout"?** Mi recomendación es guest checkout (solo nombre, teléfono y dirección, sin contraseña) para mantener la misma fricción baja que ya maneja todo el sitio vía WhatsApp — pero es tu decisión final.
-4. **Facturación**: ¿los pedidos necesitan generar factura (CFDI) o el negocio no factura por ahora? Si se factura, es una integración adicional (PAC) que conviene planear aparte.
-5. **¿Cuándo "no aplica Rappi"?** ¿Es porque el producto no está dado de alta en Rappi, porque el cliente prefiere no usarlo, o ambas? Esto define si mostramos las tres opciones siempre o si alguna se oculta según el producto.
+1. **Cuenta business de PayPal**: ¿ya existe una cuenta PayPal Business de Sigma, o hay que crearla? Se necesita antes de poder integrar el checkout de PayPal (API keys, modo sandbox para pruebas).
+2. **¿Requiere cuenta de cliente (login) o todo es "guest checkout"?** Mi recomendación es guest checkout (solo nombre, teléfono y dirección, sin contraseña) para mantener la misma fricción baja que ya maneja todo el sitio vía WhatsApp — pero es tu decisión final.
+3. **Facturación**: ¿los pedidos necesitan generar factura (CFDI) o el negocio no factura por ahora? Si se factura, es una integración adicional (PAC) que conviene planear aparte.
+4. **¿Cuándo "no aplica Rappi"?** ¿Es porque el producto no está dado de alta en Rappi, porque el cliente prefiere no usarlo, o ambas? Esto define si mostramos las tres opciones siempre o si alguna se oculta según el producto.
 
 ## 4. Fases propuestas
 
@@ -48,16 +48,17 @@ Antes de escribir el checkout necesitamos tener listo:
 
 - Cuenta PayPal Business + credenciales de API (sandbox y producción).
 - Decisión sobre cuenta de cliente (guest vs. registro).
-- Confirmar el punto 1 de la sección 3 (quién agenda/paga el viaje real de DiDi).
 
 ### Fase 1 — Pedidos, envíos a domicilio y pago manual
 
 Esta es la fase central: mover el carrito de `localStorage` a pedidos reales en base de datos, con el árbol de envío completo y pago manual validado por WhatsApp (sin PayPal todavía).
 
-**Nuevas entidades (nombres tentativos):**
+**Avance (7 sep 2026): ya están creadas las tablas.** `App\Entity\Pedido` y `App\Entity\PedidoItem`, sus repositorios, y la migración `Version20260908130000` ya existen en el repo — falta el formulario de checkout y `/admin/pedidos`, que son el resto de esta fase.
 
-- `Pedido`: cliente (nombre, teléfono, email opcional), dirección de entrega, sucursal de origen, subtotal, tipo de entrega (`rappi`, `gratis_reparto_propio`, `envio_didi`), costo de envío (0, o el monto capturado de la cotización de DiDi), descuento aplicado (15% sobre subtotal cuando aplica envío DiDi), total, estado (`pendiente_pago`, `pago_reportado`, `confirmado`, `en_preparacion`, `en_camino`, `entregado`, `cancelado`), método de pago elegido, fecha.
-- `PedidoItem`: producto, cantidad, precio unitario al momento del pedido (no referenciar el precio actual del catálogo, para no alterar pedidos ya hechos si el precio cambia después).
+**Entidades ya creadas:**
+
+- `Pedido` (`src/Entity/Pedido.php`): cliente (nombre, teléfono, email opcional), dirección de entrega, sucursal de origen, subtotal, tipo de entrega (`rappi`, `gratis_reparto_propio`, `envio_didi`), monto de envío reportado por el cliente (0 salvo en `envio_didi`), descuento aplicado (15% sobre subtotal cuando aplica envío DiDi — ver `Pedido::DESCUENTO_ENVIO_DIDI_PORCENTAJE`), total, estado (`pendiente_pago`, `pago_reportado`, `confirmado`, `en_preparacion`, `en_camino`, `entregado`, `cancelado`), método de pago elegido, notas internas, fechas. Recalcula subtotal/descuento/total solo (`recalcularTotales()`) cada vez que se agrega un item o se actualiza el monto de envío — no hay que sumarlo a mano desde el checkout que se construya después.
+- `PedidoItem` (`src/Entity/PedidoItem.php`): referencia opcional al `Producto` del catálogo (por si se borra después), nombre y precio unitario "congelados" al momento del pedido, cantidad.
 
 **Flujo de "Envíos a domicilio" en el checkout:**
 
@@ -99,4 +100,4 @@ Si en algún momento el volumen de pedidos justifica el trámite, quedaría pend
 
 ## 6. Próximo paso inmediato
 
-Confirmar el punto 1 de la sección 3 (quién agenda y paga el viaje real de DiDi después del pago) y las demás decisiones pendientes de esa sección — con eso queda cerrado el diseño de la Fase 1 y se puede empezar a construir las entidades `Pedido`/`PedidoItem` y el formulario de checkout con el árbol de envío completo.
+Con las tablas ya creadas, lo que sigue de la Fase 1 es el formulario de checkout (el árbol de envío completo: Rappi / gratis / cotización DiDi) y la pantalla `/admin/pedidos`. Para no bloquear eso, ayuda resolver las decisiones pendientes de la sección 3 — sobre todo si el checkout será guest o con cuenta de cliente, ya que afecta los campos del formulario.
