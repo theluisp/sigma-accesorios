@@ -176,6 +176,17 @@ class Pedido
         return $this->tipoEntrega;
     }
 
+    /** Etiqueta legible para el admin (ver /admin/pedidos) — no se guarda, se calcula. */
+    public function getTipoEntregaLabel(): string
+    {
+        return match ($this->tipoEntrega) {
+            self::TIPO_ENTREGA_RAPPI => 'Rappi',
+            self::TIPO_ENTREGA_GRATIS => 'Reparto propio (gratis)',
+            self::TIPO_ENTREGA_DIDI => 'Envío por DiDi (cotizado)',
+            default => $this->tipoEntrega,
+        };
+    }
+
     public function getMontoEnvioReportado(): float
     {
         return (float) $this->montoEnvioReportado;
@@ -216,6 +227,17 @@ class Pedido
         return $this->metodoPago;
     }
 
+    /** Etiqueta legible para el admin (ver /admin/pedidos) — no se guarda, se calcula. */
+    public function getMetodoPagoLabel(): string
+    {
+        return match ($this->metodoPago) {
+            self::METODO_PAGO_TRANSFERENCIA => 'Transferencia',
+            self::METODO_PAGO_DEPOSITO => 'Depósito',
+            self::METODO_PAGO_PAYPAL => 'PayPal',
+            default => $this->metodoPago,
+        };
+    }
+
     public function getEstado(): string
     {
         return $this->estado;
@@ -225,6 +247,38 @@ class Pedido
     {
         $this->estado = $estado;
         $this->actualizadoEn = new \DateTimeImmutable();
+    }
+
+    /** Etiqueta legible para el admin (ver /admin/pedidos) — no se guarda, se calcula. */
+    public function getEstadoLabel(): string
+    {
+        return match ($this->estado) {
+            self::ESTADO_PENDIENTE_PAGO => 'Pendiente de pago',
+            self::ESTADO_PAGO_REPORTADO => 'Pago reportado',
+            self::ESTADO_CONFIRMADO => 'Confirmado',
+            self::ESTADO_EN_PREPARACION => 'En preparación',
+            self::ESTADO_EN_CAMINO => 'En camino',
+            self::ESTADO_ENTREGADO => 'Entregado',
+            self::ESTADO_CANCELADO => 'Cancelado',
+            default => $this->estado,
+        };
+    }
+
+    /**
+     * Clase CSS (sufijo de .admin-badge--estado-*, ver app.css) para
+     * agrupar visualmente los estados en /admin/pedidos: los que necesitan
+     * atención (pendientes de revisar), los que ya van en curso, y los que
+     * ya cerraron (entregado o cancelado).
+     */
+    public function getEstadoClaseCss(): string
+    {
+        return match ($this->estado) {
+            self::ESTADO_PENDIENTE_PAGO, self::ESTADO_PAGO_REPORTADO => 'pendiente',
+            self::ESTADO_CONFIRMADO, self::ESTADO_EN_PREPARACION, self::ESTADO_EN_CAMINO => 'proceso',
+            self::ESTADO_ENTREGADO => 'completado',
+            self::ESTADO_CANCELADO => 'cancelado',
+            default => 'pendiente',
+        };
     }
 
     public function getNotas(): ?string

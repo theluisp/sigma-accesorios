@@ -2125,3 +2125,69 @@ body {
         width: 100%;
     }
 }
+
+/* Admin: panel de pedidos (/admin/pedidos) — Fase 1 del plan de e-commerce,
+   ver docs/plan-ecommerce-domicilio.md. Reusa .admin-table/.admin-badge del
+   resto de /admin; solo agrega los colores por grupo de estado y el
+   layout de dos columnas del detalle de un pedido. */
+.admin-badge--estado {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 980px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Pendiente de pago / pago reportado: todavía necesita que alguien lo revise. */
+.admin-badge--estado-pendiente {
+    background: #fff2d6;
+    color: #8a5a00;
+}
+
+/* Confirmado / en preparación / en camino: ya se está trabajando. */
+.admin-badge--estado-proceso {
+    background: #eef6fc;
+    color: var(--color-blue);
+}
+
+/* Entregado: ciclo cerrado con éxito. */
+.admin-badge--estado-completado {
+    background: #e3f4e9;
+    color: #1a6b3a;
+}
+
+/* Cancelado: ciclo cerrado sin venta. */
+.admin-badge--estado-cancelado {
+    background: #f1f1f1;
+    color: var(--color-text-secondary);
+}
+
+.admin-pedido-resumen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.admin-pedido-resumen__col h2 {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+    margin-top: 16px;
+}
+
+.admin-pedido-resumen__col h2:first-child {
+    margin-top: 0;
+}
+
+.admin-pedido-totales {
+    max-width: 420px;
+    margin-top: 12px;
+}
+
+.admin-pedido-totales td:last-child {
+    text-align: right;
+}

@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin · Pedidos{% endblock %}
+
+{% block body %}
+    <h1>Pedidos</h1>
+    <nav class="admin-nav">
+        <a href="{{ path('admin_pedidos_index') }}" class="admin-nav__link admin-nav__link--active">Pedidos</a>
+        <a href="{{ path('admin_images_index') }}" class="admin-nav__link">Imágenes de productos</a>
+        <a href="{{ path('admin_categorias_index') }}" class="admin-nav__link">Categorías</a>
+        <a href="{{ path('admin_analiticas_index') }}" class="admin-nav__link">Analíticas</a>
+    </nav>
+
+    <p>
+        {{ pedidos|length }} pedido(s) registrado(s). Por ahora esta pantalla solo muestra lo que va entrando desde el
+        checkout — confirmar pagos y cambiar el estado de cada pedido es el siguiente paso.
+    </p>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="admin-flash admin-flash--{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    {% if pedidos|length == 0 %}
+        <p class="admin-categorias__automatica">Todavía no hay pedidos — en cuanto el checkout del sitio esté listo, van a aparecer aquí.</p>
+    {% else %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Sucursal</th>
+                    <th>Entrega</th>
+                    <th>Pago</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pedido in pedidos %}
+                    <tr>
+                        <td>{{ pedido.creadoEn|date('d/m/Y H:i') }}</td>
+                        <td>
+                            <strong>{{ pedido.clienteNombre }}</strong><br>
+                            <code>{{ pedido.clienteTelefono }}</code>
+                        </td>
+                        <td>{{ pedido.sucursal.nombre }}</td>
+                        <td>{{ pedido.tipoEntregaLabel }}</td>
+                        <td>{{ pedido.metodoPagoLabel }}</td>
+                        <td>${{ pedido.total|number_format(2, '.', ',') }}</td>
+                        <td><span class="admin-badge--estado admin-badge--estado-{{ pedido.estadoClaseCss }}">{{ pedido.estadoLabel }}</span></td>
+                        <td><a href="{{ path('admin_pedidos_ver', {id: pedido.id}) }}" class="btn btn--secondary btn--small">Ver</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

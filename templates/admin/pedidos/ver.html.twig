@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin · Pedido #{{ pedido.id }}{% endblock %}
+
+{% block body %}
+    <h1>Pedido #{{ pedido.id }}</h1>
+    <nav class="admin-nav">
+        <a href="{{ path('admin_pedidos_index') }}" class="admin-nav__link admin-nav__link--active">Pedidos</a>
+        <a href="{{ path('admin_images_index') }}" class="admin-nav__link">Imágenes de productos</a>
+        <a href="{{ path('admin_categorias_index') }}" class="admin-nav__link">Categorías</a>
+        <a href="{{ path('admin_analiticas_index') }}" class="admin-nav__link">Analíticas</a>
+    </nav>
+
+    <p><a href="{{ path('admin_pedidos_index') }}">&larr; Volver a todos los pedidos</a></p>
+
+    <div class="admin-pedido-resumen">
+        <div class="admin-pedido-resumen__col">
+            <h2>Cliente</h2>
+            <p>
+                <strong>{{ pedido.clienteNombre }}</strong><br>
+                <code>{{ pedido.clienteTelefono }}</code>
+                {% if pedido.clienteEmail %}<br>{{ pedido.clienteEmail }}{% endif %}
+            </p>
+            <h2>Dirección de entrega</h2>
+            <p>{{ pedido.direccionEntrega|nl2br }}</p>
+        </div>
+        <div class="admin-pedido-resumen__col">
+            <h2>Estado</h2>
+            <p><span class="admin-badge--estado admin-badge--estado-{{ pedido.estadoClaseCss }}">{{ pedido.estadoLabel }}</span></p>
+            <h2>Entrega</h2>
+            <p>
+                {{ pedido.tipoEntregaLabel }}<br>
+                Sucursal de origen: {{ pedido.sucursal.nombre }}
+                {% if pedido.tipoEntrega == 'envio_didi' %}
+                    <br>Monto de envío reportado por el cliente (cotizado en DiDi): ${{ pedido.montoEnvioReportado|number_format(2, '.', ',') }}
+                {% endif %}
+            </p>
+            <h2>Pago</h2>
+            <p>{{ pedido.metodoPagoLabel }}</p>
+        </div>
+    </div>
+
+    <h2>Productos</h2>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio unitario</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in pedido.items %}
+                <tr>
+                    <td>{{ item.productoNombre }}</td>
+                    <td>{{ item.cantidad }}</td>
+                    <td>${{ item.precioUnitario|number_format(2, '.', ',') }}</td>
+                    <td>${{ item.subtotal|number_format(2, '.', ',') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table class="admin-table admin-pedido-totales">
+        <tbody>
+            <tr>
+                <td>Subtotal de productos</td>
+                <td>${{ pedido.subtotal|number_format(2, '.', ',') }}</td>
+            </tr>
+            {% if pedido.descuentoPorcentaje > 0 %}
+                <tr>
+                    <td>Descuento ({{ pedido.descuentoPorcentaje }}%)</td>
+                    <td>−${{ pedido.descuentoMonto|number_format(2, '.', ',') }}</td>
+                </tr>
+            {% endif %}
+            {% if pedido.tipoEntrega == 'envio_didi' %}
+                <tr>
+                    <td>Envío (cotizado por el cliente en DiDi)</td>
+                    <td>${{ pedido.montoEnvioReportado|number_format(2, '.', ',') }}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>${{ pedido.total|number_format(2, '.', ',') }}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% if pedido.notas %}
+        <h2>Notas internas</h2>
+        <p>{{ pedido.notas|nl2br }}</p>
+    {% endif %}
+
+    <p class="admin-categorias__automatica">
+        Creado el {{ pedido.creadoEn|date('d/m/Y H:i') }} · Última actualización {{ pedido.actualizadoEn|date('d/m/Y H:i') }}
+    </p>
+{% endblock %}
