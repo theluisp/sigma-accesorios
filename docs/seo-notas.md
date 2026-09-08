@@ -34,13 +34,11 @@ cuando se retome:
 
 - **Sucursal Real de Guadalupe:** lunes a viernes 10am–5pm y 7pm–9pm;
   martes 6pm–10pm (en vez del segundo horario de 7-9pm); sábados
-  10am–2pm. Colonia Real de Guadalupe.
-- **Sucursal Capu:** lunes a viernes 9am–4pm. Colonia Capu.
-- **Códigos postales:** el usuario dio "72016 y 72050 para capu" —
-  **esto quedó ambiguo** (¿son dos CP de la misma sucursal, o uno es de
-  Real de Guadalupe y el otro de Capu?). Hay que confirmar antes de
-  escribir el JSON-LD — una dirección estructurada incorrecta puede
-  perjudicar más que no tener JSON-LD.
+  10am–2pm. Colonia Real de Guadalupe, CP 72016.
+- **Sucursal Capu:** lunes a viernes 9am–4pm. Colonia Capu, CP 72050.
+- Confirmado por el usuario (sep 2026): CP 72016 es de Real de Guadalupe,
+  CP 72050 es de Capu — ya no hay ambigüedad, listo para usarse en el
+  JSON-LD.
 - No se tiene calle/número exacto de ninguna de las dos sucursales, solo
   colonia + CP + ciudad (Puebla, Pue.).
 
