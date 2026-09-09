@@ -5,6 +5,12 @@
 
 {% block body_class %}is-home{% endblock %}
 
+{% block jsonLd %}
+    {% if jsonLdNegocio %}
+        <script type="application/ld+json">{{ jsonLdNegocio|raw }}</script>
+    {% endif %}
+{% endblock %}
+
 {% block body %}
     {# Antes Home no tenía ningún <h1> (el resto de páginas sí) — Google usa
        el h1 para entender de qué trata la página, así que sin uno el

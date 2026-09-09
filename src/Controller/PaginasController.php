@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\SucursalRepository;
 use App\Service\Contacto\ContactoLinks;
+use App\Service\Seo\NegocioJsonLd;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,7 +21,7 @@ final class PaginasController extends AbstractController
     }
 
     #[Route('/contacto', name: 'contacto', methods: ['GET'])]
-    public function contacto(SucursalRepository $sucursalRepository, ContactoLinks $contactoLinks): Response
+    public function contacto(SucursalRepository $sucursalRepository, ContactoLinks $contactoLinks, NegocioJsonLd $negocioJsonLd): Response
     {
         $sucursales = array_map(
             static fn ($sucursal) => [
@@ -37,6 +38,7 @@ final class PaginasController extends AbstractController
             'whatsappUrl' => $contactoLinks->whatsappUrl(),
             'whatsappTelefono' => $contactoLinks->whatsappTelefono(),
             'mapsUrl' => $contactoLinks->mapsUrlPara(),
+            'jsonLdNegocio' => $negocioJsonLd->comoJson(),
         ]);
     }
 

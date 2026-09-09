@@ -6,6 +6,7 @@ use App\Repository\ProductoRepository;
 use App\Service\Banner\BannerImageResolver;
 use App\Service\Catalog\MarcaCatalog;
 use App\Service\Contacto\ContactoLinks;
+use App\Service\Seo\NegocioJsonLd;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,11 +19,13 @@ class HomeController extends AbstractController
         BannerImageResolver $bannerResolver,
         ContactoLinks $contactoLinks,
         MarcaCatalog $marcaCatalog,
+        NegocioJsonLd $negocioJsonLd,
     ): Response {
         return $this->render('home/index.html.twig', [
             'productos' => $productoRepository->findEnOferta(12),
             'banners' => $this->construirBanners($bannerResolver, $contactoLinks),
             'marcas' => $this->marcasParaMostrar($productoRepository, $marcaCatalog),
+            'jsonLdNegocio' => $negocioJsonLd->comoJson(),
         ]);
     }
 

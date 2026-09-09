@@ -26,21 +26,29 @@ por página, `robots.txt` y `sitemap.xml` dinámicos (vía `SeoController`).
   una plantilla genérica, nunca se actualizó) → corregido a "Sigma
   Accesorios Puebla".
 
-## Pendiente: datos para LocalBusiness JSON-LD (todavía no implementado)
+**Capa 3 (sep 2026):** LocalBusiness JSON-LD — datos estructurados
+(schema.org, `@type: ElectronicsStore`) para las dos sucursales, en Home y
+Contacto (`App\Service\Seo\NegocioJsonLd` + `App\Service\Seo\SucursalDireccionHorario`).
+Incluye horarios (`openingHoursSpecification`), colonia/CP/ciudad (sin
+`streetAddress` — no hay calle/número confirmado), teléfono en formato
+E.164, y `sameAs` a Facebook/Rappi. Pedido explícito del usuario: "es
+importante posicionar en los primeros resultados cuando se busque
+accesorios para celular" — ver la nota de expectativas abajo.
 
-Esta capa se decidió posponer (sep 2026, el usuario eligió empezar por los
-"ajustes rápidos" de la Capa 2), pero ya se juntaron datos reales para
-cuando se retome:
+### Nota de expectativas: "primeros resultados de accesorios para celular"
 
-- **Sucursal Real de Guadalupe:** lunes a viernes 10am–5pm y 7pm–9pm;
-  martes 6pm–10pm (en vez del segundo horario de 7-9pm); sábados
-  10am–2pm. Colonia Real de Guadalupe, CP 72016.
-- **Sucursal Capu:** lunes a viernes 9am–4pm. Colonia Capu, CP 72050.
-- Confirmado por el usuario (sep 2026): CP 72016 es de Real de Guadalupe,
-  CP 72050 es de Capu — ya no hay ambigüedad, listo para usarse en el
-  JSON-LD.
-- No se tiene calle/número exacto de ninguna de las dos sucursales, solo
-  colonia + CP + ciudad (Puebla, Pue.).
+"Accesorios para celular" a secas es un término nacional altamente
+competido (Amazon, MercadoLibre, Claro, cadenas grandes) — ningún negocio
+de 2 sucursales en Puebla va a rankear #1 ahí compitiendo de tú a tú, sin
+importar cuánto SEO técnico se le meta al sitio. Lo que SÍ es alcanzable y
+es lo que de verdad genera clientes reales para un negocio físico local es
+rankear bien en búsquedas con intención local: "accesorios para celular en
+Puebla", "cerca de mí", y sobre todo aparecer en el Local Pack de Google
+(el mapa + 3 negocios que Google muestra arriba en ese tipo de búsquedas).
+El JSON-LD de esta capa ayuda, pero el factor que más pesa para el Local
+Pack es la ficha de Google Business Profile (reseñas, fotos, categoría,
+horarios ahí también) — eso no es código, es configuración directa en la
+cuenta de Google del negocio (ver más abajo).
 
 ## Otras capas futuras no empezadas
 
@@ -49,4 +57,6 @@ cuando se retome:
   opciones consideradas.
 - Google Business Profile (ficha de Google Maps/Negocio) — fuera del
   alcance de este repo, es configuración directa en la cuenta de Google
-  del negocio, no código.
+  del negocio, no código. Es el mayor factor para aparecer en el Local
+  Pack (ver nota de expectativas arriba) — vale la pena resolverlo aunque
+  no sea trabajo de desarrollo.

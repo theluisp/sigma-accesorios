@@ -3,6 +3,12 @@
 {% block title %}Contacto y pedidos a domicilio — Sigma Accesorios para Celular en Puebla{% endblock %}
 {% block metaDescription %}Escríbenos por WhatsApp, pide por Rappi o Didi Food, o consulta nuestros puntos de entrega y sucursales en Puebla para recoger tu pedido.{% endblock %}
 
+{% block jsonLd %}
+    {% if jsonLdNegocio %}
+        <script type="application/ld+json">{{ jsonLdNegocio|raw }}</script>
+    {% endif %}
+{% endblock %}
+
 {% block body %}
     <section class="catalogo-header">
         {# H1 más específico que solo "Contacto" (SEO, sep 2026) — coincide
