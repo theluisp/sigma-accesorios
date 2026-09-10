@@ -95,31 +95,31 @@ body {
 
 /* Buscador global sobre la navbar (pedido explícito del usuario, sep 2026:
    "ponle un buscador que se vea en mobile y en pc sobre la navbar para
-   buscar productos que lleve obviamente al catalogo") — visible siempre,
-   en todas las páginas, no solo dentro del Catálogo. Reusa el mismo GET a
-   /catalogo?q=... que el buscador que ya vivía ahí (ver .catalogo-search),
-   pero recoloreado para la barra oscura en vez del fondo claro. */
+   buscar productos que lleve obviamente al catalogo", luego pidió que
+   fuera "mas pequeño y minimalista" que no rompiera con la estética del
+   sitio). Reusa el mismo GET a /catalogo?q=... que el buscador que ya
+   vivía dentro del Catálogo (ver .catalogo-search), pero es intencional-
+   mente chico/discreto: una barra angosta y centrada, no un bloque que
+   ocupe todo el ancho, y el botón es solo un ícono circular (mismo
+   lenguaje visual que .site-nav-toggle) en vez de un botón de texto
+   grande — así no compite visualmente con la marca/nav de arriba. */
 .site-header__search-row {
     background: var(--color-navy);
-    padding: 0 20px 12px;
+    padding: 0 20px 10px;
+    display: flex;
+    justify-content: center;
 }
 
 .site-search {
     display: flex;
     align-items: center;
-    gap: 8px;
-    max-width: 1100px;
-    margin: 0 auto;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    gap: 6px;
+    width: 100%;
+    max-width: 320px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 980px;
-    padding: 6px 6px 6px 16px;
-}
-
-.site-search__icon {
-    display: flex;
-    color: rgba(255, 255, 255, 0.75);
-    flex: 0 0 auto;
+    padding: 3px 3px 3px 14px;
 }
 
 .site-search__input {
@@ -127,33 +127,48 @@ body {
     min-width: 0;
     border: none;
     background: transparent;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    padding: 4px 0;
     color: var(--color-white);
     outline: none;
 }
 
 .site-search__input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .site-search__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--color-white);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.site-search__btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.site-search__btn:hover {
+    background: rgba(255, 255, 255, 0.24);
 }
 
 @media (max-width: 640px) {
     .site-header__search-row {
-        padding: 0 16px 10px;
+        padding: 0 16px 8px;
     }
-}
 
-@media (max-width: 480px) {
     .site-search {
-        padding: 6px 6px 6px 14px;
-    }
-
-    .site-search__btn {
-        padding: 8px 14px;
-        font-size: 0.8rem;
+        max-width: 280px;
     }
 }
 
