@@ -59,29 +59,24 @@ class HomeController extends AbstractController
      * regresa null y la plantilla pinta un fondo con degradado de marca en
      * su lugar — el carrusel se ve bien desde el día uno.
      *
+     * El ORDEN en que aparecen los slides es el orden de este array, no el
+     * valor de 'numero' (ese solo sirve para que BannerImageResolver
+     * encuentre el archivo banner-{numero}.* correcto y para la clase CSS
+     * de degradado de respaldo). Pedido explícito del usuario (sep 2026):
+     * intercambiar las posiciones 1 y 3 del carrusel — banner-3.png (Promo
+     * de Septiembre, ya trae su propio texto en la imagen, por eso sin
+     * overlay) ahora se ve primero, y banner-1.png (foto de producto lisa,
+     * con overlay "Encuentra el accesorio perfecto" + botón) al final. Cada
+     * entrada se mueve completa (imagen + su texto/CTA correspondiente) en
+     * vez de solo intercambiar los archivos, para que el overlay de texto
+     * no quede encimado sobre la Promo de Septiembre (que ya es
+     * autoexplicativa).
+     *
      * @return array<int, array{numero: int, imagen: ?string, titulo: string, subtitulo: string, ctaTexto: string, ctaUrl: ?string, ctaExterna: bool}>
      */
     private function construirBanners(BannerImageResolver $bannerResolver, ContactoLinks $contactoLinks): array
     {
         return [
-            [
-                'numero' => 1,
-                'imagen' => $bannerResolver->resolve(1),
-                'titulo' => 'Encuentra el accesorio perfecto',
-                'subtitulo' => 'Fundas, cargadores, audio y más — inventario actualizado todos los días.',
-                'ctaTexto' => 'Ver catálogo',
-                'ctaUrl' => $this->generateUrl('catalogo'),
-                'ctaExterna' => false,
-            ],
-            [
-                'numero' => 2,
-                'imagen' => $bannerResolver->resolve(2),
-                'titulo' => 'Pide por Rappi',
-                'subtitulo' => 'Recíbelo el mismo día, directo en tu puerta.',
-                'ctaTexto' => 'Pide a domicilio',
-                'ctaUrl' => $contactoLinks->rappiUrl(),
-                'ctaExterna' => true,
-            ],
             [
                 'numero' => 3,
                 'imagen' => $bannerResolver->resolve(3),
@@ -94,6 +89,24 @@ class HomeController extends AbstractController
                 // el bloque del botón está condicionado a `banner.ctaUrl`).
                 'ctaUrl' => null,
                 'ctaExterna' => true,
+            ],
+            [
+                'numero' => 2,
+                'imagen' => $bannerResolver->resolve(2),
+                'titulo' => 'Pide por Rappi',
+                'subtitulo' => 'Recíbelo el mismo día, directo en tu puerta.',
+                'ctaTexto' => 'Pide a domicilio',
+                'ctaUrl' => $contactoLinks->rappiUrl(),
+                'ctaExterna' => true,
+            ],
+            [
+                'numero' => 1,
+                'imagen' => $bannerResolver->resolve(1),
+                'titulo' => 'Encuentra el accesorio perfecto',
+                'subtitulo' => 'Fundas, cargadores, audio y más — inventario actualizado todos los días.',
+                'ctaTexto' => 'Ver catálogo',
+                'ctaUrl' => $this->generateUrl('catalogo'),
+                'ctaExterna' => false,
             ],
         ];
     }
