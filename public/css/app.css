@@ -1051,6 +1051,20 @@ body {
     align-items: flex-end;
 }
 
+/* Solo la primera slide (LCP) usa <img> real en vez de background-image
+   — ver home/index.html.twig. Mismo resultado visual que background-size:
+   cover/center, pero como elemento posicionado absoluto detrás del
+   degradado y el texto. */
+.banner-slide__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
 .banner-slide::after {
     content: '';
     position: absolute;
@@ -1125,17 +1139,45 @@ body {
     margin-bottom: 14px;
 }
 
+/* Objetivos táctiles (PageSpeed/Lighthouse, sep 2026: "Los objetivos
+   táctiles con tamaño y separación suficientes..." — el mismo texto que
+   usa el criterio WCAG 2.5.8, cuyo mínimo es 24x24px CSS, así que se usa
+   ese tamaño y no algo más grande): el punto visual de 8x8px es
+   intencional (se ve bien, discreto), pero como ÁREA CLICKEABLE es
+   demasiado chico para un dedo real. Se separa "botón real" (24x24,
+   invisible, es el que recibe el clic/toque) de "punto visible" (chico,
+   un ::after centrado encima) — así el tamaño visual casi no cambia,
+   pero el área que responde al toque sí crece. A propósito NO se usa un
+   tamaño mayor (ej. 48px): esta barra vive pegada al botón "Ver
+   catálogo" del banner en mobile, y una zona táctil más grande podría
+   encimarse con él. El botón activo (pill de 22px) usa la misma técnica,
+   solo que su ::after es más ancho. */
 .banner-carousel .carousel-indicators [data-bs-target] {
+    position: relative;
+    box-sizing: content-box;
+    width: 24px;
+    height: 24px;
+    margin: 0 2px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    opacity: 1;
+}
+
+.banner-carousel .carousel-indicators [data-bs-target]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 8px;
     height: 8px;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.5);
-    border: none;
-    opacity: 1;
-    transition: width 0.2s ease, background-color 0.2s ease;
+    transition: width 0.2s ease, border-radius 0.2s ease, background-color 0.2s ease;
 }
 
-.banner-carousel .carousel-indicators .active {
+.banner-carousel .carousel-indicators .active::after {
     background-color: #fff;
     width: 22px;
     border-radius: 4px;

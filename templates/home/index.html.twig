@@ -39,8 +39,25 @@
                     <div class="carousel-item {{ loop.first ? 'active' : '' }}">
                         <div
                             class="banner-slide {{ banner.imagen is null ? 'banner-slide--' ~ banner.numero : '' }}"
-                            {% if banner.imagen %}style="background-image: url('{{ banner.imagen }}')"{% endif %}
+                            {% if banner.imagen and not loop.first %}style="background-image: url('{{ banner.imagen }}')"{% endif %}
                         >
+                            {% if banner.imagen and loop.first %}
+                                {# LCP (PageSpeed, sep 2026): la primera slide es la imagen que
+                                   Google mide como Largest Contentful Paint. Como <img> real (en
+                                   vez de CSS background-image, que usan las demás slides) el
+                                   navegador la descubre desde el HTML inicial sin esperar a que
+                                   se procese el CSS, y fetchpriority="high" le dice que la baje
+                                   antes que cualquier otra cosa no crítica. Las demás slides no
+                                   son LCP, así que se quedan con el mismo background-image de
+                                   siempre — no vale la pena el mismo tratamiento ahí. #}
+                                <img
+                                    src="{{ banner.imagen }}"
+                                    alt="{{ banner.titulo is not empty ? banner.titulo : 'Sigma Accesorios para Celular' }}"
+                                    class="banner-slide__img"
+                                    fetchpriority="high"
+                                    decoding="async"
+                                >
+                            {% endif %}
                             <div class="banner-slide__content">
                                 <h2>{{ banner.titulo }}</h2>
                                 <p>{{ banner.subtitulo }}</p>

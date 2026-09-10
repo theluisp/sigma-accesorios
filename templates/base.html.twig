@@ -30,13 +30,21 @@
     <meta name="twitter:description" content="{{ block('metaDescription') }}">
     <meta name="twitter:image" content="{{ block('ogImage') }}">
 
+    {# preconnect (PageSpeed, sep 2026): el navegador puede abrir la
+       conexión (DNS + TLS) a cdnjs.cloudflare.com en paralelo mientras
+       sigue procesando el resto del <head>, en vez de esperar a llegar a
+       la línea del <link rel="stylesheet"> de abajo para recién empezar a
+       conectar — ahorra ese tiempo de conexión en la ruta crítica del
+       primer render. Bootstrap CSS y JS salen del mismo origen, así que
+       un solo preconnect cubre ambos. #}
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
     {# ?v= es cache-busting manual: sin esto, el navegador (y a veces un proxy
        intermedio) puede seguir sirviendo una copia vieja de app.css/app.js
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=28">
+    <link rel="stylesheet" href="/css/app.css?v=29">
     {% block stylesheets %}{% endblock %}
     {# JSON-LD de negocio local (SEO sep 2026, ver App\Service\Seo\NegocioJsonLd):
        vacío por default, solo Home y Contacto lo llenan — son las páginas
