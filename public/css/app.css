@@ -78,13 +78,83 @@ body {
 }
 
 .site-header__inner {
-    position: relative;
+    /* Sin position:relative aquí a propósito (sep 2026): el dropdown
+       móvil de .site-nav (position:absolute, ver media query abajo)
+       necesita anclarse al .site-header completo, no solo a esta fila —
+       si no, con la fila de búsqueda nueva (.site-header__search-row)
+       debajo, el dropdown solo taparía esta fila y dejaría la barra de
+       búsqueda visible/atropellada. .site-header ya tiene su propio
+       position:relative (ver arriba), así que sigue funcionando igual. */
     max-width: 1100px;
     margin: 0 auto;
     padding: 8px 20px;
     display: flex;
     align-items: center;
     gap: 20px;
+}
+
+/* Buscador global sobre la navbar (pedido explícito del usuario, sep 2026:
+   "ponle un buscador que se vea en mobile y en pc sobre la navbar para
+   buscar productos que lleve obviamente al catalogo") — visible siempre,
+   en todas las páginas, no solo dentro del Catálogo. Reusa el mismo GET a
+   /catalogo?q=... que el buscador que ya vivía ahí (ver .catalogo-search),
+   pero recoloreado para la barra oscura en vez del fondo claro. */
+.site-header__search-row {
+    background: var(--color-navy);
+    padding: 0 20px 12px;
+}
+
+.site-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 980px;
+    padding: 6px 6px 6px 16px;
+}
+
+.site-search__icon {
+    display: flex;
+    color: rgba(255, 255, 255, 0.75);
+    flex: 0 0 auto;
+}
+
+.site-search__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    color: var(--color-white);
+    outline: none;
+}
+
+.site-search__input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.site-search__btn {
+    flex: 0 0 auto;
+}
+
+@media (max-width: 640px) {
+    .site-header__search-row {
+        padding: 0 16px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .site-search {
+        padding: 6px 6px 6px 14px;
+    }
+
+    .site-search__btn {
+        padding: 8px 14px;
+        font-size: 0.8rem;
+    }
 }
 
 .site-header__brand {

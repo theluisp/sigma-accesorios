@@ -36,7 +36,7 @@
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=24">
+    <link rel="stylesheet" href="/css/app.css?v=25">
     {% block stylesheets %}{% endblock %}
     {# JSON-LD de negocio local (SEO sep 2026, ver App\Service\Seo\NegocioJsonLd):
        vacío por default, solo Home y Contacto lo llenan — son las páginas
@@ -88,6 +88,29 @@
                     {{ include('_partials/_icon_menu.svg.twig') }}
                 </button>
             </div>
+        </div>
+
+        {# Buscador global (pedido explícito del usuario, sep 2026): visible
+           siempre, en mobile y en pc, arriba/sobre la navbar de links —
+           manda directo al Catálogo con el filtro de texto (?q=), mismo
+           mecanismo que ya usaba el buscador propio del Catálogo (ver
+           templates/catalogo/index.html.twig, ese se deja igual — sirve
+           para refinar la búsqueda ya estando ahí dentro de una categoría
+           activa gracias al campo oculto "categoria"). #}
+        <div class="site-header__search-row">
+            <form method="get" action="{{ path('catalogo') }}" class="site-search" role="search">
+                <span class="site-search__icon" aria-hidden="true">
+                    {{ include('_partials/_icon_search.svg.twig') }}
+                </span>
+                <input
+                    type="search"
+                    name="q"
+                    placeholder="Busca fundas, cargadores, audífonos…"
+                    class="site-search__input"
+                    aria-label="Buscar productos en el catálogo"
+                >
+                <button type="submit" class="btn btn--primary btn--small site-search__btn">Buscar</button>
+            </form>
         </div>
     </header>
 
