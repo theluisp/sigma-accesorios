@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CatalogoController extends AbstractController
 {
@@ -183,7 +184,53 @@ final class CatalogoController extends AbstractController
             'pagina' => $pagina,
             'totalPaginas' => $totalPaginas,
             'rangoPaginas' => $this->calcularRangoPaginas($pagina, $totalPaginas),
+            'jsonLdBreadcrumb' => $this->construirBreadcrumbJsonLd($categoriaLabel),
         ]);
+    }
+
+    /**
+     * BreadcrumbList JSON-LD (SEO, sep 2026 — "otra capa de SEO para ir
+     * posicionando el sitio"): le dice a Google la jerarquía Inicio >
+     * Catálogo [> categoría activa], lo que puede hacer que el resultado
+     * de búsqueda muestre esa ruta en vez de la URL cruda. El Catálogo no
+     * tiene una página propia por categoría (todo vive en /catalogo con
+     * ?categoria=), así que el último escalón (la categoría) no lleva
+     * "item" (URL) — solo "name" — que es justo lo que recomienda Google
+     * para el último elemento de un breadcrumb: representa la página
+     * actual, no un destino distinto.
+     */
+    private function construirBreadcrumbJsonLd(string $categoriaLabel): string
+    {
+        $items = [
+            [
+                '@type' => 'ListItem',
+                'position' => 1,
+                'name' => 'Inicio',
+                'item' => $this->generateUrl('home', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            ],
+            [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => 'Catálogo',
+                'item' => $this->generateUrl('catalogo', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            ],
+        ];
+
+        if ($categoriaLabel !== '') {
+            $items[] = [
+                '@type' => 'ListItem',
+                'position' => 3,
+                'name' => $categoriaLabel,
+            ];
+        }
+
+        $documento = [
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => $items,
+        ];
+
+        return json_encode($documento, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?: '';
     }
 
     /**

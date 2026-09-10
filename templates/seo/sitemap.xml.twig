@@ -38,4 +38,13 @@
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
+    {# Faltaba (SEO, sep 2026): /negocios es una página real e indexable
+       (cross-promoción de los otros negocios de Luis), simplemente se
+       quedó fuera cuando se armó el sitemap la primera vez. Prioridad baja
+       porque no es contenido del catálogo — es informativa. #}
+    <url>
+        <loc>{{ url('negocios') }}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.3</priority>
+    </url>
 </urlset>

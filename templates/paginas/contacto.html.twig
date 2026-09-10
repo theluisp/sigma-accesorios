@@ -176,7 +176,13 @@
        ContactoLinks::mapsUrlPara(), que de todos modos era solo una
        búsqueda por texto, no un pin exacto. El método sigue existiendo en
        ContactoLinks por si se retoma más adelante con coordenadas reales,
-       pero la plantilla ya no lo usa. #}
+       pero la plantilla ya no lo usa.
+
+       Horarios + CP (sep 2026, pedido explícito del usuario): a propósito
+       NO se muestra colonia ni calle — "solo cp y horarios no todo por
+       tema de seguridad" — aunque PaginasController::contacto() sí tiene
+       acceso a más datos vía SucursalDireccionHorario, solo se le pasan a
+       la plantilla codigoPostal y horarios. #}
     {% if sucursales is not empty %}
         <div class="modal fade" id="sucursales-modal" tabindex="-1" aria-labelledby="sucursales-modal-title" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -191,7 +197,19 @@
                             {% for sucursal in sucursales %}
                                 <div class="sucursal-item">
                                     <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
-                                    <span class="sucursal-item__nombre">{{ sucursal.nombre }}</span>
+                                    <div class="sucursal-item__info">
+                                        <span class="sucursal-item__nombre">
+                                            {{ sucursal.nombre }}
+                                            {% if sucursal.codigoPostal %}<span class="sucursal-item__cp">CP {{ sucursal.codigoPostal }}</span>{% endif %}
+                                        </span>
+                                        {% if sucursal.horarios is not empty %}
+                                            <ul class="sucursal-item__horarios">
+                                                {% for horario in sucursal.horarios %}
+                                                    <li>{{ horario }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             {% endfor %}
                         </div>

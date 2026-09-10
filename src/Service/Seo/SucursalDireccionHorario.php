@@ -51,4 +51,74 @@ final class SucursalDireccionHorario
     {
         return self::DATOS[$claveSucursal] ?? null;
     }
+
+    /** Traducción de día en inglés (como los espera schema.org) a español. */
+    private const DIAS_ES = [
+        'Monday' => 'lunes',
+        'Tuesday' => 'martes',
+        'Wednesday' => 'miércoles',
+        'Thursday' => 'jueves',
+        'Friday' => 'viernes',
+        'Saturday' => 'sábado',
+        'Sunday' => 'domingo',
+    ];
+
+    /**
+     * Horarios en texto legible para mostrar en la tarjeta de sucursales
+     * (pedido explícito del usuario, sep 2026: "agregale esa info de
+     * horarios y direccion... recuerda solo cp y horarios no todo por
+     * tema de seguridad" — por eso esta tarjeta muestra horarios + CP,
+     * pero nunca colonia/calle, aunque SÍ estén disponibles arriba para el
+     * JSON-LD). Reusa la misma DATOS que NegocioJsonLd en vez de duplicar
+     * los horarios en otro lugar.
+     *
+     * @return string[] ej. ["Lunes a viernes: 10:00 a.m. – 5:00 p.m.", "Martes: 6:00 p.m. – 10:00 p.m."]
+     */
+    public function horariosLegibles(string $claveSucursal): array
+    {
+        $datos = self::DATOS[$claveSucursal] ?? null;
+        if ($datos === null) {
+            return [];
+        }
+
+        return array_map(
+            fn (array $horario): string => $this->formatearDias($horario[0]).': '.$this->formatearHora($horario[1]).' – '.$this->formatearHora($horario[2]),
+            $datos['horarios'],
+        );
+    }
+
+    /** @param string[] $dias */
+    private function formatearDias(array $dias): string
+    {
+        // Caso más común: los 5 días hábiles completos.
+        if ($dias === ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']) {
+            return 'Lunes a viernes';
+        }
+
+        $nombres = array_map(
+            fn (string $dia): string => self::DIAS_ES[$dia] ?? $dia,
+            $dias,
+        );
+
+        if (\count($nombres) === 1) {
+            return ucfirst($nombres[0]);
+        }
+
+        $ultimo = array_pop($nombres);
+
+        return ucfirst(implode(', ', $nombres).' y '.$ultimo);
+    }
+
+    /** "17:00" → "5:00 p.m." (formato de 12 horas, más natural para un cliente que 24h). */
+    private function formatearHora(string $hhmm): string
+    {
+        [$horas, $minutos] = array_map('intval', explode(':', $hhmm));
+        $sufijo = $horas >= 12 ? 'p.m.' : 'a.m.';
+        $horas12 = $horas % 12;
+        if ($horas12 === 0) {
+            $horas12 = 12;
+        }
+
+        return sprintf('%d:%02d %s', $horas12, $minutos, $sufijo);
+    }
 }

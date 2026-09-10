@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\SucursalRepository;
 use App\Service\Contacto\ContactoLinks;
 use App\Service\Seo\NegocioJsonLd;
+use App\Service\Seo\SucursalDireccionHorario;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,13 +22,29 @@ final class PaginasController extends AbstractController
     }
 
     #[Route('/contacto', name: 'contacto', methods: ['GET'])]
-    public function contacto(SucursalRepository $sucursalRepository, ContactoLinks $contactoLinks, NegocioJsonLd $negocioJsonLd): Response
+    public function contacto(SucursalRepository $sucursalRepository, ContactoLinks $contactoLinks, NegocioJsonLd $negocioJsonLd, SucursalDireccionHorario $direccionHorario): Response
     {
+        // Horarios + CP en la tarjeta de sucursales (pedido explícito del
+        // usuario, sep 2026): "agregale esa info de horarios y direccion
+        // que se tiene a la card de sucursales, recuerda solo cp y
+        // horarios no todo por tema de seguridad" — por eso aquí NO se
+        // manda colonia ni ningún dato de calle, aunque SucursalDireccionHorario
+        // sí los tenga (esos solo se usan para el JSON-LD, ver NegocioJsonLd).
+        // Si una sucursal no tiene datos capturados todavía, codigoPostal
+        // queda null y horarios vacío — la plantilla simplemente no
+        // muestra esa sección para esa sucursal, igual que ya hace
+        // NegocioJsonLd al omitirla del JSON-LD.
         $sucursales = array_map(
-            static fn ($sucursal) => [
-                'nombre' => $sucursal->getNombre(),
-                'mapsUrl' => $contactoLinks->mapsUrlPara($sucursal->getNombre()),
-            ],
+            static function ($sucursal) use ($contactoLinks, $direccionHorario) {
+                $datos = $direccionHorario->paraSucursal($sucursal->getClave());
+
+                return [
+                    'nombre' => $sucursal->getNombre(),
+                    'mapsUrl' => $contactoLinks->mapsUrlPara($sucursal->getNombre()),
+                    'codigoPostal' => $datos['codigoPostal'] ?? null,
+                    'horarios' => $direccionHorario->horariosLegibles($sucursal->getClave()),
+                ];
+            },
             $sucursalRepository->findAll(),
         );
 

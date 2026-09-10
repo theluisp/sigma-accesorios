@@ -3,6 +3,14 @@
 {% block title %}{{ metaTitulo }}{% endblock %}
 {% block metaDescription %}{{ metaDescripcion }}{% endblock %}
 
+{# BreadcrumbList JSON-LD (SEO, sep 2026): Inicio > Catálogo [> categoría
+   activa] — ver CatalogoController::construirBreadcrumbJsonLd(). #}
+{% block jsonLd %}
+    {% if jsonLdBreadcrumb %}
+        <script type="application/ld+json">{{ jsonLdBreadcrumb|raw }}</script>
+    {% endif %}
+{% endblock %}
+
 {% block body %}
     <section class="catalogo-header">
         {# H1 dinámico por filtro (SEO, sep 2026): antes decía siempre

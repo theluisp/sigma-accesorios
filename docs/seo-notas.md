@@ -50,6 +50,25 @@ Pack es la ficha de Google Business Profile (reseñas, fotos, categoría,
 horarios ahí también) — eso no es código, es configuración directa en la
 cuenta de Google del negocio (ver más abajo).
 
+**Capa 4 (sep 2026):**
+- `BreadcrumbList` JSON-LD en el Catálogo: Inicio > Catálogo [> categoría
+  activa] (`CatalogoController::construirBreadcrumbJsonLd()`). El último
+  escalón (la categoría) no lleva URL propia — el Catálogo no tiene página
+  por categoría, todo vive en `/catalogo?categoria=...` — así que solo
+  lleva `name`, que es lo que recomienda Google para el escalón que
+  representa la página actual.
+- `sitemap.xml`: agrega `/negocios`, que se había quedado fuera desde que
+  se armó el sitemap la primera vez (era una página real e indexable).
+- Tarjeta "Nuestras sucursales" de Contacto ahora muestra el CP y los
+  horarios de cada sucursal en texto legible (`SucursalDireccionHorario::horariosLegibles()`),
+  no solo el nombre. Pedido explícito del usuario: "recuerda solo cp y
+  horarios no todo por tema de seguridad" — a propósito NO se muestra
+  colonia ni calle ahí (esos datos solo se usan puertas adentro, para el
+  JSON-LD). Refuerza para Google el mismo contenido que ya está en el
+  JSON-LD de la Capa 3, ahora también visible como texto real en la
+  página (no solo en datos estructurados) — coincidencia entre lo que ve
+  el usuario y lo que dice el JSON-LD es una señal que Google valora.
+
 ## Otras capas futuras no empezadas
 
 - Páginas individuales por producto (URL propia en vez del modal actual)
