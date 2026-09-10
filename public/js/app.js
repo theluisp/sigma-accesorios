@@ -8,6 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
         navToggleEl.addEventListener('click', () => {
             const abierto = navEl.classList.toggle('is-open');
             navToggleEl.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+            // Ambos paneles (nav y buscador) flotan en el mismo lugar
+            // (position:absolute, top:100% del header) — si se abre uno se
+            // cierra el otro para que no se encimen.
+            if (abierto) { cerrarBuscador(); }
         });
 
         // Al dar clic en un link del menú (navegación normal, recarga la
@@ -19,6 +23,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 navEl.classList.remove('is-open');
                 navToggleEl.setAttribute('aria-expanded', 'false');
             });
+        });
+    }
+
+    /* =========================================================
+       Buscador global del header (ícono junto al carrito, misma
+       altura que el resto de la barra — pedido explícito del
+       usuario, sep 2026). Se abre/cierra igual que el menú
+       hamburguesa: clase is-open sobre un panel position:absolute.
+       ========================================================= */
+    const searchToggleEl = document.getElementById('site-search-toggle');
+    const searchPanelEl = document.getElementById('site-search-panel');
+
+    function cerrarBuscador() {
+        if (searchPanelEl && searchToggleEl) {
+            searchPanelEl.classList.remove('is-open');
+            searchToggleEl.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    if (searchToggleEl && searchPanelEl) {
+        searchToggleEl.addEventListener('click', () => {
+            const abierto = searchPanelEl.classList.toggle('is-open');
+            searchToggleEl.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+            if (abierto) {
+                if (navEl && navToggleEl) {
+                    navEl.classList.remove('is-open');
+                    navToggleEl.setAttribute('aria-expanded', 'false');
+                }
+                const inputEl = searchPanelEl.querySelector('input[name="q"]');
+                if (inputEl) { setTimeout(() => inputEl.focus(), 50); }
+            }
         });
     }
 
