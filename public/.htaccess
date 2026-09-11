@@ -7,6 +7,18 @@ DirectoryIndex index.php
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Fuerza HTTPS (sep 2026): Google Search Console mostró que había
+    # indexado por separado http://sigmaaccesorios... y https://sigmaaccesorios...
+    # como si fueran 2 páginas — nada en el servidor forzaba la
+    # redirección, así que ambas versiones respondían 200 normal. El
+    # chequeo de X-Forwarded-Proto es porque Hostinger suele terminar el
+    # SSL en un proxy delante de Apache: ahí %{HTTPS} siempre marca "off"
+    # aunque la visita real sí sea https, y sin ese chequeo esto causaría
+    # un loop infinito de redirects.
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Determine the RewriteBase automatically and set it as environment variable.
     # If you are using Apache aliases to do mass virtual hosting or installed the
     # project in a subdirectory, the base path will be prepended to allow proper
