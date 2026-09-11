@@ -23,6 +23,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * NO incluye streetAddress (ver SucursalDireccionHorario) ni priceRange —
  * no tenemos esos datos confirmados, y un valor inventado puede
  * perjudicar más que no incluir el campo.
+ *
+ * También agrega un nodo @type WebSite con potentialAction: SearchAction
+ * (SEO, sep 2026 — "otro poco de seo"), apuntando al buscador global de la
+ * navbar (ver templates/base.html.twig, #site-search-panel). Es el
+ * schema.org estándar para que Google pueda mostrar una cajita de
+ * búsqueda propia del sitio directo en los resultados de búsqueda
+ * ("sitelinks search box") — no garantiza que aparezca, pero sin este
+ * dato es imposible que Google siquiera lo considere.
  */
 final class NegocioJsonLd
 {
@@ -75,7 +83,23 @@ final class NegocioJsonLd
             $this->contactoLinks->rappiUrl(),
         ]));
 
-        $graph = [];
+        $graph = [
+            [
+                '@type' => 'WebSite',
+                '@id' => $baseUrl.'/#website',
+                'url' => $baseUrl.'/',
+                'name' => self::NOMBRE_NEGOCIO,
+                'potentialAction' => [
+                    '@type' => 'SearchAction',
+                    'target' => [
+                        '@type' => 'EntryPoint',
+                        'urlTemplate' => $baseUrl.'/catalogo?q={search_term_string}',
+                    ],
+                    'query-input' => 'required name=search_term_string',
+                ],
+            ],
+        ];
+
         foreach ($this->sucursalRepository->findAll() as $sucursal) {
             $datos = $this->direccionHorario->paraSucursal($sucursal->getClave());
             if ($datos === null) {

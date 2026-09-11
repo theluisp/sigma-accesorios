@@ -15,7 +15,9 @@
         Conteo básico de visitas: cada navegador distinto se cuenta una sola vez por día
         (vía una cookie propia, sin guardar IP ni ningún otro dato personal). No es un
         análisis de tráfico completo, pero da una idea real de cuánta gente entra al sitio.
-        Las visitas al propio panel de administración no se cuentan.
+        Las visitas al propio panel de administración no se cuentan, y tampoco los bots
+        (buscadores como Google, ni los previsualizadores de link de WhatsApp/Facebook/
+        Telegram — compartir el link en un grupo ya NO infla el contador).
     </p>
 
     <div class="admin-stats">
@@ -63,4 +65,50 @@
             {% endfor %}
         </tbody>
     </table>
+
+    {# Páginas más visitadas (pedido explícito del usuario, sep 2026: "que
+       es lo que mas visitan") — OJO, esto cuenta VISTAS (cada carga de
+       página), no visitantes únicos como la tabla de arriba: si contara
+       "una vez por navegador por día" como la de arriba, solo la primera
+       página que abre cada quien sumaría (casi siempre Inicio), y el
+       resto del sitio se vería en cero sin importar cuánto se visite de
+       verdad — ver App\Entity\VisitaPagina. #}
+    <h2>Páginas más visitadas</h2>
+    <p class="admin-analiticas__nota">
+        Cuenta cada carga de página (no navegadores únicos como la tabla de arriba),
+        para poder comparar qué tanto se visita cada sección entre sí.
+    </p>
+    {% if paginasMasVisitadas is empty %}
+        <p class="section__empty">Todavía no hay datos suficientes.</p>
+    {% else %}
+        <div class="admin-chart">
+            {% for pagina in paginasMasVisitadas %}
+                <div class="admin-chart__bar-wrap" title="{{ nombresRuta[pagina.ruta] ?? pagina.ruta }}: {{ pagina.contador }} vista{{ pagina.contador == 1 ? '' : 's' }}">
+                    <div class="admin-chart__bar" style="height: {{ (pagina.contador / maxVistasPagina * 100)|round(1) }}%"></div>
+                    <span class="admin-chart__day">{{ nombresRuta[pagina.ruta] ?? pagina.ruta }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Página</th>
+                    <th>Ruta</th>
+                    <th>Vistas</th>
+                    <th>Última visita</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pagina in paginasMasVisitadas %}
+                    <tr>
+                        <td>{{ nombresRuta[pagina.ruta] ?? pagina.ruta }}</td>
+                        <td><code>{{ pagina.ruta }}</code></td>
+                        <td>{{ pagina.contador }}</td>
+                        <td>{{ pagina.actualizadoEn|date('d/m/Y H:i') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}
