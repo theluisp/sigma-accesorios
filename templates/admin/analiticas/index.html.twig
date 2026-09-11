@@ -49,33 +49,16 @@
         {% endfor %}
     </div>
 
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Visitas</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for dia in ultimosDias|reverse %}
-                <tr>
-                    <td>{{ dia.fecha|date('d/m/Y') }}</td>
-                    <td>{{ dia.contador }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
     {# Páginas más visitadas (pedido explícito del usuario, sep 2026: "que
        es lo que mas visitan") — OJO, esto cuenta VISTAS (cada carga de
-       página), no visitantes únicos como la tabla de arriba: si contara
-       "una vez por navegador por día" como la de arriba, solo la primera
-       página que abre cada quien sumaría (casi siempre Inicio), y el
-       resto del sitio se vería en cero sin importar cuánto se visite de
-       verdad — ver App\Entity\VisitaPagina. #}
+       página), no visitantes únicos como la gráfica de arriba: si contara
+       "una vez por navegador por día" como esa, solo la primera página
+       que abre cada quien sumaría (casi siempre Inicio), y el resto del
+       sitio se vería en cero sin importar cuánto se visite de verdad —
+       ver App\Entity\VisitaPagina. #}
     <h2>Páginas más visitadas</h2>
     <p class="admin-analiticas__nota">
-        Cuenta cada carga de página (no navegadores únicos como la tabla de arriba),
+        Cuenta cada carga de página (no navegadores únicos como la gráfica de arriba),
         para poder comparar qué tanto se visita cada sección entre sí.
     </p>
     {% if paginasMasVisitadas is empty %}
