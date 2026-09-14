@@ -44,7 +44,7 @@
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=30">
+    <link rel="stylesheet" href="/css/app.css?v=31">
     {% block stylesheets %}{% endblock %}
     {# JSON-LD de negocio local (SEO sep 2026, ver App\Service\Seo\NegocioJsonLd):
        vacío por default, solo Home y Contacto lo llenan — son las páginas
@@ -305,10 +305,69 @@
                 </div>
                 <div class="modal-footer carrito-modal__footer">
                     <button type="button" class="btn btn--secondary btn--small js-carrito-vaciar" hidden>Vaciar carrito</button>
-                    <a href="#" id="carrito-whatsapp" target="_blank" rel="noopener" class="btn btn--whatsapp w-100" data-whatsapp-base="{{ whatsapp_url() }}" hidden>
-                        {{ include('_partials/_icon_whatsapp.svg.twig') }}
-                        Enviar pedido por WhatsApp
-                    </a>
+                    <div class="carrito-modal__acciones js-carrito-acciones" hidden>
+                        <a href="#" id="carrito-whatsapp" target="_blank" rel="noopener" class="btn btn--whatsapp w-100" data-whatsapp-base="{{ whatsapp_url() }}">
+                            {{ include('_partials/_icon_whatsapp.svg.twig') }}
+                            Enviar pedido por WhatsApp
+                        </a>
+                        {# "Generar pedido a domicilio" (pedido explícito del
+                           usuario, sep 2026) NO intenta mandar el carrito a
+                           Rappi/Didi — ninguna de las dos apps acepta un
+                           carrito prearmado por URL. Son los mismos 2
+                           accesos directos que ya existen en las tarjetas de
+                           Contacto (Rappi abre su link real, Didi abre
+                           #didi-modal con las instrucciones), solo puestos
+                           aquí también para no obligar al cliente a salirse
+                           del carrito para encontrarlos. Iconos chicos a
+                           propósito para no competir en tamaño con el botón
+                           de WhatsApp (la opción principal). #}
+                        <div class="carrito-domicilio">
+                            <span class="carrito-domicilio__label">o pide a domicilio</span>
+                            <div class="carrito-domicilio__botones">
+                                {% if rappi_url() is not null %}
+                                    <a href="{{ rappi_url() }}" target="_blank" rel="noopener" class="carrito-domicilio__btn" aria-label="Pedir por Rappi" title="Pedir por Rappi">
+                                        <img src="/images/brands/rappi.png" alt="" loading="lazy">
+                                    </a>
+                                {% endif %}
+                                <button type="button" class="carrito-domicilio__btn" data-bs-toggle="modal" data-bs-target="#didi-modal" aria-label="Pedir por Didi Food" title="Pedir por Didi Food">
+                                    <img src="/images/brands/didi.jpg" alt="" loading="lazy">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Modal de instrucciones de Didi Food (ver también su tarjeta en
+       Contacto, que abre este mismo modal por id): vive en base.html.twig
+       porque el botón "pide a domicilio" del carrito, sitewide, también lo
+       necesita — así no hay que duplicarlo en cada página. La app de Didi
+       no tiene un link directo a la tienda, por eso son capturas de
+       pantalla explicando cómo encontrarnos dentro de la app. #}
+    <div class="modal fade" id="didi-modal" tabindex="-1" aria-labelledby="didi-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content aqua-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="didi-modal-title">Pide por Didi Food</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="didi-paso">
+                        <p class="didi-paso__titulo">
+                            <span class="didi-paso__numero">1</span>
+                            Abre la app de DiDi y da clic en la sección Shop
+                        </p>
+                        <img src="/images/didi/paso-1.png" alt="Paso 1: abrir la sección Shop en la app de DiDi" loading="lazy">
+                    </div>
+                    <div class="didi-paso">
+                        <p class="didi-paso__titulo">
+                            <span class="didi-paso__numero">2</span>
+                            Busca "Sigma Accesorios Para Celular" y realiza tu pedido
+                        </p>
+                        <img src="/images/didi/paso-2.png" alt="Paso 2: buscar Sigma Accesorios Para Celular en DiDi" loading="lazy">
+                    </div>
                 </div>
             </div>
         </div>
@@ -332,7 +391,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/app.js?v=6" defer></script>
+    <script src="/js/app.js?v=7" defer></script>
     {% block javascripts %}{% endblock %}
 </body>
 </html>

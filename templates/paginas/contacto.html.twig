@@ -118,36 +118,10 @@
 
     </section>
 
-    {# Modal con instrucciones para pedir por Didi Food: la app no tiene un
-       link directo a la tienda, así que en vez de un botón roto se explica
-       en 2 pasos cómo encontrarnos dentro de la app (capturas de pantalla
-       provistas por el usuario). #}
-    <div class="modal fade" id="didi-modal" tabindex="-1" aria-labelledby="didi-modal-title" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content aqua-modal">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="didi-modal-title">Pide por Didi Food</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="didi-paso">
-                        <p class="didi-paso__titulo">
-                            <span class="didi-paso__numero">1</span>
-                            Abre la app de DiDi y da clic en la sección Shop
-                        </p>
-                        <img src="/images/didi/paso-1.png" alt="Paso 1: abrir la sección Shop en la app de DiDi" loading="lazy">
-                    </div>
-                    <div class="didi-paso">
-                        <p class="didi-paso__titulo">
-                            <span class="didi-paso__numero">2</span>
-                            Busca "Sigma Accesorios Para Celular" y realiza tu pedido
-                        </p>
-                        <img src="/images/didi/paso-2.png" alt="Paso 2: buscar Sigma Accesorios Para Celular en DiDi" loading="lazy">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {# El modal de instrucciones de Didi Food (#didi-modal) ya no vive aquí
+       — se movió a base.html.twig (sep 2026) porque el carrito, sitewide,
+       también necesita abrirlo desde "pedido a domicilio". Esta tarjeta de
+       arriba lo sigue abriendo igual (mismo id), sin cambios. #}
 
     {# Modal de "Puntos de entrega": muestra el póster completo de la
        campaña (imagen provista por el usuario, ago 2026) con todos los

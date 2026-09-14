@@ -2284,6 +2284,68 @@ body {
     width: 100%;
 }
 
+/* Envuelve el botón de WhatsApp + "pide a domicilio" (Rappi/Didi) — ambos
+   se muestran/ocultan juntos según si hay algo en el carrito (ver
+   app.js). Columna con poco espacio entre uno y otro para que se vean
+   como "opción principal" (WhatsApp) + "otra forma de pedir" (domicilio)
+   sin que ninguno estorbe al otro. */
+.carrito-modal__acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Fila compacta de "o pide a domicilio": mismo patrón de Rappi/Didi que
+   las tarjetas de Contacto, pero en miniatura — aquí no debe competir en
+   tamaño con el botón de WhatsApp (que sigue siendo la opción principal),
+   solo dar acceso rápido sin obligar al cliente a salirse del carrito. */
+.carrito-domicilio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--color-border);
+}
+
+.carrito-domicilio__label {
+    color: var(--color-text-secondary);
+    font-size: 0.82rem;
+}
+
+.carrito-domicilio__botones {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.carrito-domicilio__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: var(--color-surface);
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.carrito-domicilio__btn:hover {
+    background: var(--color-border);
+}
+
+.carrito-domicilio__btn img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
 /* Aviso ("toast") de "producto agregado al carrito" — el Toast de
    Bootstrap por default sale blanco/gris, aquí se pinta con el navy de
    marca en vez del gris genérico para que se sienta parte del sitio. */

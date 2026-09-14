@@ -231,6 +231,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalEl = document.querySelector('.js-carrito-total');
         const vaciarBtn = document.querySelector('.js-carrito-vaciar');
         const whatsappEl = document.getElementById('carrito-whatsapp');
+        // Envuelve tanto el botón de WhatsApp como los accesos de "pedido a
+        // domicilio" (Rappi/Didi) — se muestran/ocultan juntos según si hay
+        // algo en el carrito, sin importar si WhatsApp en particular está
+        // configurado o no (ver más abajo).
+        const accionesEl = document.querySelector('.js-carrito-acciones');
 
         if (!contenedor) { return; }
 
@@ -239,13 +244,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (vacioEl) { vacioEl.hidden = false; }
             if (totalWrap) { totalWrap.hidden = true; }
             if (vaciarBtn) { vaciarBtn.hidden = true; }
-            if (whatsappEl) { whatsappEl.hidden = true; }
+            if (accionesEl) { accionesEl.hidden = true; }
             return;
         }
 
         if (vacioEl) { vacioEl.hidden = true; }
         if (totalWrap) { totalWrap.hidden = false; }
         if (vaciarBtn) { vaciarBtn.hidden = false; }
+        if (accionesEl) { accionesEl.hidden = false; }
 
         contenedor.innerHTML = items.map((item) => `
             <div class="carrito-item" data-slug="${item.slug}">
