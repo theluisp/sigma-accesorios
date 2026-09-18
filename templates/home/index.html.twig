@@ -109,12 +109,28 @@
                     </a>
                 {% endfor %}
             </div>
-            {# Pedido explícito del usuario (sep 2026): en mobile, después de
-               ver solo las Marcas, un cliente puede pensar que nada más
-               vendemos accesorios de esas marcas reconocidas — este botón
-               deja clarísimo que hay catálogo completo más allá de eso. #}
-            <div class="marcas-ver-catalogo">
-                <a href="{{ path('catalogo') }}" class="btn btn--secondary btn--small">Ver catálogo completo</a>
+            {# Buscador "Buscar mi producto" (pedido explícito del usuario,
+               sep 2026) — reemplaza el botón "Ver catálogo completo" que
+               había aquí antes: mismo lugar, mismo destino final (el
+               Catálogo), pero ahora deja escribir directo qué busca en vez
+               de solo un link genérico. Reutiliza el mismo componente
+               visual Y el mismo mecanismo de búsqueda que el buscador del
+               Catálogo (ver templates/catalogo/index.html.twig) — un GET
+               normal a /catalogo?q=..., sin JS propio. #}
+            <div class="marcas-buscador">
+                <form method="get" action="{{ path('catalogo') }}" class="catalogo-search" role="search">
+                    <span class="catalogo-search__icon" aria-hidden="true">
+                        {{ include('_partials/_icon_search.svg.twig') }}
+                    </span>
+                    <input
+                        type="search"
+                        name="q"
+                        placeholder="Buscar mi producto…"
+                        class="catalogo-search__input"
+                        aria-label="Buscar mi producto"
+                    >
+                    <button type="submit" class="btn btn--primary btn--small catalogo-search__btn">Buscar</button>
+                </form>
             </div>
         </section>
     {% endif %}

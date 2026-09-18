@@ -461,12 +461,20 @@ body {
     gap: 16px;
 }
 
-/* Botón "Ver catálogo completo" debajo de Marcas en Home (pedido explícito
-   del usuario, sep 2026) — evita que en mobile alguien piense que solo
-   vendemos accesorios de esas marcas reconocidas. */
-.marcas-ver-catalogo {
+/* Buscador "Buscar mi producto" debajo de Marcas en Home (pedido explícito
+   del usuario, sep 2026 — reemplaza al botón "Ver catálogo completo" que
+   vivía aquí antes) — evita que en mobile alguien piense que solo
+   vendemos accesorios de esas marcas reconocidas, y de paso deja buscar
+   directo sin tener que entrar primero al Catálogo. Centrado porque
+   .catalogo-search es flex con max-width, no ocupa todo el ancho solo. */
+.marcas-buscador {
+    display: flex;
+    justify-content: center;
     margin-top: 20px;
-    text-align: center;
+}
+
+.marcas-buscador .catalogo-search {
+    width: 100%;
 }
 
 .category-card {
