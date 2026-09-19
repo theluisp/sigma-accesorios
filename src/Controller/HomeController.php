@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\ProductoRepository;
 use App\Service\Banner\BannerImageResolver;
 use App\Service\Catalog\MarcaCatalog;
+use App\Service\Catalog\ProductCategorizer;
 use App\Service\Contacto\ContactoLinks;
 use App\Service\Seo\NegocioJsonLd;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,14 +20,46 @@ class HomeController extends AbstractController
         BannerImageResolver $bannerResolver,
         ContactoLinks $contactoLinks,
         MarcaCatalog $marcaCatalog,
+        ProductCategorizer $categorizer,
         NegocioJsonLd $negocioJsonLd,
     ): Response {
+        $conteoPorCategoria = $productoRepository->conteoDisponiblesPorCategoria();
+
         return $this->render('home/index.html.twig', [
             'productos' => $productoRepository->findEnOferta(12),
             'banners' => $this->construirBanners($bannerResolver, $contactoLinks),
             'marcas' => $this->marcasParaMostrar($productoRepository, $marcaCatalog),
+            'categorias' => $this->categoriasParaMostrar($categorizer, $conteoPorCategoria),
+            'conteoPorCategoria' => $conteoPorCategoria,
             'jsonLdNegocio' => $negocioJsonLd->comoJson(),
         ]);
+    }
+
+    /**
+     * Categorías del riel de Home (sep 2026, "ya se me ocurre poner el
+     * carrusel del catálogo de categorías arriba del carrusel" — pedido
+     * explícito del usuario, como otra entrada directa y siempre visible
+     * al Catálogo): a diferencia de Catálogo (que muestra TODAS las
+     * categorías, incluso en 0, porque ahí es donde de verdad se filtra),
+     * aquí solo las que tienen al menos un producto disponible ahora mismo
+     * — mismo criterio de "nunca una tarjeta que lleve a un catálogo
+     * vacío" que marcasParaMostrar() de arriba. El riel en sí (íconos,
+     * marcado) es el mismo componente compartido que usa Catálogo, ver
+     * templates/_partials/_categorias_rail.html.twig.
+     *
+     * @param array<string, int> $conteoPorCategoria
+     * @return array<string, string> slug => label, en el orden fijo de ProductCategorizer
+     */
+    private function categoriasParaMostrar(ProductCategorizer $categorizer, array $conteoPorCategoria): array
+    {
+        $resultado = [];
+        foreach ($categorizer->todas() as $slug => $label) {
+            if (($conteoPorCategoria[$slug] ?? 0) > 0) {
+                $resultado[$slug] = $label;
+            }
+        }
+
+        return $resultado;
     }
 
     /**

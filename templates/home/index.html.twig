@@ -20,6 +20,23 @@
        reales de abajo (pedido: "SEO básico", ago 2026). #}
     <h1 class="home-eyebrow">Accesorios para celular en Puebla — fundas, cargadores, audífonos y más</h1>
 
+    {# Riel de categorías arriba del carrusel de banners (pedido explícito
+       del usuario, sep 2026: "ya se me ocurre poner el carrusel del
+       catálogo de categorías arriba del carrusel") — otra entrada directa
+       y siempre visible al Catálogo, con la ventaja de que además deja ver
+       de un vistazo QUÉ vendemos (a diferencia del botón genérico "Ver
+       catálogo completo"). Solo categorías con stock ahora mismo (ver
+       HomeController::categoriasParaMostrar()), mismo componente
+       compartido que usa Catálogo (templates/_partials/_categorias_rail.html.twig). #}
+    {% if categorias is not empty %}
+        <section class="home-categorias">
+            {{ include('_partials/_categorias_rail.html.twig', {
+                categorias: categorias,
+                conteoPorCategoria: conteoPorCategoria,
+            }) }}
+        </section>
+    {% endif %}
+
     {% if banners is not empty %}
         <div id="home-carousel" class="carousel slide banner-carousel" data-bs-ride="carousel" data-bs-interval="5000">
             <div class="carousel-indicators">
@@ -83,6 +100,16 @@
             </button>
         </div>
     {% endif %}
+
+    {# CTA grande a Catálogo, SIEMPRE visible (propuesta sep 2026) — a
+       diferencia del link "Catálogo" del nav (en mobile queda escondido
+       detrás de la hamburguesa) y de "Ver todo el catálogo →" (chico,
+       dentro de Destacados), este botón no depende de que haya stock de
+       alguna marca ni de que el visitante baje/explore para encontrarlo:
+       es lo primero después del carrusel. #}
+    <section class="home-cta-catalogo">
+        <a href="{{ path('catalogo') }}" class="btn btn--primary home-cta-catalogo__btn">Ver catálogo completo</a>
+    </section>
 
     {# Marcas: agrupa por palabra(s) clave en el NOMBRE del producto (no
        categorías de ProductCategorizer) — ver App\Service\Catalog\MarcaCatalog

@@ -454,6 +454,32 @@ body {
     letter-spacing: -0.015em;
 }
 
+/* Riel de categorías arriba del carrusel de banners en Home (pedido
+   explícito del usuario, sep 2026) — reusa .categorias-rail/.categoria-chip
+   tal cual (mismo componente que Catálogo), este wrapper solo da el
+   espaciado vertical para que no quede pegado al h1 de arriba ni al
+   carrusel de abajo. */
+.home-categorias {
+    padding-top: 4px;
+}
+
+/* CTA grande a Catálogo en Home, siempre visible (propuesta sep 2026) —
+   ver el comentario en home/index.html.twig para el porqué. Más grande que
+   un .btn--primary normal (padding/font-size aumentados) para que destaque
+   como el siguiente paso obvio después del carrusel, no como un botón más
+   entre otros. */
+.home-cta-catalogo {
+    display: flex;
+    justify-content: center;
+    padding: 28px 0;
+}
+
+.home-cta-catalogo__btn {
+    font-size: 1.15rem;
+    padding: 16px 40px;
+    box-shadow: 0 8px 20px rgba(42, 135, 202, 0.25);
+}
+
 /* Categorías */
 .categories-grid {
     display: grid;

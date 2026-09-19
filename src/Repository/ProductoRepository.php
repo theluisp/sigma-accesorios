@@ -148,6 +148,39 @@ class ProductoRepository extends ServiceEntityRepository
     }
 
     /**
+     * Conteo de productos disponibles (con imagen propia) por categoría —
+     * para el riel de categorías cuando se muestra en Home (sep 2026, ver
+     * App\Controller\HomeController), donde a diferencia del Catálogo solo
+     * deben aparecer categorías con stock real ahora mismo (mismo criterio
+     * de "nunca una tarjeta que lleve a un catálogo vacío" que
+     * marcasConStock()). El catálogo es chico (~200 productos), así que
+     * traer todo y contar en PHP es suficiente — misma filosofía que el
+     * resto de este repositorio.
+     *
+     * @return array<string, int> categoría => conteo de productos disponibles
+     */
+    public function conteoDisponiblesPorCategoria(): array
+    {
+        $productos = $this->createQueryBuilder('p')
+            ->addSelect('e', 's')
+            ->leftJoin('p.existencias', 'e')
+            ->leftJoin('e.sucursal', 's')
+            ->innerJoin('p.imagen', 'i')
+            ->getQuery()
+            ->getResult();
+
+        $conteo = [];
+        foreach ($productos as $producto) {
+            if ($producto->isDisponible()) {
+                $categoria = $producto->getCategoria();
+                $conteo[$categoria] = ($conteo[$categoria] ?? 0) + 1;
+            }
+        }
+
+        return $conteo;
+    }
+
+    /**
      * Slugs de marca (de $marcas, ej. ['apple' => ['apple', 'iphone',
      * 'lightning']] — varias palabras clave por marca, para agarrar
      * títulos como "Cable Lightning" o "Funda iPhone" que no dicen

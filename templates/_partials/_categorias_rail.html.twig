@@ -1,0 +1,42 @@
+{# Riel horizontal de categorías con ícono circular + scroll-snap
+   (.categoria-chip) — componente compartido (sep 2026) entre Catálogo
+   (todas las categorías, incluso en 0, porque ahí es donde de verdad se
+   filtra) y Home (solo las que tienen stock ahora mismo, mismo criterio de
+   "nunca un link a un catálogo vacío" que la sección Marcas). Se extrajo a
+   partial para que ambos lados usen exactamente el mismo mapa de íconos y
+   el mismo marcado — antes solo vivía en Catálogo (ver el historial de
+   templates/catalogo/index.html.twig) y se duplicaba a mano si hacía
+   falta en otro lado.
+
+   Variables esperadas:
+   - categorias: array<string, string> slug => label, en el orden a mostrar
+   - conteoPorCategoria: array<string, int> slug => conteo (opcional, default 0)
+   - categoriaSeleccionada: slug activo, para resaltarlo (opcional)
+   - texto: búsqueda de texto activa, para no perderla al filtrar (opcional)
+   - railClass: clase extra en el contenedor, ej. para hooks de CSS/JS específicos (opcional)
+#}
+{% set categoriaIconos = {
+    'fundas': '_partials/_icon_case.svg.twig',
+    'bocinas-audifonos': '_partials/_icon_audio.svg.twig',
+    'cargadores': '_partials/_icon_charger.svg.twig',
+    'soportes-auto': '_partials/_icon_car.svg.twig',
+    'soportes-moto': '_partials/_icon_motorcycle.svg.twig',
+    'adaptadores': '_partials/_icon_adapter.svg.twig',
+    'hogar': '_partials/_icon_home.svg.twig',
+    'videojuegos': '_partials/_icon_gamepad.svg.twig',
+    'computacion': '_partials/_icon_computer.svg.twig',
+    'chips': '_partials/_icon_chip.svg.twig',
+    'otros': '_partials/_icon_other.svg.twig',
+} %}
+<div class="categorias-rail{{ railClass is defined ? ' ' ~ railClass : '' }}">
+    {% for slug, label in categorias %}
+        <a
+            href="{{ path('catalogo', {q: texto|default(''), categoria: slug}) }}#catalogo-resultados"
+            class="categoria-chip{{ (categoriaSeleccionada|default('')) == slug ? ' categoria-chip--active' : '' }}"
+        >
+            <span class="categoria-chip__icono">{{ include(categoriaIconos[slug] ?? categoriaIconos['otros']) }}</span>
+            <span class="categoria-chip__label">{{ label }}</span>
+            <span class="categoria-chip__count">{{ conteoPorCategoria[slug] ?? 0 }}</span>
+        </a>
+    {% endfor %}
+</div>
