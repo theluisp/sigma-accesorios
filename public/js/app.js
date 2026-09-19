@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const tituloEl = document.getElementById('producto-modal-title');
         const precioEl = document.getElementById('producto-modal-precio');
         const descripcionEl = document.getElementById('producto-modal-descripcion');
-        const whatsappEl = document.getElementById('producto-modal-whatsapp');
         const carritoBtnEl = document.getElementById('producto-modal-carrito');
 
         modalEl.addEventListener('show.bs.modal', (event) => {
@@ -78,17 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tituloEl.textContent = nombre;
             precioEl.textContent = trigger.dataset.precio || '';
             descripcionEl.textContent = trigger.dataset.descripcion || 'Sin descripción disponible.';
-
-            const whatsappBase = trigger.dataset.whatsapp;
-            if (whatsappEl) {
-                if (whatsappBase) {
-                    const mensaje = `Hola, me interesa este producto: ${nombre}`;
-                    whatsappEl.href = `${whatsappBase}?text=${encodeURIComponent(mensaje)}`;
-                    whatsappEl.hidden = false;
-                } else {
-                    whatsappEl.hidden = true;
-                }
-            }
 
             // El botón "Agregar al carrito" del modal reutiliza el mismo
             // patrón data-* que los botones de las tarjetas (js-carrito-agregar

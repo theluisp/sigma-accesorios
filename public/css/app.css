@@ -456,28 +456,24 @@ body {
 
 /* Riel de categorías arriba del carrusel de banners en Home (pedido
    explícito del usuario, sep 2026) — reusa .categorias-rail/.categoria-chip
-   tal cual (mismo componente que Catálogo), este wrapper solo da el
-   espaciado vertical para que no quede pegado al h1 de arriba ni al
-   carrusel de abajo. */
+   tal cual (mismo componente que Catálogo). En PC, con pocas categorías
+   con stock, el riel no llena el ancho de .site-main y se quedaba pegado
+   a la izquierda ("se ve desalineado", pedido explícito del usuario) — se
+   centra aquí en el WRAPPER (display:flex + justify-content:center), no
+   en .categorias-rail directamente: ese es el contenedor con scroll
+   (overflow-x:auto) y ponerle justify-content:center a él es lo que rompe
+   el scroll en navegadores que centran el contenido desbordado (el inicio
+   del riel queda inalcanzable). min-width:0 es el fix estándar de flexbox
+   para que el riel sí pueda encogerse al ancho del wrapper en mobile y
+   active su propio scroll horizontal, en vez de desbordar la página. */
 .home-categorias {
+    display: flex;
+    justify-content: center;
     padding-top: 4px;
 }
 
-/* CTA grande a Catálogo en Home, siempre visible (propuesta sep 2026) —
-   ver el comentario en home/index.html.twig para el porqué. Más grande que
-   un .btn--primary normal (padding/font-size aumentados) para que destaque
-   como el siguiente paso obvio después del carrusel, no como un botón más
-   entre otros. */
-.home-cta-catalogo {
-    display: flex;
-    justify-content: center;
-    padding: 28px 0;
-}
-
-.home-cta-catalogo__btn {
-    font-size: 1.15rem;
-    padding: 16px 40px;
-    box-shadow: 0 8px 20px rgba(42, 135, 202, 0.25);
+.home-categorias .categorias-rail {
+    min-width: 0;
 }
 
 /* Categorías */

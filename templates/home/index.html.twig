@@ -101,16 +101,6 @@
         </div>
     {% endif %}
 
-    {# CTA grande a Catálogo, SIEMPRE visible (propuesta sep 2026) — a
-       diferencia del link "Catálogo" del nav (en mobile queda escondido
-       detrás de la hamburguesa) y de "Ver todo el catálogo →" (chico,
-       dentro de Destacados), este botón no depende de que haya stock de
-       alguna marca ni de que el visitante baje/explore para encontrarlo:
-       es lo primero después del carrusel. #}
-    <section class="home-cta-catalogo">
-        <a href="{{ path('catalogo') }}" class="btn btn--primary home-cta-catalogo__btn">Ver catálogo completo</a>
-    </section>
-
     {# Marcas: agrupa por palabra(s) clave en el NOMBRE del producto (no
        categorías de ProductCategorizer) — ver App\Service\Catalog\MarcaCatalog
        y App\Controller\HomeController::marcasParaMostrar(). Mismo criterio

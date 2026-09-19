@@ -44,7 +44,7 @@
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=34">
+    <link rel="stylesheet" href="/css/app.css?v=35">
     {% block stylesheets %}{% endblock %}
     {# JSON-LD de negocio local (SEO sep 2026, ver App\Service\Seo\NegocioJsonLd):
        vacío por default, solo Home y Contacto lo llenan — son las páginas
@@ -249,11 +249,11 @@
     {# Modal genérico de "ver detalle" de producto (componente Modal de Bootstrap,
        con el vestido Aqua en app.css). Cualquier botón con
        data-bs-toggle="modal" data-bs-target="#producto-modal" y los atributos
-       data-nombre/data-descripcion/data-precio/data-imagen/data-whatsapp lo
-       abre y lo llena (ver public/js/app.js). Reutilizable desde Home,
-       Catálogo, etc. El botón de WhatsApp del modal manda un mensaje
-       precargado con el nombre del producto — para incentivar dudas/compra
-       directa, no solo dejar el dato suelto. #}
+       data-nombre/data-descripcion/data-precio/data-imagen lo abre y lo
+       llena (ver public/js/app.js). Reutilizable desde Home,
+       Catálogo, etc. Antes traía un botón "Preguntar por WhatsApp" con
+       mensaje precargado — se quitó (pedido explícito del usuario, sep
+       2026) para dejar solo "Agregar al carrito" como acción del modal. #}
     <div class="modal fade" id="producto-modal" tabindex="-1" aria-labelledby="producto-modal-title" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content aqua-modal">
@@ -267,15 +267,11 @@
                     </div>
                     <p class="aqua-modal__price fw-bold" id="producto-modal-precio"></p>
                     <p class="aqua-modal__descripcion" id="producto-modal-descripcion"></p>
-                    <a href="#" id="producto-modal-whatsapp" target="_blank" rel="noopener" class="btn btn--whatsapp w-100 mt-3" hidden>
-                        {{ include('_partials/_icon_whatsapp.svg.twig') }}
-                        Preguntar por WhatsApp
-                    </a>
                     {# Agregar al carrito desde el modal de detalle: mismo patrón
                        data-* que el botón de la tarjeta (js-carrito-agregar), se
                        llena vía JS al abrir el modal (ver app.js). Oculto si el
                        producto no tiene precio (no hay con qué calcular total). #}
-                    <button type="button" id="producto-modal-carrito" class="btn btn--secondary w-100 mt-2 js-carrito-agregar" hidden>
+                    <button type="button" id="producto-modal-carrito" class="btn btn--secondary w-100 mt-3 js-carrito-agregar" hidden>
                         🛒 Agregar al carrito
                     </button>
                 </div>
@@ -391,7 +387,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/app.js?v=7" defer></script>
+    <script src="/js/app.js?v=8" defer></script>
     {% block javascripts %}{% endblock %}
 </body>
 </html>
