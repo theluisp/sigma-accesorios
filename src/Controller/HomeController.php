@@ -98,12 +98,12 @@ class HomeController extends AbstractController
      * de degradado de respaldo). Pedido explícito del usuario (sep 2026):
      * intercambiar las posiciones 1 y 3 del carrusel — banner-3.png (Promo
      * de Septiembre, ya trae su propio texto en la imagen, por eso sin
-     * overlay) ahora se ve primero, y banner-1.png (foto de producto lisa,
-     * con overlay "Encuentra el accesorio perfecto" + botón) al final. Cada
-     * entrada se mueve completa (imagen + su texto/CTA correspondiente) en
-     * vez de solo intercambiar los archivos, para que el overlay de texto
-     * no quede encimado sobre la Promo de Septiembre (que ya es
-     * autoexplicativa).
+     * overlay) ahora se ve primero. banner-1.png se reemplazó en oct 2026
+     * por la Promo de Octubre (10% en bocinas y audífonos), que igual que
+     * la de Septiembre ya trae su propio texto/CTA dibujado en la imagen —
+     * así que también se queda sin overlay/título/botón de Twig encima
+     * (mismo criterio que banner-3, para no encimar texto sobre un banner
+     * que ya es autoexplicativo).
      *
      * @return array<int, array{numero: int, imagen: ?string, titulo: string, subtitulo: string, ctaTexto: string, ctaUrl: ?string, ctaExterna: bool}>
      */
@@ -135,10 +135,13 @@ class HomeController extends AbstractController
             [
                 'numero' => 1,
                 'imagen' => $bannerResolver->resolve(1),
-                'titulo' => 'Encuentra el accesorio perfecto',
-                'subtitulo' => 'Fundas, cargadores, audio y más — inventario actualizado todos los días.',
-                'ctaTexto' => 'Ver catálogo',
-                'ctaUrl' => $this->generateUrl('catalogo'),
+                'titulo' => '',
+                'subtitulo' => '',
+                'ctaTexto' => '',
+                // Sin botón a propósito, igual que banner-3 (ver comentario
+                // de arriba) — la Promo de Octubre ya trae su propio texto
+                // y botón "¡Aprovecha!" dibujados en la imagen.
+                'ctaUrl' => null,
                 'ctaExterna' => false,
             ],
         ];
