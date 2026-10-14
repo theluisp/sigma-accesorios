@@ -20,7 +20,11 @@ final class CatalogImportService
 {
     private const SUCURSALES = [
         'real_de_guadalupe' => 'Real De Guadalupe',
-        'capu' => 'Capu',
+        // La clave interna 'capu' se queda igual a propósito (es la llave
+        // que usa BranchStock/ProductoSucursal y el nombre de la pestaña
+        // del Sheet, GOOGLE_SHEETS_RANGE_CAPU) — solo cambia el nombre
+        // público que se muestra (pedido explícito del usuario, oct 2026).
+        'capu' => 'La Paz',
     ];
 
     public function __construct(
@@ -115,6 +119,13 @@ final class CatalogImportService
             if ($sucursal === null) {
                 $sucursal = new Sucursal($clave, $label);
                 $this->em->persist($sucursal);
+            } else {
+                // El nombre se sobreescribe siempre desde SUCURSALES (no
+                // viene del Sheet, es de código) — así un cambio de nombre
+                // aquí (ej. "Capu" -> "La Paz", oct 2026) se refleja en la
+                // sucursal que ya existe en la base de datos en el próximo
+                // sync, sin necesitar una migración aparte cada vez.
+                $sucursal->setNombre($label);
             }
             $sucursales[$clave] = $sucursal;
         }

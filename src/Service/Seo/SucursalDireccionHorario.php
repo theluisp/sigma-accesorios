@@ -36,7 +36,14 @@ final class SucursalDireccionHorario
             ],
         ],
         'capu' => [
-            'colonia' => 'Capu',
+            // Colonia actualizada de "Capu" a "La Paz" (pedido explícito
+            // del usuario, oct 2026). El código postal se deja igual
+            // (72050, el que ya estaba confirmado para "Capu") en lo que
+            // el usuario confirma si La Paz tiene el mismo CP o uno
+            // distinto — mismo criterio que streetAddress arriba: mejor
+            // un dato verificado (aunque posiblemente desactualizado) que
+            // inventar uno nuevo sin confirmar.
+            'colonia' => 'La Paz',
             'codigoPostal' => '72050',
             'horarios' => [
                 [['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], '09:00', '16:00'],

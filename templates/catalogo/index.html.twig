@@ -2,6 +2,8 @@
 
 {% block title %}{{ metaTitulo }}{% endblock %}
 {% block metaDescription %}{{ metaDescripcion }}{% endblock %}
+{# Ver CatalogoController::construirCanonicalUrl() — nunca incluye ?q=. #}
+{% block canonicalUrl %}{{ canonicalUrl }}{% endblock %}
 
 {# BreadcrumbList JSON-LD (SEO, sep 2026): Inicio > Catálogo [> categoría
    activa] — ver CatalogoController::construirBreadcrumbJsonLd(). #}

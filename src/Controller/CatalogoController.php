@@ -173,6 +173,7 @@ final class CatalogoController extends AbstractController
             'categoriaLabel' => $categoriaLabel,
             'metaTitulo' => $metaTitulo,
             'metaDescripcion' => $metaDescripcion,
+            'canonicalUrl' => $this->construirCanonicalUrl($categoriaSeleccionada, $pagina),
             'categorias' => $categorizer->todas(),
             'conteoPorCategoria' => $conteoPorCategoria,
             'conteoOfertas' => $conteoOfertas,
@@ -186,6 +187,34 @@ final class CatalogoController extends AbstractController
             'rangoPaginas' => $this->calcularRangoPaginas($pagina, $totalPaginas),
             'jsonLdBreadcrumb' => $this->construirBreadcrumbJsonLd($categoriaLabel),
         ]);
+    }
+
+    /**
+     * Canónica del Catálogo (SEO, oct 2026 — "otro poco de SEO"): por
+     * default base.html.twig usa la URL tal cual llegó (app.request.uri)
+     * como su propia canónica, lo cual está bien para /catalogo?categoria=X
+     * (cada categoría real SÍ tiene su propio título/descripción, ver
+     * metaTitulo/metaDescripcion arriba, así que vale la pena que Google la
+     * indexe aparte) pero no para la búsqueda de texto libre (?q=): esa NO
+     * tiene título propio (son demasiadas combinaciones posibles, ver el
+     * comentario de metaTitulo) y cada búsqueda distinta generaba su propia
+     * URL canónica — contenido casi duplicado indexándose sin fin, que no
+     * ayuda en nada al posicionamiento y sí desperdicia crawl budget. Se
+     * quita `q` de la canónica (apunta siempre al filtro de categoría
+     * "limpio", sin importar qué se haya buscado) pero se conserva
+     * `pagina` cuando es mayor a 1, para que cada página de resultados de
+     * una categoría se siga indexando por separado (criterio actual de
+     * Google para paginación real, sin rel=prev/next que ya está
+     * deprecado).
+     */
+    private function construirCanonicalUrl(string $categoriaSeleccionada, int $pagina): string
+    {
+        $parametros = array_filter([
+            'categoria' => $categoriaSeleccionada !== '' ? $categoriaSeleccionada : null,
+            'pagina' => $pagina > 1 ? $pagina : null,
+        ], static fn (mixed $valor): bool => $valor !== null);
+
+        return $this->generateUrl('catalogo', $parametros, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     /**
