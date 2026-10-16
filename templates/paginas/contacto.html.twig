@@ -121,28 +121,12 @@
     {# El modal de instrucciones de Didi Food (#didi-modal) ya no vive aquí
        — se movió a base.html.twig (sep 2026) porque el carrito, sitewide,
        también necesita abrirlo desde "pedido a domicilio". Esta tarjeta de
-       arriba lo sigue abriendo igual (mismo id), sin cambios. #}
+       arriba lo sigue abriendo igual (mismo id), sin cambios.
 
-    {# Modal de "Puntos de entrega": muestra el póster completo de la
-       campaña (imagen provista por el usuario, ago 2026) con todos los
-       puntos de entrega de la zona norte/centro y el punto nuevo de
-       Gallito. Es una sola imagen estática (no viene de la BD, a
-       diferencia de #sucursales-modal), así que si algún día cambian los
-       puntos hay que subir un póster nuevo a
-       public/images/entrega/puntos-entrega.jpg. #}
-    <div class="modal fade" id="puntos-entrega-modal" tabindex="-1" aria-labelledby="puntos-entrega-modal-title" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content aqua-modal">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="puntos-entrega-modal-title">Puntos de entrega</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body modal-body--imagen">
-                    <img src="/images/entrega/puntos-entrega.jpg" alt="Puntos de entrega Sigma Accesorios — zona norte y centro" loading="lazy">
-                </div>
-            </div>
-        </div>
-    </div>
+       El modal de "Puntos de entrega" (#puntos-entrega-modal) tampoco vive
+       ya aquí — se movió a base.html.twig (oct 2026) porque Home también
+       necesita abrirlo. La tarjeta de arriba lo sigue abriendo igual
+       (mismo id), sin cambios. #}
 
     {# Modal de sucursales: lista las sucursales reales (SucursalRepository).
        Ya NO enlaza a Google Maps (pedido explícito del usuario: quitar las

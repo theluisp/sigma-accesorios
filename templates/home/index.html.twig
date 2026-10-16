@@ -20,6 +20,21 @@
        reales de abajo (pedido: "SEO básico", ago 2026). #}
     <h1 class="home-eyebrow">Accesorios para celular en Puebla — fundas, cargadores, audífonos y más</h1>
 
+    {# Botón "Puntos de entrega" en Home (pedido explícito del usuario, oct
+       2026: "comentan clientes que no ven los puntos de entrega... debajo
+       del texto Accesorios para celular en Puebla... un button o algun
+       elemento bonito"). Abre el mismo modal #puntos-entrega-modal que ya
+       usaba la tarjeta de Contacto — ahora vive en base.html.twig (ver
+       ese archivo) precisamente para que Home también pueda abrirlo sin
+       duplicar el modal. Mismo ícono de pin que la tarjeta de Contacto
+       para que se reconozca como la misma función. #}
+    <div class="home-puntos-entrega">
+        <button type="button" class="home-puntos-entrega__btn" data-bs-toggle="modal" data-bs-target="#puntos-entrega-modal">
+            <span class="home-puntos-entrega__icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
+            ¿Dónde recoger mi pedido? Ver puntos de entrega
+        </button>
+    </div>
+
     {# Riel de categorías arriba del carrusel de banners (pedido explícito
        del usuario, sep 2026: "ya se me ocurre poner el carrusel del
        catálogo de categorías arriba del carrusel") — otra entrada directa

@@ -50,7 +50,7 @@
        cacheada aunque el archivo en el servidor ya haya cambiado — un "no se
        ve el cambio" clásico. Súbele el número cada vez que se edite
        app.css o app.js. #}
-    <link rel="stylesheet" href="/css/app.css?v=35">
+    <link rel="stylesheet" href="/css/app.css?v=36">
     {% block stylesheets %}{% endblock %}
     {# JSON-LD de negocio local (SEO sep 2026, ver App\Service\Seo\NegocioJsonLd):
        vacío por default, solo Home y Contacto lo llenan — son las páginas
@@ -370,6 +370,34 @@
                         </p>
                         <img src="/images/didi/paso-2.png" alt="Paso 2: buscar Sigma Accesorios Para Celular en DiDi" loading="lazy">
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Modal de "Puntos de entrega": muestra el póster completo de la
+       campaña (imagen provista por el usuario, ago 2026) con todos los
+       puntos de entrega de la zona norte/centro y el punto nuevo de
+       Gallito. Es una sola imagen estática (no viene de la BD, a
+       diferencia de #sucursales-modal), así que si algún día cambian los
+       puntos hay que subir un póster nuevo a
+       public/images/entrega/puntos-entrega.jpg.
+
+       Vive en base.html.twig (oct 2026) — antes solo estaba en Contacto,
+       pero Home también necesita abrirlo (botón debajo del h1, pedido
+       explícito del usuario porque "comentan clientes que no ven los
+       puntos de entrega"), mismo criterio que #didi-modal arriba: un
+       modal sitewide se define una sola vez y cualquier página lo abre
+       por id. La tarjeta de Contacto sigue abriéndolo igual, sin cambios. #}
+    <div class="modal fade" id="puntos-entrega-modal" tabindex="-1" aria-labelledby="puntos-entrega-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content aqua-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="puntos-entrega-modal-title">Puntos de entrega</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body modal-body--imagen">
+                    <img src="/images/entrega/puntos-entrega.jpg" alt="Puntos de entrega Sigma Accesorios — zona norte y centro" loading="lazy">
                 </div>
             </div>
         </div>
