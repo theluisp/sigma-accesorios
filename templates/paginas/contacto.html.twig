@@ -63,8 +63,11 @@
                (lista completa de puntos de la zona norte/centro, punto
                nuevo de Gallito, etc. — imagen provista por el usuario, ago
                2026). Es información distinta a "Nuestras sucursales" de
-               abajo (esa sigue viniendo de la BD vía #sucursales-modal). #}
-            <button type="button" class="aqua-card contacto-card contacto-card--btn" data-bs-toggle="modal" data-bs-target="#puntos-entrega-modal">
+               abajo (esa sigue viniendo de la BD vía #sucursales-modal).
+               El id="puntos-entrega" (oct 2026) es el ancla a la que
+               manda el botón de Home — así el cliente llega directo a
+               esta tarjeta en vez de a la Contacto genérica. #}
+            <button type="button" id="puntos-entrega" class="aqua-card contacto-card contacto-card--btn" data-bs-toggle="modal" data-bs-target="#puntos-entrega-modal">
                 <span class="valor-icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
                 <p class="aqua-card__name">Puntos de entrega</p>
                 <p class="valor-desc">Consulta todos nuestros puntos de entrega.</p>

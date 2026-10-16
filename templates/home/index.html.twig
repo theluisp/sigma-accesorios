@@ -23,16 +23,17 @@
     {# Botón "Puntos de entrega" en Home (pedido explícito del usuario, oct
        2026: "comentan clientes que no ven los puntos de entrega... debajo
        del texto Accesorios para celular en Puebla... un button o algun
-       elemento bonito"). Abre el mismo modal #puntos-entrega-modal que ya
-       usaba la tarjeta de Contacto — ahora vive en base.html.twig (ver
-       ese archivo) precisamente para que Home también pueda abrirlo sin
-       duplicar el modal. Mismo ícono de pin que la tarjeta de Contacto
-       para que se reconozca como la misma función. #}
+       elemento bonito"). NO abre un modal aquí mismo — manda directo a la
+       tarjeta "Puntos de entrega" de Contacto (#puntos-entrega, pedido
+       explícito del usuario: "el button deberia ser solo la redireccion
+       a .../contacto"), que es la que de verdad abre el modal. Mismo
+       ícono de pin que esa tarjeta para que se reconozca como la misma
+       función. #}
     <div class="home-puntos-entrega">
-        <button type="button" class="home-puntos-entrega__btn" data-bs-toggle="modal" data-bs-target="#puntos-entrega-modal">
+        <a href="{{ path('contacto') }}#puntos-entrega" class="home-puntos-entrega__btn">
             <span class="home-puntos-entrega__icon">{{ include('_partials/_icon_pin.svg.twig') }}</span>
             Ver opciones de entrega
-        </button>
+        </a>
     </div>
 
     {# Riel de categorías arriba del carrusel de banners (pedido explícito
