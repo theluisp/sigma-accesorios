@@ -99,8 +99,9 @@ class HomeController extends AbstractController
      * intercambiar las posiciones 1 y 3 del carrusel, para que la slide
      * que se ve PRIMERO sea siempre la promo del mes vigente — esa es
      * banner-3.png, que ya trae su propio texto/CTA dibujado en la
-     * imagen, por eso sin overlay. Actualizada a la Promo de Octubre (10%
-     * en bocinas y audífonos) en oct 2026 — antes tenía la de Septiembre.
+     * imagen, por eso sin overlay. Actualizada a la Promo de El Buen Fin
+     * (15% de descuento en toda la tienda, 16-27 nov 2026) en nov 2026 —
+     * antes tenía la de Octubre.
      * banner-1.png (foto de producto lisa, con overlay "Encuentra el
      * accesorio perfecto" + botón) se queda en la última posición, sin
      * tocar, como estaba desde el intercambio de septiembre.
